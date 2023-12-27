@@ -25,7 +25,7 @@ void draw_esp(FVector3 head_pos, FVector3 screen_pos, Entity entity, uintptr_t  
 				draw_healthbar(screen_pos, entity.health);
 
 			if (settings::visuals::bSkeleton)
-				draw_skeleton(bone_array, view_matrix);
+				draw_skeleton(bone_array, view_matrix,entity.visible);
 		}
 
 
