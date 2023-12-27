@@ -43,7 +43,7 @@ void draw_healthbar(FVector3 screen_pos, float health) {
 
 }
 
-void draw_skeleton(uintptr_t bonearray, view_matrix_t view_matrix) {
+void draw_skeleton(uintptr_t bonearray, view_matrix_t view_matrix,bool visible) {
 
 #if _DEBUG
 	for (int i = 0; i < 32; i++) {
@@ -56,6 +56,9 @@ void draw_skeleton(uintptr_t bonearray, view_matrix_t view_matrix) {
 
 	}
 #else
+	ImColor hidden_color = ImColor(255, 0, 0, 255);
+	ImColor visible_color = ImColor(0, 255, 0, 255);
+
 	FVector3 head = process.readv<FVector3>(bonearray + EBone::Head * 32).world_to_screen(view_matrix);
 	FVector3 neck = process.readv<FVector3>(bonearray + EBone::Neck * 32).world_to_screen(view_matrix);
 	FVector3 right_shoulder = process.readv<FVector3>(bonearray + EBone::RightShoulder * 32).world_to_screen(view_matrix);
@@ -70,18 +73,18 @@ void draw_skeleton(uintptr_t bonearray, view_matrix_t view_matrix) {
 	FVector3 right_foot = process.readv<FVector3>(bonearray + EBone::RightFoot * 32).world_to_screen(view_matrix);
 	FVector3 left_foot = process.readv<FVector3>(bonearray + EBone::LeftFoot * 32).world_to_screen(view_matrix);
 
-	ImGui::GetBackgroundDrawList()->AddLine({ head.x, head.y }, { neck.x, neck.y }, ImColor(255, 0, 0, 255));
-	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y }, { right_shoulder.x, right_shoulder.y }, ImColor(255, 0, 0, 255));
-	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y }, { left_shoulder.x, left_shoulder.y }, ImColor(255, 0, 0, 255));
-	ImGui::GetBackgroundDrawList()->AddLine({ right_shoulder.x, right_shoulder.y }, { right_arm.x, right_arm.y }, ImColor(255, 0, 0, 255));
-	ImGui::GetBackgroundDrawList()->AddLine({ left_shoulder.x, left_shoulder.y }, { left_arm.x, left_arm.y }, ImColor(255, 0, 0, 255));
-	ImGui::GetBackgroundDrawList()->AddLine({ right_arm.x, right_arm.y }, { right_hand.x, right_hand.y }, ImColor(255, 0, 0, 255));
-	ImGui::GetBackgroundDrawList()->AddLine({ left_arm.x, left_arm.y }, { left_hand.x, left_hand.y }, ImColor(255, 0, 0, 255));
-	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y }, { root.x, root.y }, ImColor(255, 0, 0, 255));
-	ImGui::GetBackgroundDrawList()->AddLine({ root.x, root.y }, { right_knee.x, right_knee.y }, ImColor(255, 0, 0, 255));
-	ImGui::GetBackgroundDrawList()->AddLine({ root.x, root.y }, { left_knee.x, left_knee.y }, ImColor(255, 0, 0, 255));
-	ImGui::GetBackgroundDrawList()->AddLine({ right_knee.x, right_knee.y }, { right_foot.x, right_foot.y }, ImColor(255, 0, 0, 255));
-	ImGui::GetBackgroundDrawList()->AddLine({ left_knee.x, left_knee.y }, { left_foot.x, left_foot.y }, ImColor(255, 0, 0, 255));
+	ImGui::GetBackgroundDrawList()->AddLine({ head.x, head.y }, { neck.x, neck.y }, visible ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y }, { right_shoulder.x, right_shoulder.y }, visible ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y }, { left_shoulder.x, left_shoulder.y }, visible ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ right_shoulder.x, right_shoulder.y }, { right_arm.x, right_arm.y },visible ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ left_shoulder.x, left_shoulder.y }, { left_arm.x, left_arm.y }, visible ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ right_arm.x, right_arm.y }, { right_hand.x, right_hand.y }, visible ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ left_arm.x, left_arm.y }, { left_hand.x, left_hand.y }, visible ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y }, { root.x, root.y }, visible ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ root.x, root.y }, { right_knee.x, right_knee.y }, visible ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ root.x, root.y }, { left_knee.x, left_knee.y }, visible ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ right_knee.x, right_knee.y }, { right_foot.x, right_foot.y }, visible ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ left_knee.x, left_knee.y }, { left_foot.x, left_foot.y }, visible ? visible_color : hidden_color);
 #endif
 
 };
