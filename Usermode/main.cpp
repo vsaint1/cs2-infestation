@@ -11,7 +11,7 @@ int main() {
 	SetConsoleTitleA("CS2 - External");
 
 	while (entry_hwnd == NULL) {
-		printf("[+] Open the game\r");
+		LOG("Open the game");
 		//processid = driver.get_process_id("cs2.exe");
 		processid = process.get_procid();
 		entry_hwnd = get_process_wnd(processid);
@@ -20,7 +20,7 @@ int main() {
 	//UNICODE_STRING module_name;
 	//RtlInitUnicodeString(&module_name, L"client.dll");
 	//client = driver.get_module_base(processid, module_name, 0); // 0 - get base, 1 - get size
-	client = process.get_modulebase("client.dll");
+	client = process.get_modulebase(MODULE_NAME);
 
 
 #if NDEBUG

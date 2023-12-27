@@ -104,6 +104,9 @@
     <ClInclude Include="memory\defines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="utils\helper_macro.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Driver\.clang-format" />
