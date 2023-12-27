@@ -29,7 +29,7 @@ namespace offsets {
 	std::ptrdiff_t m_iTeamNum = 0x3bf;
 	std::ptrdiff_t m_vecOrigin = 0x1224;          // m_vOldOrigin client.dll.rs
 	std::ptrdiff_t m_iHealth = 0x32C;             // m_iHealth client.dll.rs
-	std::ptrdiff_t bSpottedByMask = 0x1630 + 0xC; // entitySpottedState + bSpottedByMask
+	std::ptrdiff_t bSpottedByMask = 0x1638 + 0xC; // entitySpottedState + bSpottedByMask
 	std::ptrdiff_t m_iszPlayerName = 0x640;       // char[128]
 	std::ptrdiff_t iIDEntIndex = 0x153C;          // m_iIDEntIndex = 0x153C;
 } // namespace offsets
@@ -41,7 +41,7 @@ namespace settings {
 		bool aimbot = true;
 		bool visible_check = false;
 		inline float aim_fov = 0.0f;
-		inline float smooth = 0.0f;
+		inline int smooth = 0;
 		bool fov_circle = false;
 		inline int selectedhitbox = 0;
 		inline const char* hitbox[] = { ("Head"), ("Chest") };
@@ -58,6 +58,10 @@ namespace settings {
 		bool bDistance = false;
 		bool bBox = false;
 		bool distance = false;
+		bool weapon = false;
+		bool weapon_name = false;
+		bool weapon_distance = false;
+		bool weapon_snaplines = false;
 
 
 	}; // namespace Visuals
