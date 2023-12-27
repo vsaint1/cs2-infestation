@@ -136,14 +136,21 @@ void draw_menu() {
 	if (ImGui::BeginTabItem(("Aimbot"))) {
 		ImGui::Checkbox("Enabled", &settings::aimbot::aimbot);
 		set_helper("Enable/Disable Aimbot");
+		ImGui::Checkbox("Visible Check", &settings::aimbot::visible_check);
+		set_helper("Enable/Disable Visible Check");
 		ImGui::SliderFloat("FOV", &settings::aimbot::aim_fov, 0.f, 100.f, "%.0f");
+		set_helper("Aimbot FOV");
 		ImGui::Combo("Target", &settings::aimbot::selectedhitbox, settings::aimbot::hitbox, IM_ARRAYSIZE(settings::aimbot::hitbox));
+		ImGui::SliderInt("Smooth", &settings::aimbot::smooth, 0, 10, "%d");
+		set_helper("Aimbot Smooth");
 		hotkey_button(hotkeys::aimkey, change_key, keystatus);
 
 		ImGui::EndTabItem();
 	}
 
 	if (ImGui::BeginTabItem(("ESP"))) {
+		ImGui::Columns(2, NULL, false);
+		ImGui::SetColumnOffset(1, 150);
 		ImGui::Checkbox("Enabled", &settings::visuals::esp);
 		set_helper("Enable/Disable ESP");
 		ImGui::Checkbox("Skeleton", &settings::visuals::bSkeleton);
@@ -154,6 +161,21 @@ void draw_menu() {
 		set_helper("Draw lines to enemies");
 		ImGui::Checkbox("Distance", &settings::visuals::distance);
 		set_helper("Draw distance to enemies");
+
+		ImGui::NextColumn();
+		ImGui::Checkbox("Weapon", &settings::visuals::weapon);
+		set_helper("Enable/Disable Weapon ESP");
+
+
+		if (settings::visuals::weapon) {
+			ImGui::Checkbox("Weapon Name", &settings::visuals::weapon_name);
+			set_helper("Draw weapon name");
+			ImGui::Checkbox("Weapon Distance", &settings::visuals::weapon_distance);
+			set_helper("Draw distance to weapon");
+			ImGui::Checkbox("Weapon Snap Lines", &settings::visuals::weapon_snaplines);
+			set_helper("Draw lines to weapon");
+		}
+
 		ImGui::EndTabItem();
 	}
 
