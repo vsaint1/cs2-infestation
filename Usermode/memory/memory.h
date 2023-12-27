@@ -1,6 +1,7 @@
 #pragma once
 #include <string> 
 #include <TlHelp32.h>
+#include "../utils/helper_macro.h"
 
 typedef NTSTATUS(WINAPI* pNtReadVirtualMemory)(HANDLE ProcessHandle, PVOID BaseAddress, PVOID Buffer, ULONG NumberOfBytesToRead, PULONG NumberOfBytesRead);
 typedef NTSTATUS(WINAPI* pNtWriteVirtualMemory)(HANDLE Processhandle, PVOID BaseAddress, PVOID Buffer, ULONG NumberOfBytesToWrite, PULONG NumberOfBytesWritten);
@@ -182,4 +183,4 @@ public:
 
 };
 
-inline Memory process("cs2.exe");
+inline Memory process(GAME_NAME);
