@@ -43,12 +43,10 @@ Kernel mode / user mode
 Project with basic features and low performance impact.
 
 
-3.0 - Final version
 
+3.5 - **NEW VERSION** - 2023-12-27
 
-
-
-<img src="./examples/done_2.png">
+<img src="./examples/best_free.png">
 
 <a target="_blank" href="https://streamable.com/g937bg">Watch the demo</a>
 
