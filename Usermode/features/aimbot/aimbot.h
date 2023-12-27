@@ -19,7 +19,15 @@ void aimbot(Entity entity, FVector3 head_bone) {
 		if (settings::bMenu)
 			return;
 
+		if (settings::aimbot::visible_check && !entity.visible)
+			return;
+
 		if (GetAsyncKeyState(hotkeys::aimkey)) {
+
+			if (settings::aimbot::smooth > 0) {
+				dx = dx / (rand() % settings::aimbot::smooth + 1);
+				dy = dy / (rand() % settings::aimbot::smooth + 1);
+			}
 
 			if (dist < closest_pawn) {
 
@@ -32,7 +40,7 @@ void aimbot(Entity entity, FVector3 head_bone) {
 				if (entity.health <= 0)
 					return;
 
-
+				// todo: calculate with bone to be more accurate
 				if (settings::aimbot::selectedhitbox == 0)
 					dx, dy;
 
