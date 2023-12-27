@@ -1,0 +1,176 @@
+#pragma once
+
+IDirect3DTexture9* image_logo = nullptr;
+inline bool load_image_from_memory(void* data, size_t size, IDirect3DTexture9** out_texture);
+
+void create_style() {
+	ImGuiStyle* style = &ImGui::GetStyle();
+
+	style->WindowRounding = 5.3f;
+	style->FrameRounding = 2.3f;
+	style->ScrollbarRounding = 5.f;
+	style->WindowTitleAlign = ImVec2(0.5f, 0.5f);
+	style->GrabMinSize = 20.0f;
+
+	style->Colors[ImGuiCol_Text] = ImVec4(0.80f, 0.80f, 0.83f, 1.00f);
+	style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.30f, 0.09f, 0.12f, 1.00f);
+	style->Colors[ImGuiCol_TitleBgActive] = ImVec4(1.0f, 0.23f, 0.29f, 1.00f);
+	style->Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.0f, 0.23f, 0.29f, 1.00f);
+	style->Colors[ImGuiCol_TextDisabled] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
+	style->Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+	style->Colors[ImGuiCol_ChildBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
+	style->Colors[ImGuiCol_PopupBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
+	style->Colors[ImGuiCol_Border] = ImVec4(0.80f, 0.80f, 0.83f, 0.88f);
+	style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.92f, 0.91f, 0.88f, 0.00f);
+	style->Colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+	style->Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.92f, 0.18f, 0.29f, 0.78f);
+	style->Colors[ImGuiCol_FrameBgActive] = ImVec4(0.80f, 0.56f, 0.58f, 1.00f);
+	style->Colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+	style->Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 0.98f, 0.95f, 0.75f);
+	style->Colors[ImGuiCol_TitleBgActive] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
+	style->Colors[ImGuiCol_MenuBarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+	style->Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+	style->Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
+	style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
+	style->Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+	style->Colors[ImGuiCol_Tab] = ImLerp(style->Colors[ImGuiCol_Header], style->Colors[ImGuiCol_TitleBgActive], 1.00f);
+	style->Colors[ImGuiCol_TabHovered] = ImLerp(style->Colors[ImGuiCol_TabActive], style->Colors[ImGuiCol_TabActive], 0.50f);
+	style->Colors[ImGuiCol_TabActive] = ImVec4(0.30f, 0.09f, 0.12f, 1.00f);
+	style->Colors[ImGuiCol_TabUnfocused] = ImLerp(style->Colors[ImGuiCol_Tab], style->Colors[ImGuiCol_TitleBg], 0.80f);
+	style->Colors[ImGuiCol_TabUnfocusedActive] = ImLerp(style->Colors[ImGuiCol_TabActive], style->Colors[ImGuiCol_TitleBg], 0.40f);
+	style->Colors[ImGuiCol_CheckMark] = ImVec4(0.30f, 0.09f, 0.12f, 1.00f);
+	style->Colors[ImGuiCol_SliderGrab] = ImVec4(0.30f, 0.09f, 0.12f, 1.00f);
+	style->Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.25f, 0.09f, 0.12f, 1.00f);
+	style->Colors[ImGuiCol_Button] = ImVec4(0.30f, 0.09f, 0.12f, 1.00f);
+	style->Colors[ImGuiCol_ButtonHovered] = ImVec4(0.25f, 0.09f, 0.12f, 1.00f);
+	style->Colors[ImGuiCol_ButtonActive] = ImVec4(0.20f, 0.09f, 0.12f, 1.00f);
+	style->Colors[ImGuiCol_Header] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+	style->Colors[ImGuiCol_HeaderHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
+	style->Colors[ImGuiCol_HeaderActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+	style->Colors[ImGuiCol_ResizeGrip] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+	style->Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
+	style->Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+	style->Colors[ImGuiCol_PlotLines] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
+	style->Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
+	style->Colors[ImGuiCol_PlotHistogram] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
+	style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
+
+	style->Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.20f, 0.22f, 0.27f, 0.73f);
+}
+void set_helper(const char* text) {
+
+	ImGui::SameLine();
+	ImGui::TextColored(ImColor(105, 105, 105), "(?)");
+	if (ImGui::IsItemHovered())
+		ImGui::SetTooltip(text);
+}
+
+
+
+void change_key(void* blank) {
+	keystatus = 1;
+	while (true) {
+		for (int i = 0; i < 0x87; i++) {
+			if (GetKeyState(i) & 0x8000) {
+				hotkeys::aimkey = i;
+				keystatus = 0;
+				return;
+			}
+		}
+	}
+}
+
+
+static bool key_array(void* data, int idx, const char** out_text) {
+	const char* const* items = (const char* const*)data;
+	if (out_text)
+		*out_text = items[idx];
+	return true;
+}
+
+void hotkey_button(int aimkey, void* changekey, int status) {
+	const char* preview_value = NULL;
+	if (aimkey >= 0 && aimkey < IM_ARRAYSIZE(key_names))
+		key_array(key_names, aimkey, &preview_value);
+
+	std::string aimkeys;
+
+	if (preview_value == NULL)
+		aimkeys = "Select any Key";
+	else
+		aimkeys = preview_value;
+
+	if (status == 1)
+		aimkeys = "Press the Key";
+
+	if (ImGui::Button(aimkeys.c_str(), ImVec2(125, 20))) {
+		if (status == 0)
+			CreateThread(0, 0, (LPTHREAD_START_ROUTINE)changekey, nullptr, 0, nullptr);
+	}
+
+}
+
+void draw_menu() {
+	if (GetAsyncKeyState(VK_HOME) & 1)
+		settings::bMenu = !settings::bMenu;
+
+
+	if (!settings::bMenu)
+		return;
+
+	create_style();
+
+
+	load_image_from_memory((void*)image_data, sizeof(image_data), &image_logo);
+
+	ImGui::SetNextWindowSize(ImVec2(400.0f, 200.0f), ImGuiCond_Once);
+	ImGui::Begin(("[FREE] - Infestation"), &settings::bMenu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
+
+	ImGui::BeginTabBar(("##tabs"), ImGuiTabBarFlags_None);
+	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowSize().x / 2 - 100, 50));
+
+	ImGui::Image((void*)image_logo, ImVec2(300, 100));
+
+
+
+	if (ImGui::BeginTabItem(("Aimbot"))) {
+		ImGui::Checkbox("Enabled", &settings::aimbot::aimbot);
+		set_helper("Enable/Disable Aimbot");
+		ImGui::SliderFloat("FOV", &settings::aimbot::aim_fov, 0.f, 100.f, "%.0f");
+		ImGui::Combo("Target", &settings::aimbot::selectedhitbox, settings::aimbot::hitbox, IM_ARRAYSIZE(settings::aimbot::hitbox));
+		hotkey_button(hotkeys::aimkey, change_key, keystatus);
+
+		ImGui::EndTabItem();
+	}
+
+	if (ImGui::BeginTabItem(("ESP"))) {
+		ImGui::Checkbox("Enabled", &settings::visuals::esp);
+		set_helper("Enable/Disable ESP");
+		ImGui::Checkbox("Skeleton", &settings::visuals::bSkeleton);
+		set_helper("Draw enemies skeleton");
+		ImGui::Checkbox("Health", &settings::visuals::bHealth);
+		set_helper("Draw enemies health");
+		ImGui::Checkbox("Snap Lines", &settings::visuals::bSnaplines);
+		set_helper("Draw lines to enemies");
+		ImGui::Checkbox("Distance", &settings::visuals::distance);
+		set_helper("Draw distance to enemies");
+		ImGui::EndTabItem();
+	}
+
+	if (ImGui::BeginTabItem("Misc")) {
+		ImGui::Checkbox("Team-Check", &settings::misc::bTeamcheck);
+		set_helper("Enable/Disable Team-Check");
+		ImGui::Checkbox("Watermark", &settings::misc::bWatermark);
+		set_helper("Enable/Disable Watermark");
+
+		if (ImGui::Button("Website"))
+			ShellExecuteA(NULL, "open", "https://www.infestation.com.br", NULL, NULL, SW_SHOWNORMAL);
+
+		ImGui::EndTabItem();
+
+	}
+
+	ImGui::EndTabBar();
+	ImGui::End();
+
+}
