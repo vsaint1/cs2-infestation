@@ -1,48 +1,6 @@
 # CS2 - FREE GAMING CHAIR (REUPLOAD)
 
-Feel free to use and modify the project as you wish, but please give credit to the original author.
-
-
-## TL;DR
-
-**This is a FREE project, if you want a PAID version discord or website**
-
-- [x] Latest CS2 updates
-- [x] Free version only works on VAC
-
-- Currently we only support Windows 10 x64 20H2, 21H1 , 22H2.
-- VALORANT AND CS2 - PRIVATE GAMING CHAIRS
-
-<a href = "https://www.infestation.com.br">What are you waiting for?</a>
-
-# CS2 (MM AND LEAGUE) - PRIVATE CHEAT
-
-- AIMBOT
-- ESP
-
-# VALORANT - PRIVATE CHEAT
-
-- AIMBOT
-- ESP
-
-<img src="./examples/products_new.png">
-
-<p display="flex">
-Join our discord server for support and updates on our products.
-<a href="https://discord.gg/7Ms9UmsjCj">
-<img src="https://discordapp.com/api/guilds/1135362291311849693/widget.png?style=shield">
-</a>
-</p>
-
-# [FREE] - Features
-Kernel mode / user mode
-- [x] Aimbot
-- [x] ESP
-
- 
 Project with basic features and low performance impact.
-
-
 
 3.5 - **NEW VERSION** - 2023-12-27
 
