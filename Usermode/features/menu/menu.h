@@ -123,15 +123,15 @@ void draw_menu() {
 
 	load_image_from_memory((void*)image_data, sizeof(image_data), &image_logo);
 
-	ImGui::SetNextWindowSize(ImVec2(400.0f, 200.0f), ImGuiCond_Once);
-	ImGui::Begin(("[FREE] - Infestation"), &settings::bMenu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
+	ImGui::SetNextWindowSize(ImVec2(400.0f, 300.0f), ImGuiCond_Once);
+	ImGui::Begin(("Infestation - 4.0"), &settings::bMenu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
 
 	ImGui::BeginTabBar(("##tabs"), ImGuiTabBarFlags_None);
 	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowSize().x / 2 - 100, 50));
 
-	ImGui::Image((void*)image_logo, ImVec2(300, 100));
+	ImGui::Image((void*)image_logo, ImVec2(300, 200));
 
-
+	ImGui::SetNextItemwidth(100);
 
 	if (ImGui::BeginTabItem(("Aimbot"))) {
 		ImGui::Checkbox("Enabled", &settings::aimbot::aimbot);
@@ -147,6 +147,10 @@ void draw_menu() {
 
 		ImGui::EndTabItem();
 	}
+
+	ImGui::SetNextItemwidth(100);
+
+
 
 	if (ImGui::BeginTabItem(("ESP"))) {
 		ImGui::Columns(2, NULL, false);
@@ -174,10 +178,14 @@ void draw_menu() {
 			set_helper("Draw distance to weapon");
 			ImGui::Checkbox("Weapon Snap Lines", &settings::visuals::weapon_snaplines);
 			set_helper("Draw lines to weapon");
+
 		}
 
 		ImGui::EndTabItem();
+
 	}
+
+	ImGui::SetNextItemwidth(100);
 
 	if (ImGui::BeginTabItem("Misc")) {
 		ImGui::Checkbox("Team-Check", &settings::misc::bTeamcheck);
@@ -185,8 +193,8 @@ void draw_menu() {
 		ImGui::Checkbox("Watermark", &settings::misc::bWatermark);
 		set_helper("Enable/Disable Watermark");
 
-		if (ImGui::Button("Website"))
-			ShellExecuteA(NULL, "open", "https://www.infestation.com.br", NULL, NULL, SW_SHOWNORMAL);
+		if (ImGui::Button("Github"))
+			ShellExecuteA(NULL, "open", "https://github.com/vsaint1/cs2-infestation", NULL, NULL, SW_SHOWNORMAL);
 
 		ImGui::EndTabItem();
 
