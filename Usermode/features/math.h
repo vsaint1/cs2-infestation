@@ -81,17 +81,17 @@ struct FVector3 {
 	constexpr const bool operator==(const FVector3& other) const noexcept { return x == other.x && y == other.y && z == other.z; }
 
 
-	float Distance(const FVector3& other) const noexcept {
+	float distance(const FVector3& other) const noexcept {
 		const FVector3 diff = *this - other;
 	
 		return std::sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
 	}
 
-	constexpr const FVector3& ToAngle() const noexcept {
+	constexpr const FVector3& toAngle() const noexcept {
 		return FVector3{ std::atan2(-z, std::hypot(x, y)) * (180.0f / std::numbers::pi_v<float>), std::atan2(y, x) * (180.0f / std::numbers::pi_v<float>), 0.0f };
 	}
 
-	constexpr const bool IsZero() const noexcept { return x == 0.f && y == 0.f && z == 0.f; }
+	constexpr const bool isZero() const noexcept { return x == 0.f && y == 0.f && z == 0.f; }
 
 	FVector3 world_to_screen(view_matrix_t matrix) const {
 		float _x = matrix[0][0] * x + matrix[0][1] * y + matrix[0][2] * z + matrix[0][3];
