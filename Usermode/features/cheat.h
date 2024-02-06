@@ -5,6 +5,8 @@
 #include <thread>
 #include "esp/esp.h"
 
+
+
 void cache_entities() {
 	while (true) {
 		std::vector<Entity> temp;
@@ -44,7 +46,7 @@ void cache_entities() {
 			uintptr_t pcs_pawn = process.readv<uintptr_t>(list_entry2 + 120 * (h_pawn & 0x1FF));
 
 			if (pcs_pawn == local_player) {
-								local_index = i;
+				local_index = i;
 				continue;
 			}
 
@@ -68,8 +70,8 @@ void cache_entities() {
 			entity.pawn = pcs_pawn;
 			entity.name = e_name.empty() ? "unknown" : e_name;
 			entity.health = e_health;
-			entity.visible = e_spotted & (1 << local_index -1 );
-			entity.position = pcs_pos.Distance(local_pos) / 100;
+			entity.visible = e_spotted & (1 << local_index - 1);
+			entity.position = pcs_pos.distance(local_pos) / 100;
 			temp.push_back(entity);
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -92,6 +94,7 @@ void entities_loop()
 
 	uintptr_t entity_list = process.readv<uintptr_t>(client + offsets::dwEntityList);
 	auto max_entities = process.readv<int>(entity_list + offsets::dwGameEntitySystem_getHighestEntityIndex);
+
 
 	for (auto i = 65; i < max_entities; i++) {
 
@@ -118,18 +121,27 @@ void entities_loop()
 		LOG("classname: %s\n", classname.c_str());
 
 #endif
-		if (classname.find("weapon_") == std::string::npos)
+
+		if (classname.find("_projectile") == std::string::npos && classname.find("weapon_") == std::string::npos)
 			continue;
-
-
-		LOG("classname: %s\n", classname.c_str());
 
 		auto node = process.readv<uintptr_t>(ent + 0x310);
 
 		FVector3 abs_origin = process.readv<FVector3>(node + 0x80);
 
-		float dist = abs_origin.Distance(process.readv<FVector3>(global_pawn + offsets::m_vecOrigin)) / 100;
+		if (abs_origin.isZero())
+			continue;
 
+		auto normalized_str = classname.find("weapon_") != std::string::npos ? classname.substr(7) : classname.erase(classname.find("_projectile"), 11);
+
+		const char* nades[5] = { "smokegrenade","hegrenade","flashbang","molotov","flashbang" };
+
+		// TODO: do extra stuff soon
+		if (std::find(std::begin(nades), std::end(nades), normalized_str) != std::end(nades))
+			LOG("CLASS_NAME: %s ABS_ORIGIN: %f %f %f", classname.c_str(), abs_origin.x, abs_origin.y, abs_origin.z);
+
+
+		float dist = abs_origin.distance(process.readv<FVector3>(global_pawn + offsets::m_vecOrigin)) / 100;
 
 		view_matrix_t local_viewmatrix = process.readv<view_matrix_t>(client + offsets::dwViewMatrix);
 
@@ -139,7 +151,7 @@ void entities_loop()
 			continue;
 
 		if (settings::visuals::weapon_name)
-			draw_text(classname.substr(7).c_str(), ImVec2(screen_pos.x, screen_pos.y), ImVec4(100, 0, 0, 150));
+			draw_text(normalized_str.c_str(), ImVec2(screen_pos.x, screen_pos.y), ImVec4(100, 0, 0, 150));
 
 		if (settings::visuals::weapon_snaplines)
 			draw_snapline(screen_pos, ImVec4(255, 255, 255, 255));
@@ -189,8 +201,8 @@ void entity_loop() {
 				draw_esp(head_pos, screen_pos, entity, p_bonearray, local_viewmatrix);
 
 
-			if(settings::aimbot::aim_fov >0)
-			ImGui::GetBackgroundDrawList()->AddCircle(ImVec2(width / 2, height / 2), settings::aimbot::aim_fov, ImColor(255, 255, 255, 255), 100);
+			if (settings::aimbot::aim_fov > 0)
+				ImGui::GetBackgroundDrawList()->AddCircle(ImVec2(width / 2, height / 2), settings::aimbot::aim_fov, ImColor(255, 255, 255, 255), 100);
 
 			std::thread(aimbot, entity, head_pos).detach();
 
