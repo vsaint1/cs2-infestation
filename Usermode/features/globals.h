@@ -18,10 +18,10 @@ namespace hotkeys {
 static int keystatus = 0;
 
 namespace offsets {
-	std::ptrdiff_t dwEntityList = 0x17C1950;
-	std::ptrdiff_t dwLocalPlayerPawn = 0x16C8F38;
+	std::ptrdiff_t dwEntityList = 0x17CE6A0;
+	std::ptrdiff_t dwLocalPlayerPawn = 0x16D4F48;
 	std::ptrdiff_t dwGameEntitySystem_getHighestEntityIndex = 0x1510;
-	std::ptrdiff_t dwViewMatrix = 0x1820150;
+	std::ptrdiff_t dwViewMatrix = 0x182CEA0;
 	std::ptrdiff_t dwPawnHealth = 0x7F8;    // m_iPawnHealth = 0x7F8; // uint32_t
 	std::ptrdiff_t dwPlayerPawn = 0x7EC;    // m_hPlayerPawn client.dll.rs
 	std::ptrdiff_t dwSanitizedName = 0x640; //  m_iszPlayerName = 0x640; // char[128]
