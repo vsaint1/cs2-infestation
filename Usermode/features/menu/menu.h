@@ -120,8 +120,9 @@ void draw_menu() {
 
 	create_style();
 
-
-	load_image_from_memory((void*)image_data, sizeof(image_data), &image_logo);
+	// TODO: fix memory leak's
+	// load_image_from_memory((void*)image_data, sizeof(image_data), &image_logo);
+	// ImGui::Image((void*)image_logo, ImVec2(300, 200));
 
 	ImGui::SetNextWindowSize(ImVec2(400.0f, 300.0f), ImGuiCond_Once);
 	ImGui::Begin(("Infestation - 4.0"), &settings::bMenu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
@@ -129,7 +130,6 @@ void draw_menu() {
 	ImGui::BeginTabBar(("##tabs"), ImGuiTabBarFlags_None);
 	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowSize().x / 2 - 100, 50));
 
-	ImGui::Image((void*)image_logo, ImVec2(300, 200));
 
 	ImGui::SetNextItemwidth(100);
 
