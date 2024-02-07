@@ -2,6 +2,7 @@
 #include "../features/math.h"
 #include <algorithm>
 
+constexpr int MAX_NUM_SEGMENTS = 10;
 
 void draw_distance(FVector3 local_position, float distance)
 {
@@ -9,6 +10,53 @@ void draw_distance(FVector3 local_position, float distance)
 	ImVec2 TextSize = ImGui::CalcTextSize(distance_str.c_str());
 	ImGui::GetForegroundDrawList()->AddText(ImVec2(local_position.x - TextSize.x / 2, local_position.y - TextSize.y / 2 + 10), ImColor(255, 255, 255, 255), distance_str.c_str());
 
+}
+void draw_filled_rect(int x, int y, int w, int h, ImVec4 color)
+{
+	ImGui::GetForegroundDrawList()->AddRectFilled(ImVec2(x, y), ImVec2(x + w, y + h), ImGui::ColorConvertFloat4ToU32(color), 0, 0);
+}
+
+
+void draw_path(FVector3 initial_pos, FVector3 current_pos)
+{
+	std::vector<FVector3>previous_positions;
+    previous_positions.push_back(current_pos);
+
+    float distance = std::hypot(current_pos.x - initial_pos.x, current_pos.y - initial_pos.y);
+
+    int num_segments = static_cast<int>(distance / 10.0f); 
+
+    float alpha_decay_rate = 255.0f / static_cast<float>(num_segments); 
+
+    float alpha = 255.0f;
+
+    for (int i = 0; i < num_segments; ++i) {
+        float t = static_cast<float>(i) / num_segments;
+        ImVec2 p1 = ImVec2(initial_pos.x * (1 - t) + current_pos.x * t, initial_pos.y * (1 - t) + current_pos.y * t);
+        t = static_cast<float>(i + 1) / num_segments;
+        ImVec2 p2 = ImVec2(initial_pos.x * (1 - t) + current_pos.x * t, initial_pos.y * (1 - t) + current_pos.y * t);
+        
+        alpha -= alpha_decay_rate;
+        if (alpha < 0.0f) alpha = 0.0f;
+
+        ImGui::GetForegroundDrawList()->AddLine(p1, p2, IM_COL32(255, 255, 255, static_cast<int>(alpha)), 2.0f);
+    }
+
+    if (previous_positions.size() > MAX_NUM_SEGMENTS) 
+        previous_positions.erase(previous_positions.begin(), previous_positions.end() - MAX_NUM_SEGMENTS);
+}
+
+
+void draw_box(int x, int y, int w, int h, int border, ImVec4 color)
+{
+	draw_filled_rect(x + border, y, w, border, color); //top 
+	draw_filled_rect(x + w - w + border, y, w, border, color); //top 
+	draw_filled_rect(x, y, border, h, color); //left 
+	draw_filled_rect(x, y + h - h + border * 2, border, h, color); //left 
+	draw_filled_rect(x + border, y + h + border, w, border, color); //bottom 
+	draw_filled_rect(x + w - w + border, y + h + border, w, border, color); //bottom 
+	draw_filled_rect(x + w + border, y, border, h, color);//right 
+	draw_filled_rect(x + w + border, y + h - h + border * 2, border, h, color);//right 
 }
 
 void draw_box(FVector3 screen_pos, float height, float width, ImColor color)
@@ -18,17 +66,20 @@ void draw_box(FVector3 screen_pos, float height, float width, ImColor color)
 
 void draw_rect(int x, int y, int w, int h, ImColor color, int thickness)
 {
-	ImGui::GetForegroundDrawList()->AddRect(ImVec2(x, y), ImVec2(x + w, y + h), color , 0.0f, 0, thickness);
+	ImGui::GetForegroundDrawList()->AddRect(ImVec2(x, y), ImVec2(x + w, y + h), color, 0.0f, 0, thickness);
 }
 
 
 void draw_text(const char* text, ImVec2 pos, ImColor color)
 {
+
 	ImVec2 TextSize = ImGui::CalcTextSize(text);
 	ImGui::GetForegroundDrawList()->AddText(ImVec2(pos.x - TextSize.x / 2, pos.y - TextSize.y / 2), color, text);
+	ImGui::GetForegroundDrawList()->AddText(ImVec2(pos.x - TextSize.x / 2 + 1, pos.y - TextSize.y / 2 + 1), ImColor(0, 0, 0, 255), text);
 }
 
-void draw_snapline(FVector3 screen_pos, ImColor color) {
+void draw_snaplines(FVector3 screen_pos, ImColor color) {
+	// bottom -> foot
 	ImGui::GetBackgroundDrawList()->AddLine({ screen_pos.x , screen_pos.y }, ImVec2(width / 2, height), color);
 
 }
@@ -43,7 +94,27 @@ void draw_healthbar(FVector3 screen_pos, float health) {
 
 }
 
-void draw_skeleton(uintptr_t bonearray, view_matrix_t view_matrix,bool visible) {
+void draw_rect(int x, int y, int w, int h, ImVec4 color, int thickness)
+{
+	ImGui::GetForegroundDrawList()->AddRect(ImVec2(x, y), ImVec2(x + w, y + h), ImGui::ColorConvertFloat4ToU32(color), 0, 0, thickness);
+}
+
+void draw_progressbar(int x, int y, int w, int h, int thick, int health)
+{
+	float G = (255 * health / 100);
+	float R = 255 - G;
+	ImVec4 color = { R, G, 0, 255 };
+	std::string health_str = std::to_string(static_cast<int32_t>(health));
+
+	ImVec2 text_size = ImGui::CalcTextSize(health_str.c_str());
+
+	draw_filled_rect(x + (w / 2) - 25, y, thick, (h)*health / 100, color);
+	draw_text(health_str.c_str(), ImVec2(x, y + 5 - text_size.y / 2), ImVec4(255, 255, 255, 150));
+
+}
+
+
+void draw_skeleton(uintptr_t bonearray, view_matrix_t view_matrix, bool visible) {
 
 #if _DEBUG
 	for (int i = 0; i < 32; i++) {
@@ -76,7 +147,7 @@ void draw_skeleton(uintptr_t bonearray, view_matrix_t view_matrix,bool visible) 
 	ImGui::GetBackgroundDrawList()->AddLine({ head.x, head.y }, { neck.x, neck.y }, visible ? visible_color : hidden_color);
 	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y }, { right_shoulder.x, right_shoulder.y }, visible ? visible_color : hidden_color);
 	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y }, { left_shoulder.x, left_shoulder.y }, visible ? visible_color : hidden_color);
-	ImGui::GetBackgroundDrawList()->AddLine({ right_shoulder.x, right_shoulder.y }, { right_arm.x, right_arm.y },visible ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ right_shoulder.x, right_shoulder.y }, { right_arm.x, right_arm.y }, visible ? visible_color : hidden_color);
 	ImGui::GetBackgroundDrawList()->AddLine({ left_shoulder.x, left_shoulder.y }, { left_arm.x, left_arm.y }, visible ? visible_color : hidden_color);
 	ImGui::GetBackgroundDrawList()->AddLine({ right_arm.x, right_arm.y }, { right_hand.x, right_hand.y }, visible ? visible_color : hidden_color);
 	ImGui::GetBackgroundDrawList()->AddLine({ left_arm.x, left_arm.y }, { left_hand.x, left_hand.y }, visible ? visible_color : hidden_color);
