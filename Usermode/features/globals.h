@@ -18,19 +18,19 @@ namespace hotkeys {
 static int keystatus = 0;
 
 namespace offsets {
-	std::ptrdiff_t dwEntityList = 0x17CE6A0;
-	std::ptrdiff_t dwLocalPlayerPawn = 0x16D4F48;
+	std::ptrdiff_t dwEntityList = 0x18AFFB8;
+	std::ptrdiff_t dwLocalPlayerPawn = 0x17252B8;
 	std::ptrdiff_t dwGameEntitySystem_getHighestEntityIndex = 0x1510;
-	std::ptrdiff_t dwViewMatrix = 0x182CEA0;
-	std::ptrdiff_t dwPawnHealth = 0x7F8;    // m_iPawnHealth = 0x7F8; // uint32_t
-	std::ptrdiff_t dwPlayerPawn = 0x7EC;    // m_hPlayerPawn client.dll.rs
+	std::ptrdiff_t dwViewMatrix = 0x190F2A0;
+	std::ptrdiff_t dwPawnHealth = 0x7F0;    // m_iPawnHealth = 0x7F8; // uint32_t
+	std::ptrdiff_t dwPlayerPawn = 0x7E4;    // m_hPlayerPawn client.dll.rs
 	std::ptrdiff_t dwSanitizedName = 0x640; //  m_iszPlayerName = 0x640; // char[128]
 	std::ptrdiff_t m_bDormant = 0xE7;
-	std::ptrdiff_t m_iTeamNum = 0x3bf;
-	std::ptrdiff_t m_vecOrigin = 0x1224;          // m_vOldOrigin client.dll.rs
-	std::ptrdiff_t m_iHealth = 0x32C;             // m_iHealth client.dll.rs
-	std::ptrdiff_t bSpottedByMask = 0x1638 + 0xC; // entitySpottedState + bSpottedByMask
-	std::ptrdiff_t m_iszPlayerName = 0x640;       // char[128]
+	std::ptrdiff_t m_iTeamNum = 0x3CB;
+	std::ptrdiff_t m_vecOrigin = 0x127C;          // m_vOldOrigin client.dll.rs
+	std::ptrdiff_t m_iHealth = 0x334;             // m_iHealth client.dll.rs
+	std::ptrdiff_t bSpottedByMask = 0x1698 + 0xC; // entitySpottedState + bSpottedByMask
+	std::ptrdiff_t m_iszPlayerName = 0x638;       // char[128]
 	std::ptrdiff_t iIDEntIndex = 0x153C;          // m_iIDEntIndex = 0x153C;
 } // namespace offsets
 
