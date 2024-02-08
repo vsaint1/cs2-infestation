@@ -61,19 +61,21 @@ namespace settings {
 
 
 
-	}; // namespace Visuals
+	}; // namespace visuals
 
 	namespace world {
+		bool esp = false;
 		bool grenade_esp = false;
 		bool grenade_distance = false;
 		bool grenade_trajectory = false;
 		bool grenade_name = false;
+		bool grenade_snaplines = false;
 
 		bool weapon_esp = false;
 		bool weapon_name = false;
 		bool weapon_distance = false;
 		bool weapon_snaplines = false;
-	};
+	};// namespace world
 
 	namespace misc {
 		bool bTeamcheck = true;
