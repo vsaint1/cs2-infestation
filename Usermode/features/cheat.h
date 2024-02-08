@@ -179,7 +179,7 @@ void entities_loop()
 #endif // _DEBUG
 
 			if (settings::world::grenade_name)
-				draw_text(classname.erase(classname.find("_projectile"), 11).c_str(), ImVec2(screen_pos.x, screen_pos.y), ImVec4(137, 122, 0, 255));
+				draw_text(classname.c_str(), ImVec2(screen_pos.x, screen_pos.y), ImVec4(137, 122, 0, 255));
 
 			if (settings::world::grenade_snaplines)
 				draw_snaplines(screen_pos, ImVec4(255, 255, 255, 255));

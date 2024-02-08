@@ -200,7 +200,7 @@ void draw_menu() {
 				ImGui::Checkbox("Grenade Snap Lines", &settings::world::grenade_snaplines);
 				set_helper("Draw lines to Grenade projectile");
 				ImGui::Checkbox("Grenade Trajectory - DEV", &settings::world::grenade_trajectory);
-				set_helper("Draw Grenade projectile projection");
+				set_helper("This feature is under development, need to fix bounces, velocity and trajectory calculations");
 
 			}
 		}
