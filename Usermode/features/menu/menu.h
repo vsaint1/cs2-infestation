@@ -155,8 +155,9 @@ void draw_menu() {
 	if (ImGui::BeginTabItem(("ESP"))) {
 		ImGui::Columns(2, NULL, false);
 		ImGui::SetColumnOffset(1, 150);
-		ImGui::Checkbox("Enabled", &settings::visuals::esp);
+		ImGui::Checkbox("Player", &settings::visuals::esp);
 		set_helper("Enable/Disable ESP");
+		ImGui::Checkbox("Box", &settings::visuals::bBox);
 		ImGui::Checkbox("Skeleton", &settings::visuals::bSkeleton);
 		set_helper("Draw enemies skeleton");
 		ImGui::Checkbox("Health", &settings::visuals::bHealth);
@@ -167,18 +168,41 @@ void draw_menu() {
 		set_helper("Draw distance to enemies");
 
 		ImGui::NextColumn();
-		ImGui::Checkbox("Weapon", &settings::visuals::weapon);
-		set_helper("Enable/Disable Weapon ESP");
+		ImGui::Checkbox("World", &settings::world::esp);
+		set_helper("Enable/Disable World ESP");
+		ImGui::Spacing();
 
+		if (settings::world::esp) {
 
-		if (settings::visuals::weapon) {
-			ImGui::Checkbox("Weapon Name", &settings::visuals::weapon_name);
-			set_helper("Draw weapon name");
-			ImGui::Checkbox("Weapon Distance", &settings::visuals::weapon_distance);
-			set_helper("Draw distance to weapon");
-			ImGui::Checkbox("Weapon Snap Lines", &settings::visuals::weapon_snaplines);
-			set_helper("Draw lines to weapon");
+			ImGui::Checkbox("Weapons", &settings::world::weapon_esp);
+			set_helper("Enable/Disable Weapons ESP");
 
+			if (settings::world::weapon_esp) {
+				ImGui::Checkbox("Weapon Name", &settings::world::weapon_name);
+				set_helper("Draw weapon name");
+				ImGui::Checkbox("Weapon Distance", &settings::world::weapon_distance);
+				set_helper("Draw distance to weapon");
+				ImGui::Checkbox("Weapon Snap Lines", &settings::world::weapon_snaplines);
+				set_helper("Draw lines to weapon");
+
+			}
+
+			ImGui::Spacing();
+
+			ImGui::Checkbox("Grenades", &settings::world::grenade_esp);
+			set_helper("Enable/Disable Grenades ESP");
+
+			if (settings::world::grenade_esp) {
+				ImGui::Checkbox("Grenade Name", &settings::world::grenade_name);
+				set_helper("Grenade projectile name");
+				ImGui::Checkbox("Grenade Distance", &settings::world::grenade_distance);
+				set_helper("Grenade projectile distance");
+				ImGui::Checkbox("Grenade Snap Lines", &settings::world::grenade_snaplines);
+				set_helper("Draw lines to Grenade projectile");
+				ImGui::Checkbox("Grenade Trajectory - DEV", &settings::world::grenade_trajectory);
+				set_helper("Draw Grenade projectile projection");
+
+			}
 		}
 
 		ImGui::EndTabItem();
