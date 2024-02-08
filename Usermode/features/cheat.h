@@ -85,11 +85,12 @@ void cache_entities() {
 
 }
 
+// TODO: cache the world entities
 void entities_loop()
 {
 
 
-	if (!settings::visuals::weapon)
+	if (!settings::world::esp)
 		return;
 
 	uintptr_t entity_list = process.readv<uintptr_t>(client + offsets::dwEntityList);
@@ -101,6 +102,7 @@ void entities_loop()
 		uintptr_t ent = process.readv<uintptr_t>(entity_list + 8LL * ((i & 0x7FFF) >> 9) + 16);
 		if (!ent)
 			continue;
+		uintptr_t entbase = ent;
 
 		ent = process.readv<uintptr_t>(ent + 120LL * (i & 0x1FF));
 		if (!ent)
@@ -118,27 +120,22 @@ void entities_loop()
 		std::string classname = process.read_str(designer_name);
 #if _DEBUG
 
-		LOG("classname: %s\n", classname.c_str());
+		//LOG("classname: %s\n", classname.c_str());
 
 #endif
 
 		if (classname.find("_projectile") == std::string::npos && classname.find("weapon_") == std::string::npos)
 			continue;
 
-		auto node = process.readv<uintptr_t>(ent + 0x310);
+
+		auto node = process.readv<uintptr_t>(ent + 0x318);
 
 		FVector3 abs_origin = process.readv<FVector3>(node + 0x80);
 
 		if (abs_origin.isZero())
 			continue;
 
-		auto normalized_str = classname.find("weapon_") != std::string::npos ? classname.substr(7) : classname.erase(classname.find("_projectile"), 11);
-
-		const char* nades[5] = { "smokegrenade","hegrenade","flashbang","molotov","flashbang" };
-
-		// TODO: do extra stuff soon
-		if (std::find(std::begin(nades), std::end(nades), normalized_str) != std::end(nades))
-			LOG("CLASS_NAME: %s ABS_ORIGIN: %f %f %f", classname.c_str(), abs_origin.x, abs_origin.y, abs_origin.z);
+		const char* nades[5] = { "smokegrenade_projectile","hegrenade_projectile","flashbang_projectile","molotov_projectile","flashbang_projectile" };
 
 
 		float dist = abs_origin.distance(process.readv<FVector3>(global_pawn + offsets::m_vecOrigin)) / 100;
@@ -150,14 +147,41 @@ void entities_loop()
 		if (screen_pos.z < 0.001f)
 			continue;
 
-		if (settings::visuals::weapon_name)
+
+		if (settings::world::grenade_trajectory) {
+
+			if (std::find(std::begin(nades), std::end(nades), classname) != std::end(nades)) {
+				//LOG("CLASS_NAME: %s ABS_ORIGIN: %f %f %f", classname.c_str(), abs_origin.x, abs_origin.y, abs_origin.z);
+				//LOG("smoke: %d", process.readv<bool>(ent + 0x110C));
+				FVector3 initial_pos = process.readv<FVector3>(ent + 0x10C0);
+#ifdef _DEBUG
+				ImGui::Begin(classname.c_str());
+
+				ImGui::Text("X coordinate: %.2f", abs_origin.x);
+				ImGui::Text("Y coordinate: %.2f", abs_origin.y);
+				ImGui::Text("Z coordinate: %.2f", abs_origin.z);
+
+
+				ImGui::End();
+#endif // _DEBUG
+
+				draw_path(initial_pos.world_to_screen(local_viewmatrix), screen_pos);
+
+			}
+
+		}
+
+		auto normalized_str = classname.find("weapon_") != std::string::npos ? classname.substr(7) : classname.erase(classname.find("_projectile"), 11);
+
+		if (settings::world::grenade_name)
 			draw_text(normalized_str.c_str(), ImVec2(screen_pos.x, screen_pos.y), ImVec4(100, 0, 0, 150));
 
-		if (settings::visuals::weapon_snaplines)
-			draw_snapline(screen_pos, ImVec4(255, 255, 255, 255));
+		if (settings::world::grenade_snaplines)
+			draw_snaplines(screen_pos, ImVec4(255, 255, 255, 255));
 
-		if (settings::visuals::weapon_distance)
+		if (settings::world::grenade_distance)
 			draw_distance(screen_pos, dist);
+
 
 	}
 }
@@ -171,21 +195,20 @@ void entity_loop() {
 
 		view_matrix_t local_viewmatrix = process.readv<view_matrix_t>(client + offsets::dwViewMatrix);
 
-		for (Entity entity : entities) {
+		for (Entity& entity : entities) {
 			FVector3 origin = process.readv<FVector3>(entity.pawn + offsets::m_vecOrigin);
 
-			FVector3 head;
-			head.x = origin.x;
-			head.y = origin.y;
-			head.z = origin.z;
+			FVector3 head{ origin.x,origin.y,origin.z };
 
 			FVector3 screen_pos = origin.world_to_screen(local_viewmatrix);
 
 			if (screen_pos.z < 0.001f)
 				continue;
 
-			uintptr_t  p_gamescene = process.readv<uint64_t>(entity.pawn + 0x310);
-			uintptr_t  p_bonearray = process.readv<uint64_t>(p_gamescene + 0x1E0);
+
+			//CSkeletonInstance
+			uintptr_t  p_gamescene = process.readv<uint64_t>(entity.pawn + 0x318);
+			uintptr_t  p_bonearray = process.readv<uint64_t>(p_gamescene + 0x160 + 0x80); // m_modelState  + bArray
 
 			FVector3 entity_pos = process.readv<FVector3>(entity.pawn + offsets::m_vecOrigin);
 
