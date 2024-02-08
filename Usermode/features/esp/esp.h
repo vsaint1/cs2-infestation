@@ -17,7 +17,7 @@ void draw_esp(FVector3 head_pos, FVector3 screen_pos, Entity entity, uintptr_t  
 			float width = height / 2.0f;
 
 			if (settings::visuals::bBox)
-				draw_box(head_pos.x - 30, head_pos.y, width, height,1, ImVec4(255, 255, 255, 255));
+				draw_box(head_pos.x - 25, head_pos.y, width, height,1, ImVec4(255, 255, 255, 255));
 
 			if (settings::visuals::distance)
 				draw_distance(screen_pos, entity.position);
@@ -26,7 +26,7 @@ void draw_esp(FVector3 head_pos, FVector3 screen_pos, Entity entity, uintptr_t  
 				draw_snaplines(screen_pos, ImColor(255, 255, 255, 255));
 
 			if (settings::visuals::bHealth)
-				draw_progressbar(screen_pos.x + 30, head_pos.y, width, height, 2, entity.health);
+				draw_progressbar(screen_pos.x + 25, head_pos.y, width, height, 2, entity.health);
 
 			if (settings::visuals::bSkeleton)
 				draw_skeleton(bone_array, view_matrix, entity.visible);
