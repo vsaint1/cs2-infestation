@@ -120,7 +120,7 @@ void entities_loop()
 		std::string classname = process.read_str(designer_name);
 #if _DEBUG
 
-		//LOG("classname: %s\n", classname.c_str());
+		LOG("CLASS_NAME: {}\n", classname.c_str());
 
 #endif
 
@@ -148,39 +148,53 @@ void entities_loop()
 			continue;
 
 
-		if (settings::world::grenade_trajectory) {
+		if (settings::world::weapon_esp && classname.find("weapon_") != std::string::npos) {
 
-			if (std::find(std::begin(nades), std::end(nades), classname) != std::end(nades)) {
-				//LOG("CLASS_NAME: %s ABS_ORIGIN: %f %f %f", classname.c_str(), abs_origin.x, abs_origin.y, abs_origin.z);
-				//LOG("smoke: %d", process.readv<bool>(ent + 0x110C));
-				FVector3 initial_pos = process.readv<FVector3>(ent + 0x10C0);
+
+			if (settings::world::weapon_name)
+				draw_text(classname.substr(7).c_str(), ImVec2(screen_pos.x, screen_pos.y), ImVec4(30, 0, 0, 60));
+
+			if (settings::world::weapon_snaplines)
+				draw_snaplines(screen_pos, ImVec4(255, 255, 255, 255));
+
+			if (settings::world::weapon_distance)
+				draw_distance(screen_pos, dist);
+		}
+
+		if (settings::world::grenade_esp && std::find(std::begin(nades), std::end(nades), classname) != std::end(nades)) {
+
+
+			LOG("CLASS_NAME: {} ABS_ORIGIN: {} {} {}", classname.erase(classname.find("_projectile"), 11).c_str(), abs_origin.x, abs_origin.y, abs_origin.z);
+			LOG("SMOKE_TICK: {}", process.readv<bool>(ent + 0x110C));
+
 #ifdef _DEBUG
-				ImGui::Begin(classname.c_str());
+			ImGui::Begin(classname.c_str());
 
-				ImGui::Text("X coordinate: %.2f", abs_origin.x);
-				ImGui::Text("Y coordinate: %.2f", abs_origin.y);
-				ImGui::Text("Z coordinate: %.2f", abs_origin.z);
+			ImGui::Text("X coordinate: %.2f", abs_origin.x);
+			ImGui::Text("Y coordinate: %.2f", abs_origin.y);
+			ImGui::Text("Z coordinate: %.2f", abs_origin.z);
 
 
-				ImGui::End();
+			ImGui::End();
 #endif // _DEBUG
 
+			if (settings::world::grenade_name)
+				draw_text(classname.erase(classname.find("_projectile"), 11).c_str(), ImVec2(screen_pos.x, screen_pos.y), ImVec4(137, 122, 0, 255));
+
+			if (settings::world::grenade_snaplines)
+				draw_snaplines(screen_pos, ImVec4(255, 255, 255, 255));
+
+			if (settings::world::grenade_distance)
+				draw_distance(screen_pos, dist);
+
+			if (settings::world::grenade_trajectory) {
+				FVector3 initial_pos = process.readv<FVector3>(ent + 0x10C0);
 				draw_path(initial_pos.world_to_screen(local_viewmatrix), screen_pos);
 
 			}
 
+
 		}
-
-		auto normalized_str = classname.find("weapon_") != std::string::npos ? classname.substr(7) : classname.erase(classname.find("_projectile"), 11);
-
-		if (settings::world::grenade_name)
-			draw_text(normalized_str.c_str(), ImVec2(screen_pos.x, screen_pos.y), ImVec4(100, 0, 0, 150));
-
-		if (settings::world::grenade_snaplines)
-			draw_snaplines(screen_pos, ImVec4(255, 255, 255, 255));
-
-		if (settings::world::grenade_distance)
-			draw_distance(screen_pos, dist);
 
 
 	}
