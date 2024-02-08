@@ -13,25 +13,29 @@ void draw_esp(FVector3 head_pos, FVector3 screen_pos, Entity entity, uintptr_t  
 
 		if (settings::visuals::esp) {
 
+			float height = abs(screen_pos.y - head_pos.y);
+			float width = height / 2.0f;
 
+			if (settings::visuals::bBox)
+				draw_box(head_pos.x - 30, head_pos.y, width, height,1, ImVec4(255, 255, 255, 255));
 
 			if (settings::visuals::distance)
 				draw_distance(screen_pos, entity.position);
 
 			if (settings::visuals::bSnaplines)
-				draw_snapline(screen_pos, ImColor(255, 255, 255, 255));
+				draw_snaplines(screen_pos, ImColor(255, 255, 255, 255));
 
 			if (settings::visuals::bHealth)
-				draw_healthbar(screen_pos, entity.health);
+				draw_progressbar(screen_pos.x + 30, head_pos.y, width, height, 2, entity.health);
 
 			if (settings::visuals::bSkeleton)
-				draw_skeleton(bone_array, view_matrix,entity.visible);
+				draw_skeleton(bone_array, view_matrix, entity.visible);
 		}
 
 
 	}
 
 	if (settings::misc::bWatermark)
-		draw_text("[FREE] - https://www.infestation.com.br", ImVec2(200, 10), ImColor(255, 255, 255, 255));
+		draw_text("[CODE] - https://github.com/vsaint1/cs2-infestation", ImVec2(200, 10), ImColor(255, 255, 255, 255));
 
 }
