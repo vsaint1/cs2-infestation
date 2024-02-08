@@ -73,9 +73,9 @@ void draw_box(FVector3 screen_pos, float height, float width, ImColor color)
 	ImGui::GetForegroundDrawList()->AddRect({ screen_pos.x - width / 2, screen_pos.y }, { screen_pos.x + width / 2, screen_pos.y + height }, color);
 }
 
-void draw_rect(int x, int y, int w, int h, ImColor color, int thickness)
+void draw_rect(int x, int y, int w, int h, ImColor color)
 {
-	ImGui::GetForegroundDrawList()->AddRect(ImVec2(x, y), ImVec2(x + w, y + h), color, 0.0f, 0, thickness);
+	ImGui::GetForegroundDrawList()->AddRect(ImVec2(x, y), ImVec2(x + w, y + h), color, 0.0f, 0, 1);
 }
 
 
@@ -112,7 +112,7 @@ void draw_progressbar(int x, int y, int w, int h, int thick, int health)
 	ImVec2 text_size = ImGui::CalcTextSize(health_str.c_str());
 
 	draw_filled_rect(x + (w / 2) - 25, y, thick, (h)*health / 100, color);
-	draw_text(health_str.c_str(), ImVec2(x, y + 5 - text_size.y / 2), ImVec4(255, 255, 255, 150));
+	draw_text(health_str.c_str(), ImVec2(x, y + 5 ), ImVec4(255, 255, 255, 150));
 
 }
 
