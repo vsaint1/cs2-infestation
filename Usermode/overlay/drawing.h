@@ -4,11 +4,20 @@
 
 constexpr int MAX_NUM_SEGMENTS = 10;
 
+void draw_text(const char* text, ImVec2 pos, ImColor color)
+{
+
+	ImVec2 TextSize = ImGui::CalcTextSize(text);
+	ImGui::GetForegroundDrawList()->AddText(ImVec2(pos.x - TextSize.x / 2, pos.y - TextSize.y / 2), color, text);
+	ImGui::GetForegroundDrawList()->AddText(ImVec2(pos.x - TextSize.x / 2 + 1, pos.y - TextSize.y / 2 + 1), ImColor(0, 0, 0, 255), text);
+}
+
 void draw_distance(FVector3 local_position, float distance)
 {
 	std::string distance_str = std::to_string(static_cast<int32_t>(distance)) + "m";
-	ImVec2 TextSize = ImGui::CalcTextSize(distance_str.c_str());
-	ImGui::GetForegroundDrawList()->AddText(ImVec2(local_position.x - TextSize.x / 2, local_position.y - TextSize.y / 2 + 10), ImColor(255, 255, 255, 255), distance_str.c_str());
+	ImVec2 text_size = ImGui::CalcTextSize(distance_str.c_str());
+
+	draw_text(distance_str.c_str(), ImVec2(local_position.x, local_position.y + 20 - text_size.y / 2), ImVec4(100, 50, 50, 150));
 
 }
 void draw_filled_rect(int x, int y, int w, int h, ImVec4 color)
@@ -70,13 +79,7 @@ void draw_rect(int x, int y, int w, int h, ImColor color, int thickness)
 }
 
 
-void draw_text(const char* text, ImVec2 pos, ImColor color)
-{
 
-	ImVec2 TextSize = ImGui::CalcTextSize(text);
-	ImGui::GetForegroundDrawList()->AddText(ImVec2(pos.x - TextSize.x / 2, pos.y - TextSize.y / 2), color, text);
-	ImGui::GetForegroundDrawList()->AddText(ImVec2(pos.x - TextSize.x / 2 + 1, pos.y - TextSize.y / 2 + 1), ImColor(0, 0, 0, 255), text);
-}
 
 void draw_snaplines(FVector3 screen_pos, ImColor color) {
 	// bottom -> foot
