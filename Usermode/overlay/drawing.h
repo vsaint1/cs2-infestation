@@ -36,35 +36,40 @@ void draw_filled_rect(int x, int y, int w, int h, ImVec4 color)
 }
 
 
-void draw_path(FVector3 initial_pos, FVector3 current_pos)
+void draw_path(FVector3 initial_pos, FVector3 current_pos,bool spawned)
 {
-	std::vector<FVector3>previous_positions;
-	previous_positions.push_back(current_pos);
+    static std::vector<FVector3> previous_positions;
 
-	float distance = std::hypot(current_pos.x - initial_pos.x, current_pos.y - initial_pos.y);
+	if (spawned)
+		return;
+       
 
-	int num_segments = static_cast<int>(distance / 10.0f);
+    previous_positions.push_back(current_pos);
 
-	float alpha_decay_rate = 255.0f / static_cast<float>(num_segments);
+    float distance = std::hypot(current_pos.x - initial_pos.x, current_pos.y - initial_pos.y);
 
-	float alpha = 255.0f;
+    int num_segments = static_cast<int>(distance / 10.0f);
 
-	for (int i = 0; i < num_segments; ++i) {
-		float t = static_cast<float>(i) / num_segments;
-		ImVec2 p1 = ImVec2(initial_pos.x * (1 - t) + current_pos.x * t, initial_pos.y * (1 - t) + current_pos.y * t);
-		t = static_cast<float>(i + 1) / num_segments;
-		ImVec2 p2 = ImVec2(initial_pos.x * (1 - t) + current_pos.x * t, initial_pos.y * (1 - t) + current_pos.y * t);
+    float alpha_decay_rate = 255.0f / static_cast<float>(num_segments);
 
-		alpha -= alpha_decay_rate;
-		if (alpha < 0.0f) alpha = 0.0f;
+    float alpha = 255.0f;
 
-		ImGui::GetForegroundDrawList()->AddLine(p1, p2, IM_COL32(255, 255, 255, static_cast<int>(alpha)), 2.0f);
-	}
+    for (int i = 0; i < num_segments; ++i) {
+        float t = static_cast<float>(i) / num_segments;
+        ImVec2 p1 = ImVec2(initial_pos.x * (1 - t) + current_pos.x * t, initial_pos.y * (1 - t) + current_pos.y * t);
+        t = static_cast<float>(i + 1) / num_segments;
+        ImVec2 p2 = ImVec2(initial_pos.x * (1 - t) + current_pos.x * t, initial_pos.y * (1 - t) + current_pos.y * t);
 
-	if (previous_positions.size() > MAX_NUM_SEGMENTS)
-		previous_positions.erase(previous_positions.begin(), previous_positions.end() - MAX_NUM_SEGMENTS);
+        alpha -= alpha_decay_rate;
+        if (alpha < 0.0f) alpha = 0.0f;
 
+        ImGui::GetForegroundDrawList()->AddLine(p1, p2, IM_COL32(255, 255, 255, static_cast<int>(alpha)), 2.0f);
+    }
+
+    if (previous_positions.size() > MAX_NUM_SEGMENTS)
+        previous_positions.erase(previous_positions.begin(), previous_positions.end() - MAX_NUM_SEGMENTS);
 }
+
 
 
 void draw_box(int x, int y, int w, int h, int border, ImVec4 color)
