@@ -148,7 +148,6 @@ void draw_timer_progress(bool tick_begin, const ImVec2& center, ImVec4 color, in
         timers[idx] -= ImGui::GetIO().DeltaTime;
 
     if (timers[idx] < 0.0f) {
-        tick_begin = false;
         timers[idx] = 20.0f;
     }
 

@@ -192,7 +192,7 @@ void entities_loop()
 
 
 			// C_BaseCSGrenadeProjectile
-			if (settings::world::grenade_timer && classname.compare("smokegrenade_projectile"))
+			if (settings::world::grenade_timer && classname.compare("smokegrenade") == 0)
 				draw_timer_progress(process.readv<bool>(ent + 0x11A1), ImVec2(screen_pos.x, screen_pos.y - 30), ImVec4(255, 0, 0, 255),i);
 
 
