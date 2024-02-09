@@ -8,7 +8,7 @@ Project with awesome features and low performance impact.
 <img src="./examples/bostil.png">
 
 - Process  **running**, very low memory usage.
-<img src="./examples/running.webp">
+<img src="./examples/running.png">
 
 - Total **binary** size 
 <img src="./examples/size.png">
