@@ -3,13 +3,22 @@
 #include <algorithm>
 
 constexpr int MAX_NUM_SEGMENTS = 10;
+constexpr float PI = 3.14159265;
+
+ImVec2 add(ImVec2 a, ImVec2 b) {
+	return ImVec2(a.x + b.x, a.y + b.y);
+}
+
+ImVec2 subtract(ImVec2 a, ImVec2 b) {
+	return ImVec2(a.x - b.x, a.y - b.y);
+}
 
 void draw_text(const char* text, ImVec2 pos, ImColor color)
 {
 
 	ImVec2 TextSize = ImGui::CalcTextSize(text);
 	ImGui::GetForegroundDrawList()->AddText(ImVec2(pos.x - TextSize.x / 2, pos.y - TextSize.y / 2), color, text);
-	ImGui::GetForegroundDrawList()->AddText(ImVec2(pos.x - TextSize.x / 2 + 1, pos.y - TextSize.y / 2 + 1), ImColor(0, 0, 0, 255), text);
+	ImGui::GetForegroundDrawList()->AddText(ImVec2(pos.x - TextSize.x / 2 + 1, pos.y - TextSize.y / 2 + 1), ImColor(0, 0, 0, 200), text);
 }
 
 void draw_distance(FVector3 local_position, float distance)
@@ -20,6 +29,7 @@ void draw_distance(FVector3 local_position, float distance)
 	draw_text(distance_str.c_str(), ImVec2(local_position.x, local_position.y + 20 - text_size.y / 2), ImVec4(100, 50, 50, 150));
 
 }
+
 void draw_filled_rect(int x, int y, int w, int h, ImVec4 color)
 {
 	ImGui::GetForegroundDrawList()->AddRectFilled(ImVec2(x, y), ImVec2(x + w, y + h), ImGui::ColorConvertFloat4ToU32(color), 0, 0);
@@ -29,30 +39,31 @@ void draw_filled_rect(int x, int y, int w, int h, ImVec4 color)
 void draw_path(FVector3 initial_pos, FVector3 current_pos)
 {
 	std::vector<FVector3>previous_positions;
-    previous_positions.push_back(current_pos);
+	previous_positions.push_back(current_pos);
 
-    float distance = std::hypot(current_pos.x - initial_pos.x, current_pos.y - initial_pos.y);
+	float distance = std::hypot(current_pos.x - initial_pos.x, current_pos.y - initial_pos.y);
 
-    int num_segments = static_cast<int>(distance / 10.0f); 
+	int num_segments = static_cast<int>(distance / 10.0f);
 
-    float alpha_decay_rate = 255.0f / static_cast<float>(num_segments); 
+	float alpha_decay_rate = 255.0f / static_cast<float>(num_segments);
 
-    float alpha = 255.0f;
+	float alpha = 255.0f;
 
-    for (int i = 0; i < num_segments; ++i) {
-        float t = static_cast<float>(i) / num_segments;
-        ImVec2 p1 = ImVec2(initial_pos.x * (1 - t) + current_pos.x * t, initial_pos.y * (1 - t) + current_pos.y * t);
-        t = static_cast<float>(i + 1) / num_segments;
-        ImVec2 p2 = ImVec2(initial_pos.x * (1 - t) + current_pos.x * t, initial_pos.y * (1 - t) + current_pos.y * t);
-        
-        alpha -= alpha_decay_rate;
-        if (alpha < 0.0f) alpha = 0.0f;
+	for (int i = 0; i < num_segments; ++i) {
+		float t = static_cast<float>(i) / num_segments;
+		ImVec2 p1 = ImVec2(initial_pos.x * (1 - t) + current_pos.x * t, initial_pos.y * (1 - t) + current_pos.y * t);
+		t = static_cast<float>(i + 1) / num_segments;
+		ImVec2 p2 = ImVec2(initial_pos.x * (1 - t) + current_pos.x * t, initial_pos.y * (1 - t) + current_pos.y * t);
 
-        ImGui::GetForegroundDrawList()->AddLine(p1, p2, IM_COL32(255, 255, 255, static_cast<int>(alpha)), 2.0f);
-    }
+		alpha -= alpha_decay_rate;
+		if (alpha < 0.0f) alpha = 0.0f;
 
-    if (previous_positions.size() > MAX_NUM_SEGMENTS) 
-        previous_positions.erase(previous_positions.begin(), previous_positions.end() - MAX_NUM_SEGMENTS);
+		ImGui::GetForegroundDrawList()->AddLine(p1, p2, IM_COL32(255, 255, 255, static_cast<int>(alpha)), 2.0f);
+	}
+
+	if (previous_positions.size() > MAX_NUM_SEGMENTS)
+		previous_positions.erase(previous_positions.begin(), previous_positions.end() - MAX_NUM_SEGMENTS);
+
 }
 
 
@@ -104,18 +115,54 @@ void draw_rect(int x, int y, int w, int h, ImVec4 color, int thickness)
 
 void draw_progressbar(int x, int y, int w, int h, int thick, int health)
 {
+
+	float dt = health / 100.0f;
+
+	ImVec4 color = ImVec4(ImLerp(255.0f, 0.f, dt), ImLerp(0.f, (health > 50 ? 165.0f : 0.0f), dt), 0.0f, 200);
+
 	float G = (255 * health / 100);
 	float R = 255 - G;
-	ImVec4 color = { R, G, 0, 255 };
+	ImVec4 colore = { R, G, 0, 200 };
 	std::string health_str = std::to_string(static_cast<int32_t>(health));
 
 	ImVec2 text_size = ImGui::CalcTextSize(health_str.c_str());
 
 	draw_filled_rect(x + (w / 2) - 25, y, thick, (h)*health / 100, color);
-	draw_text(health_str.c_str(), ImVec2(x, y + 5 ), ImVec4(255, 255, 255, 150));
+	if (health < 100)
+		draw_text(health_str.c_str(), ImVec2(x + (w / 2) - 25, y + 5), ImVec4(255, 255, 255, 255));
 
 }
 
+void draw_timer_progress(bool tick_begin, const ImVec2& center, ImVec4 color, int idx) {
+    static float timers[32] = {20.0f}; 
+
+    if (!tick_begin)
+        return;
+
+    float radius = 20.0f;
+    float thickness = 2.0f;
+
+    ImGui::GetBackgroundDrawList()->AddCircleFilled(center, radius, IM_COL32(50, 50, 50, 100), MAX_NUM_SEGMENTS);
+
+    if (tick_begin)
+        timers[idx] -= ImGui::GetIO().DeltaTime;
+
+    if (timers[idx] < 0.0f) {
+        tick_begin = false;
+        timers[idx] = 20.0f;
+    }
+
+    float progress = timers[idx] / 20.0f;
+    ImVec2 start(cosf(-PI * 0.5f), sinf(-PI * 0.5f));
+    ImVec2 end(cosf(PI * 2.0f * progress - PI * 0.5f), sinf(PI * 2.0f * progress - PI * 0.5f));
+    ImGui::GetBackgroundDrawList()->PathArcTo(center, radius - thickness * 0.5f, PI * 0.5f, PI * 2.0f * progress + PI * 0.5f, MAX_NUM_SEGMENTS);
+    ImGui::GetBackgroundDrawList()->PathStroke(IM_COL32(255, 0, 0, 255), false, thickness);
+
+    char label[32];
+    snprintf(label, sizeof(label), "%.1f", timers[idx]);
+    ImVec2 textSize = ImGui::CalcTextSize(label);
+    ImGui::GetBackgroundDrawList()->AddText(ImVec2(center.x - textSize.x * 0.5f, center.y - textSize.y * 0.5f), IM_COL32_WHITE, label);
+}
 
 void draw_skeleton(uintptr_t bonearray, view_matrix_t view_matrix, bool visible) {
 
@@ -162,3 +209,4 @@ void draw_skeleton(uintptr_t bonearray, view_matrix_t view_matrix, bool visible)
 #endif
 
 };
+
