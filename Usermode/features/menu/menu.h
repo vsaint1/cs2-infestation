@@ -124,7 +124,7 @@ void draw_menu() {
 	// load_image_from_memory((void*)image_data, sizeof(image_data), &image_logo);
 	// ImGui::Image((void*)image_logo, ImVec2(300, 200));
 
-	ImGui::SetNextWindowSize(ImVec2(400.0f, 300.0f), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(500.0f, 400.0f), ImGuiCond_Once);
 	ImGui::Begin(("Infestation - 4.0"), &settings::bMenu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
 
 	ImGui::BeginTabBar(("##tabs"), ImGuiTabBarFlags_None);
@@ -158,6 +158,9 @@ void draw_menu() {
 		ImGui::Checkbox("Player", &settings::visuals::esp);
 		set_helper("Enable/Disable ESP");
 		ImGui::Checkbox("Box", &settings::visuals::bBox);
+		set_helper("Draw enemies 2D box");
+		ImGui::Checkbox("Name", &settings::visuals::bName);
+		set_helper("Draw enemies name");
 		ImGui::Checkbox("Skeleton", &settings::visuals::bSkeleton);
 		set_helper("Draw enemies skeleton");
 		ImGui::Checkbox("Health", &settings::visuals::bHealth);
@@ -199,6 +202,8 @@ void draw_menu() {
 				set_helper("Grenade projectile distance");
 				ImGui::Checkbox("Grenade Snap Lines", &settings::world::grenade_snaplines);
 				set_helper("Draw lines to Grenade projectile");
+				ImGui::Checkbox("Grenade Timer", &settings::world::grenade_timer);
+				set_helper("Draw Grenade timer");
 				ImGui::Checkbox("Grenade Trajectory - DEV", &settings::world::grenade_trajectory);
 				set_helper("This feature is under development, need to fix bounces, velocity and trajectory calculations");
 
