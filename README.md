@@ -1,13 +1,43 @@
-# CS2 - FREE GAMING CHAIR (REUPLOAD)
+# CS2 - FREE GAMING CHAIR 
 
-Project with basic features and low performance impact.
+Project with awesome features and low performance impact.
 
-3.5 - **NEW VERSION** - 2023-12-27
+## Usermode
 
-<img src="./examples/best_free.png">
+- Screenshot **project** running on 4.5 - VERSION 
+<img src="./examples/bostil.png">
 
+- Process  **running**, very low memory usage.
+<img src="./examples/running.webp">
+
+- Total **binary** size 
+<img src="./examples/size.png">
+
+- **OBS: This demo is using old version (3.0)**
 <a target="_blank" href="https://streamable.com/g937bg">Watch the demo</a>
 
+### Features (4.5)
+
+- Mouse
+- [x] Aimbot
+- [ ] Triggerbot
+- [ ] RCS
+
+- ESP
+- [x] Player **(Box, Skeleton,Name, Distance, SnapLines, Health)**
+
+- WORLD
+- [x] Weapon **(Name, Distance, SnapLines)**
+- [x] Grenade **(Trajectory, Name, Distance, Timer)**
+
+- MISC
+- [x] Team-Check
+- [ ] Anti-Screencapture
+- [ ] Radar
+- [ ] Bunny-hop
+- [ ] Sound-ESP
+
+## Driver
 The driver can be used in any windows 10/11 versions.
 
 - [x] Kernel fully recoded with extra addons
