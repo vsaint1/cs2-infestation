@@ -89,9 +89,6 @@
     <ClInclude Include="features\esp\esp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="overlay\logo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="features\menu\menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>

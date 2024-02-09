@@ -171,7 +171,6 @@
     <ClInclude Include="memory\driver.h" />
     <ClInclude Include="memory\memory.h" />
     <ClInclude Include="overlay\drawing.h" />
-    <ClInclude Include="overlay\logo.h" />
     <ClInclude Include="overlay\render.h" />
     <ClInclude Include="protection\xor.h" />
     <ClInclude Include="utils\helper_macro.h" />

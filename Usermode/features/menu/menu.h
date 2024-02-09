@@ -1,7 +1,6 @@
 #pragma once
 
-IDirect3DTexture9* image_logo = nullptr;
-inline bool load_image_from_memory(void* data, size_t size, IDirect3DTexture9** out_texture);
+
 
 void create_style() {
 	ImGuiStyle* style = &ImGui::GetStyle();
@@ -120,12 +119,10 @@ void draw_menu() {
 
 	create_style();
 
-	// TODO: fix memory leak's
-	// load_image_from_memory((void*)image_data, sizeof(image_data), &image_logo);
-	// ImGui::Image((void*)image_logo, ImVec2(300, 200));
+
 
 	ImGui::SetNextWindowSize(ImVec2(500.0f, 400.0f), ImGuiCond_Once);
-	ImGui::Begin(("Infestation - 4.0"), &settings::bMenu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
+	ImGui::Begin(("Infestation - 4.5"), &settings::bMenu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
 
 	ImGui::BeginTabBar(("##tabs"), ImGuiTabBarFlags_None);
 	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowSize().x / 2 - 100, 50));
@@ -134,6 +131,7 @@ void draw_menu() {
 	ImGui::SetNextItemwidth(100);
 
 	if (ImGui::BeginTabItem(("Aimbot"))) {
+		ImGui::Text("Aimbot");
 		ImGui::Checkbox("Enabled", &settings::aimbot::aimbot);
 		set_helper("Enable/Disable Aimbot");
 		ImGui::Checkbox("Visible Check", &settings::aimbot::visible_check);
@@ -155,7 +153,8 @@ void draw_menu() {
 	if (ImGui::BeginTabItem(("ESP"))) {
 		ImGui::Columns(2, NULL, false);
 		ImGui::SetColumnOffset(1, 150);
-		ImGui::Checkbox("Player", &settings::visuals::esp);
+		ImGui::Text("Player");
+		ImGui::Checkbox("Enabled", &settings::visuals::esp);
 		set_helper("Enable/Disable ESP");
 		ImGui::Checkbox("Box", &settings::visuals::bBox);
 		set_helper("Draw enemies 2D box");
@@ -171,6 +170,7 @@ void draw_menu() {
 		set_helper("Draw distance to enemies");
 
 		ImGui::NextColumn();
+
 		ImGui::Checkbox("World", &settings::world::esp);
 		set_helper("Enable/Disable World ESP");
 		ImGui::Spacing();
@@ -178,8 +178,8 @@ void draw_menu() {
 		if (settings::world::esp) {
 
 			ImGui::Checkbox("Weapons", &settings::world::weapon_esp);
+			ImGui::SameLine();
 			set_helper("Enable/Disable Weapons ESP");
-
 			if (settings::world::weapon_esp) {
 				ImGui::Checkbox("Weapon Name", &settings::world::weapon_name);
 				set_helper("Draw weapon name");
@@ -191,7 +191,6 @@ void draw_menu() {
 			}
 
 			ImGui::Spacing();
-
 			ImGui::Checkbox("Grenades", &settings::world::grenade_esp);
 			set_helper("Enable/Disable Grenades ESP");
 
