@@ -178,6 +178,7 @@ void entities_loop()
 			ImGui::End();
 #endif // _DEBUG
 
+			auto smoke_tick_begin = process.readv<bool>(ent + 0x11A1);
 			if (settings::world::grenade_name)
 				draw_text(normalized_str, ImVec2(screen_pos.x, screen_pos.y), ImVec4(137, 122, 0, 255));
 
@@ -188,12 +189,12 @@ void entities_loop()
 				draw_distance(screen_pos, dist);
 
 			if (settings::world::grenade_trajectory)
-				draw_path(process.readv<FVector3>(ent + 0x10C0).world_to_screen(local_viewmatrix), screen_pos);
+				draw_path(process.readv<FVector3>(ent + 0x10C0).world_to_screen(local_viewmatrix), screen_pos,smoke_tick_begin);
 
 
 			// C_BaseCSGrenadeProjectile
 			if (settings::world::grenade_timer && classname.compare("smokegrenade") == 0)
-				draw_timer_progress(process.readv<bool>(ent + 0x11A1), ImVec2(screen_pos.x, screen_pos.y - 30), ImVec4(255, 0, 0, 255),i);
+				draw_timer_progress(smoke_tick_begin, ImVec2(screen_pos.x, screen_pos.y - 30), ImVec4(255, 0, 0, 255),i);
 
 
 
