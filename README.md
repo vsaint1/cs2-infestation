@@ -18,27 +18,29 @@ Project with awesome features and low performance impact.
 
 ### Features (4.5)
 
-- Mouse
+#### Mouse
 - [x] Aimbot
 - [ ] Triggerbot
 - [ ] RCS
 
-- ESP
+#### ESP
 - [x] Player **(Box, Skeleton,Name, Distance, SnapLines, Health)**
+- [ ] Flags
 
-- WORLD
+#### WORLD
 - [x] Weapon **(Name, Distance, SnapLines)**
 - [x] Grenade **(Trajectory, Name, Distance, Timer)**
+- [ ] Bomb-Timer
 
-- MISC
+#### MISC
 - [x] Team-Check
 - [ ] Anti-Screencapture
 - [ ] Radar
 - [ ] Bunny-hop
 - [ ] Sound-ESP
-- [ ] Bomb-Timer
 
-- Config
+
+#### Config
 - [ ] Create
 - [ ] Load
 - [ ] Delete
