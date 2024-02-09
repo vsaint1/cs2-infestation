@@ -16,8 +16,12 @@ void draw_esp(FVector3 head_pos, FVector3 screen_pos, Entity entity, uintptr_t  
 			float height = abs(screen_pos.y - head_pos.y);
 			float width = height / 2.0f;
 
+
 			if (settings::visuals::bBox)
 				draw_rect(screen_pos.x - width / 2, head_pos.y - 1, width, height, ImVec4(255, 243, 247, 255));
+
+			if (settings::visuals::bName)
+				draw_text(entity.name.c_str(), ImVec2(head_pos.x, head_pos.y - 10), ImVec4(255, 243, 247, 255));
 
 			if (settings::visuals::distance)
 				draw_distance(screen_pos, entity.position);
@@ -30,6 +34,10 @@ void draw_esp(FVector3 head_pos, FVector3 screen_pos, Entity entity, uintptr_t  
 
 			if (settings::visuals::bSkeleton)
 				draw_skeleton(bone_array, view_matrix, entity.visible);
+
+			// flags
+			//draw_text(entity.name.c_str(), ImVec2(screen_pos.x - width / 2 , head_pos.y - 10), ImVec4(255, 243, 247, 255));
+
 		}
 
 
