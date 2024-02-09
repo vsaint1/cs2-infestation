@@ -121,7 +121,7 @@ void draw_menu() {
 
 
 
-	ImGui::SetNextWindowSize(ImVec2(500.0f, 400.0f), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(500.0f, 350.0f), ImGuiCond_Once);
 	ImGui::Begin(("Infestation - 4.5"), &settings::bMenu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
 
 	ImGui::BeginTabBar(("##tabs"), ImGuiTabBarFlags_None);
