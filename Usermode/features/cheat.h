@@ -120,7 +120,7 @@ void entities_loop()
 		std::string classname = process.read_str(designer_name);
 #if _DEBUG
 
-		LOG("CLASS_NAME: {}\n", classname.c_str());
+		LOG("CLASS_NAME: %s\n", classname.c_str());
 
 #endif
 
@@ -134,6 +134,7 @@ void entities_loop()
 
 		if (abs_origin.isZero())
 			continue;
+
 
 		const char* nades[5] = { "smokegrenade_projectile","hegrenade_projectile","flashbang_projectile","molotov_projectile","flashbang_projectile" };
 
@@ -163,9 +164,9 @@ void entities_loop()
 
 		if (settings::world::grenade_esp && std::find(std::begin(nades), std::end(nades), classname) != std::end(nades)) {
 
-
-			LOG("CLASS_NAME: {} ABS_ORIGIN: {} {} {}", classname.erase(classname.find("_projectile"), 11).c_str(), abs_origin.x, abs_origin.y, abs_origin.z);
-			LOG("SMOKE_TICK: {}", process.readv<bool>(ent + 0x110C));
+			auto normalized_str = classname.erase(classname.find("_projectile"), 11).c_str();
+			LOG("CLASS_NAME: %s ABS_ORIGIN: %.2f %.2f %.2f",normalized_str, abs_origin.x, abs_origin.y, abs_origin.z);
+		
 
 #ifdef _DEBUG
 			ImGui::Begin(classname.c_str());
@@ -174,12 +175,11 @@ void entities_loop()
 			ImGui::Text("Y coordinate: %.2f", abs_origin.y);
 			ImGui::Text("Z coordinate: %.2f", abs_origin.z);
 
-
 			ImGui::End();
 #endif // _DEBUG
 
 			if (settings::world::grenade_name)
-				draw_text(classname.c_str(), ImVec2(screen_pos.x, screen_pos.y), ImVec4(137, 122, 0, 255));
+				draw_text(normalized_str, ImVec2(screen_pos.x, screen_pos.y), ImVec4(137, 122, 0, 255));
 
 			if (settings::world::grenade_snaplines)
 				draw_snaplines(screen_pos, ImVec4(255, 255, 255, 255));
@@ -187,17 +187,21 @@ void entities_loop()
 			if (settings::world::grenade_distance)
 				draw_distance(screen_pos, dist);
 
-			if (settings::world::grenade_trajectory) {
-				FVector3 initial_pos = process.readv<FVector3>(ent + 0x10C0);
-				draw_path(initial_pos.world_to_screen(local_viewmatrix), screen_pos);
+			if (settings::world::grenade_trajectory)
+				draw_path(process.readv<FVector3>(ent + 0x10C0).world_to_screen(local_viewmatrix), screen_pos);
 
-			}
+
+			// C_BaseCSGrenadeProjectile
+			if (settings::world::grenade_timer && classname.compare("smokegrenade_projectile"))
+				draw_timer_progress(process.readv<bool>(ent + 0x11A1), ImVec2(screen_pos.x, screen_pos.y - 30), ImVec4(255, 0, 0, 255),i);
+
 
 
 		}
 
-
 	}
+
+
 }
 
 
@@ -242,7 +246,6 @@ void entity_loop() {
 				ImGui::GetBackgroundDrawList()->AddCircle(ImVec2(width / 2, height / 2), settings::aimbot::aim_fov, ImColor(255, 255, 255, 255), 100);
 
 			std::thread(aimbot, entity, head_pos).detach();
-
 		}
 
 	}
