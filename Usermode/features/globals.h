@@ -18,10 +18,10 @@ namespace hotkeys {
 static int keystatus = 0;
 
 namespace offsets {
-	std::ptrdiff_t dwEntityList = 0x18B0FB8;
-	std::ptrdiff_t dwLocalPlayerPawn = 0x17262D8;
+	std::ptrdiff_t dwEntityList = 0x18B0FC8;
+	std::ptrdiff_t dwLocalPlayerPawn = 0x17262E8;
 	std::ptrdiff_t dwGameEntitySystem_getHighestEntityIndex = 0x1510;
-	std::ptrdiff_t dwViewMatrix = 0x19102A0;
+	std::ptrdiff_t dwViewMatrix = 0x19102B0;
 	std::ptrdiff_t dwPawnHealth = 0x7F0;    // m_iPawnHealth = 0x7F8; // uint32_t
 	std::ptrdiff_t dwPlayerPawn = 0x7E4;    // m_hPlayerPawn client.dll.rs
 	std::ptrdiff_t dwSanitizedName = 0x640; //  m_iszPlayerName = 0x640; // char[128]
@@ -70,6 +70,7 @@ namespace settings {
 		bool grenade_trajectory = false;
 		bool grenade_name = false;
 		bool grenade_snaplines = false;
+		bool grenade_timer = false;
 
 		bool weapon_esp = false;
 		bool weapon_name = false;
