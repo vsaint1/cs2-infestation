@@ -36,6 +36,12 @@ Project with awesome features and low performance impact.
 - [ ] Radar
 - [ ] Bunny-hop
 - [ ] Sound-ESP
+- [ ] Bomb-Timer
+
+- Config
+- [ ] Create
+- [ ] Load
+- [ ] Delete
 
 ## Driver
 The driver can be used in any windows 10/11 versions.
