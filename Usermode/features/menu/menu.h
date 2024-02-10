@@ -168,6 +168,8 @@ void draw_menu() {
 		set_helper("Draw lines to enemies");
 		ImGui::Checkbox("Distance", &settings::visuals::distance);
 		set_helper("Draw distance to enemies");
+		ImGui::Checkbox("Weapon", &settings::visuals::bWeapon);
+		set_helper("Draw enemies current weapon");
 
 		ImGui::NextColumn();
 
