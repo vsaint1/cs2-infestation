@@ -45,6 +45,7 @@ public:
 	bool visible;
 	std::string name;
 	float position;
+	std::string weapon_name;
 };
 
 

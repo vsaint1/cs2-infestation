@@ -58,7 +58,7 @@ namespace settings {
 		bool bDistance = false;
 		bool bBox = false;
 		bool distance = false;
-
+		bool bWeapon = false;
 
 
 	}; // namespace visuals
