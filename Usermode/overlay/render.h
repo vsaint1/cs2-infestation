@@ -11,6 +11,8 @@
 #include "../features/globals.h"
 #include "../features/menu/menu.h"
 #include "../features/cheat.h"
+#include "font.h"
+#include "weapon_font.h"
 
 #pragma comment(lib, "d3dx9.lib")
 #pragma comment(lib, "d3d9.lib")
@@ -67,7 +69,7 @@ HRESULT init_wndparams(HWND hWnd)
 	p_Params.BackBufferHeight = height;
 	p_Params.EnableAutoDepthStencil = TRUE;
 	p_Params.AutoDepthStencilFormat = D3DFMT_D16;
-	p_Params.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
+	p_Params.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 
 	if (FAILED(p_Object->CreateDeviceEx(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &p_Params, 0, &p_Device))) {
 		p_Object->Release();
@@ -78,6 +80,9 @@ HRESULT init_wndparams(HWND hWnd)
 	ImGui::CreateContext();
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.Fonts->AddFontFromMemoryTTF(&tahoma_font, sizeof(tahoma_font), 13.0f, NULL, io.Fonts->GetGlyphRangesDefault());
+	io.Fonts->AddFontFromMemoryTTF(&weapon_font_icon, sizeof(weapon_font_icon), 17.0f, NULL, io.Fonts->GetGlyphRangesDefault());
+
 	ImGuiStyle& s = ImGui::GetStyle();
 	io.IniFilename = NULL;
 
