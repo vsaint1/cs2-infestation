@@ -39,14 +39,13 @@ void draw_text(ImFont* font, const char* text, FVector3 pos, ImColor color, floa
 
 }
 
-void draw_distance(FVector3 local_position, float distance) {
+void draw_distance(FVector3 local_position, float distance,ImColor color = ImColor(255, 201, 14, 233)) {
 	std::string distance_str = std::to_string(static_cast<int32_t>(distance)) + "m";
 	ImVec2 text_size = ImGui::CalcTextSize(distance_str.c_str());
 
-	draw_text(distance_str.c_str(), ImVec2(local_position.x - 5, local_position.y + 20 - text_size.y / 2), ImColor(255, 201, 14, 233));
+	draw_text(distance_str.c_str(), ImVec2(local_position.x - 5, local_position.y + 20 - text_size.y / 2), color);
 
 }
-
 
 
 void draw_filled_rect(int x, int y, int w, int h, ImVec4 color) {
@@ -154,7 +153,7 @@ void draw_progressbar(int x, int y, int w, int h, int thick, int health)
 	draw_filled_rect(x + (w / 2) - 25, bar_y, thick, health_h, color);
 
 	if (health < 100)
-		draw_text(health_str.c_str(), ImVec2(x + (w / 2) - 22, bar_y + 5), ImVec4(255, 255, 255, 255), 14.5f);
+		draw_text(health_str.c_str(), ImVec2(x + (w / 2) - 22, bar_y + 5), ImVec4(255, 255, 255, 255));
 }
 
 void draw_timer_progress(bool tick_begin, const ImVec2& center, ImVec4 color, int idx) {
