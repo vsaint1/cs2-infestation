@@ -168,7 +168,7 @@ void draw_menu() {
 		set_helper("Draw lines to enemies");
 		ImGui::Checkbox("Distance", &settings::visuals::distance);
 		set_helper("Draw distance to enemies");
-		ImGui::Checkbox("Weapon", &settings::visuals::bWeapon);
+		ImGui::Checkbox("Weapon Icon", &settings::visuals::bWeapon);
 		set_helper("Draw enemies current weapon");
 
 		ImGui::NextColumn();
@@ -183,7 +183,7 @@ void draw_menu() {
 			ImGui::SameLine();
 			set_helper("Enable/Disable Weapons ESP");
 			if (settings::world::weapon_esp) {
-				ImGui::Checkbox("Weapon Name", &settings::world::weapon_name);
+				ImGui::Checkbox("Weapon Icon", &settings::world::weapon_name);
 				set_helper("Draw weapon name");
 				ImGui::Checkbox("Weapon Distance", &settings::world::weapon_distance);
 				set_helper("Draw distance to weapon");
@@ -197,7 +197,7 @@ void draw_menu() {
 			set_helper("Enable/Disable Grenades ESP");
 
 			if (settings::world::grenade_esp) {
-				ImGui::Checkbox("Grenade Name", &settings::world::grenade_name);
+				ImGui::Checkbox("Grenade Icon", &settings::world::grenade_name);
 				set_helper("Grenade projectile name");
 				ImGui::Checkbox("Grenade Distance", &settings::world::grenade_distance);
 				set_helper("Grenade projectile distance");
