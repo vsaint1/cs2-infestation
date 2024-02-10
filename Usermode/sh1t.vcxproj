@@ -171,8 +171,11 @@
     <ClInclude Include="memory\driver.h" />
     <ClInclude Include="memory\memory.h" />
     <ClInclude Include="overlay\drawing.h" />
+    <ClInclude Include="overlay\font.h" />
     <ClInclude Include="overlay\render.h" />
+    <ClInclude Include="overlay\weapon_font.h" />
     <ClInclude Include="protection\xor.h" />
+    <ClInclude Include="utils\gun_icon.h" />
     <ClInclude Include="utils\helper_macro.h" />
   </ItemGroup>
   <ItemGroup>

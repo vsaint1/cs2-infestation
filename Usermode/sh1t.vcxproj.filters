@@ -104,6 +104,15 @@
     <ClInclude Include="utils\helper_macro.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="overlay\font.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="overlay\weapon_font.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\gun_icon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Driver\.clang-format" />
