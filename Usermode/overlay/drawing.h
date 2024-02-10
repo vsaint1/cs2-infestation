@@ -1,6 +1,8 @@
 #pragma once
 #include "../features/math.h"
 #include <algorithm>
+#include "../external/imgui/imgui_internal.h"
+#include "../utils/gun_icon.h"
 
 constexpr int MAX_NUM_SEGMENTS = 10;
 constexpr float PI = 3.14159265;
@@ -13,32 +15,48 @@ ImVec2 subtract(ImVec2 a, ImVec2 b) {
 	return ImVec2(a.x - b.x, a.y - b.y);
 }
 
-void draw_text(const char* text, ImVec2 pos, ImColor color, float font_size = 13.0f)
-{
+void draw_text(const char* text, ImVec2 pos, ImColor color, float font_size = 13.0f) {
 	ImFont* font = ImGui::GetFont();
 	font->FontSize = font_size;
 	ImVec2 TextSize = ImGui::CalcTextSize(text);
-	ImGui::GetForegroundDrawList()->AddText(ImVec2(pos.x - TextSize.x / 2, pos.y - TextSize.y / 2), color, text);
-	ImGui::GetForegroundDrawList()->AddText(ImVec2(pos.x - TextSize.x / 2 + 1, pos.y - TextSize.y / 2 + 1), ImColor(0, 0, 0, 255), text);
+
+	ImVec2 text_pos = ImVec2(pos.x - TextSize.x * 0.5f, pos.y - TextSize.y * 0.5f);
+	ImVec2 shadow_offset = ImVec2(1.0f, 1.0f);
+	ImColor shadow_color = ImColor(0, 0, 0, 255);
+	ImVec2 shadow_pos = ImVec2(text_pos.x + shadow_offset.x, text_pos.y + shadow_offset.y);
+
+	ImGui::GetForegroundDrawList()->AddText(shadow_pos, shadow_color, text);
+
+	ImGui::GetForegroundDrawList()->AddText(text_pos, color, text);
 }
 
-void draw_distance(FVector3 local_position, float distance)
-{
+void draw_text(ImFont* font, const char* text, FVector3 pos, ImColor color, float font_size = 13.0f) {
+
+	ImVec2 text_size = ImGui::CalcTextSize(text);
+
+	ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(pos.x - text_size.x / 2 + 1 + 10, pos.y - text_size.y / 2 + 1 +5), ImColor(0, 0, 0, 255), gun_icon(text));
+	ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(pos.x - text_size.x / 2 + 10, pos.y - text_size.y / 2 + 5), color, gun_icon(text));
+
+}
+
+void draw_distance(FVector3 local_position, float distance) {
 	std::string distance_str = std::to_string(static_cast<int32_t>(distance)) + "m";
 	ImVec2 text_size = ImGui::CalcTextSize(distance_str.c_str());
 
-	draw_text(distance_str.c_str(), ImVec2(local_position.x, local_position.y + 20 - text_size.y / 2), ImVec4(100, 50, 50, 150));
+	draw_text(distance_str.c_str(), ImVec2(local_position.x - 5, local_position.y + 20 - text_size.y / 2), ImColor(255, 201, 14, 233));
 
 }
 
-void draw_filled_rect(int x, int y, int w, int h, ImVec4 color)
-{
+
+
+void draw_filled_rect(int x, int y, int w, int h, ImVec4 color) {
+
 	ImGui::GetForegroundDrawList()->AddRectFilled(ImVec2(x, y), ImVec2(x + w, y + h), ImGui::ColorConvertFloat4ToU32(color), 0, 0);
 }
 
 
-void draw_path(FVector3 initial_pos, FVector3 current_pos, bool spawned)
-{
+void draw_path(FVector3 initial_pos, FVector3 current_pos, bool spawned) {
+
 	static std::vector<FVector3> previous_positions;
 
 	if (spawned)
@@ -73,25 +91,25 @@ void draw_path(FVector3 initial_pos, FVector3 current_pos, bool spawned)
 
 
 
-void draw_box(int x, int y, int w, int h, int border, ImVec4 color)
-{
-	draw_filled_rect(x + border, y, w, border, color); //top 
-	draw_filled_rect(x + w - w + border, y, w, border, color); //top 
-	draw_filled_rect(x, y, border, h, color); //left 
-	draw_filled_rect(x, y + h - h + border * 2, border, h, color); //left 
-	draw_filled_rect(x + border, y + h + border, w, border, color); //bottom 
-	draw_filled_rect(x + w - w + border, y + h + border, w, border, color); //bottom 
-	draw_filled_rect(x + w + border, y, border, h, color);//right 
-	draw_filled_rect(x + w + border, y + h - h + border * 2, border, h, color);//right 
+void draw_filled_box(int x, int y, int w, int h, int border, ImVec4 border_color) {
+	int shadow_offset = 1;
+	ImVec4 shadow_color = ImVec4(0.2f, 0.2f, 0.2f, 0.5f);
+	draw_filled_rect(x + shadow_offset, y + shadow_offset, w, h, shadow_color);
+
+
+	draw_filled_rect(x, y, w, border, border_color); //top 
+	draw_filled_rect(x, y, border, h, border_color); //left 
+	draw_filled_rect(x + w - border, y, border, h, border_color); //right 
+	draw_filled_rect(x, y + h - border, w, border, border_color); //bottom 
 }
 
-void draw_box(FVector3 screen_pos, float height, float width, ImColor color)
-{
+void draw_box(FVector3 screen_pos, float height, float width, ImColor color) {
+
 	ImGui::GetForegroundDrawList()->AddRect({ screen_pos.x - width / 2, screen_pos.y }, { screen_pos.x + width / 2, screen_pos.y + height }, color);
 }
 
-void draw_rect(int x, int y, int w, int h, ImColor color)
-{
+void draw_box(int x, int y, int w, int h, ImColor color) {
+
 	ImGui::GetForegroundDrawList()->AddRect(ImVec2(x, y), ImVec2(x + w, y + h), color, 0.0f, 0, 1);
 }
 
@@ -136,11 +154,20 @@ void draw_progressbar(int x, int y, int w, int h, int thick, int health)
 	draw_filled_rect(x + (w / 2) - 25, bar_y, thick, health_h, color);
 
 	if (health < 100)
-		draw_text(health_str.c_str(), ImVec2(x + (w / 2) - 25, bar_y + 5), ImVec4(255, 255, 255, 255), 15.0f);
+		draw_text(health_str.c_str(), ImVec2(x + (w / 2) - 22, bar_y + 5), ImVec4(255, 255, 255, 255), 14.5f);
 }
 
 void draw_timer_progress(bool tick_begin, const ImVec2& center, ImVec4 color, int idx) {
-	static float timers[32] = { 20.0f };
+	static float timers[32];
+#ifdef _DEBUG
+	ImGui::SetNextWindowSize(ImVec2(100.0f, 100.0f), ImGuiCond_Once);
+
+	ImGui::Begin("Timers");
+	ImGui::Text("Grenade idx %d", idx);
+	ImGui::Text("Time %.1f", timers[idx]);
+	ImGui::Text("TickBegin %s", tick_begin ? "Fade in" : "Fade out");
+	ImGui::End();
+#endif // _DEBUG
 
 	if (!tick_begin)
 		return;
@@ -148,14 +175,13 @@ void draw_timer_progress(bool tick_begin, const ImVec2& center, ImVec4 color, in
 	float radius = 20.0f;
 	float thickness = 2.0f;
 
-	ImGui::GetBackgroundDrawList()->AddCircleFilled(center, radius, IM_COL32(50, 50, 50, 100), MAX_NUM_SEGMENTS);
 
-	if (tick_begin)
-		timers[idx] -= ImGui::GetIO().DeltaTime;
-
-	if (timers[idx] < 0.0f) {
+	if (timers[idx] < 0.0f)
 		timers[idx] = 20.0f;
-	}
+
+	timers[idx] -= ImGui::GetIO().DeltaTime;
+
+	ImGui::GetBackgroundDrawList()->AddCircleFilled(center, radius, IM_COL32(50, 50, 50, 100), MAX_NUM_SEGMENTS);
 
 	float progress = timers[idx] / 20.0f;
 	ImVec2 start(cosf(-PI * 0.5f), sinf(-PI * 0.5f));
@@ -164,7 +190,7 @@ void draw_timer_progress(bool tick_begin, const ImVec2& center, ImVec4 color, in
 	ImGui::GetBackgroundDrawList()->PathStroke(IM_COL32(255, 0, 0, 255), false, thickness);
 
 	char label[32];
-	snprintf(label, sizeof(label), "%.1f", timers[idx]);
+	snprintf(label, sizeof(label), "%.2f", timers[idx]);
 	ImVec2 textSize = ImGui::CalcTextSize(label);
 	ImGui::GetBackgroundDrawList()->AddText(ImVec2(center.x - textSize.x * 0.5f, center.y - textSize.y * 0.5f), IM_COL32_WHITE, label);
 }
