@@ -68,7 +68,7 @@ void cache_entities() {
 
 			std::string weap_name = process.read_str(des_name);
 
-			
+
 			if (weap_name.empty())
 				weap_name = "unknown_weapon";
 
@@ -163,13 +163,13 @@ void entities_loop()
 
 
 			if (settings::world::weapon_name)
-				draw_text(classname.substr(7).c_str(), ImVec2(screen_pos.x, screen_pos.y), ImVec4(30, 0, 0, 60));
-
+				draw_text(ImGui::GetIO().Fonts->Fonts[1], classname.substr(7).c_str(), screen_pos, ImColor(255, 255, 255, 255), dist > 10 ? 10.0f : 12.0f);
+			
 			if (settings::world::weapon_snaplines)
 				draw_snaplines(screen_pos, ImVec4(255, 255, 255, 255));
 
 			if (settings::world::weapon_distance)
-				draw_distance(screen_pos, dist);
+				draw_distance(screen_pos, dist,ImColor(195,195,195,255));
 		}
 
 		if (settings::world::grenade_esp && std::find(std::begin(nades), std::end(nades), classname) != std::end(nades)) {
@@ -192,13 +192,13 @@ void entities_loop()
 
 			auto smoke_tick_begin = process.readv<bool>(ent + 0x11A1);
 			if (settings::world::grenade_name)
-				draw_text(normalized_str, ImVec2(screen_pos.x, screen_pos.y), ImVec4(137, 122, 0, 255));
+				draw_text(ImGui::GetIO().Fonts->Fonts[1], normalized_str, screen_pos, ImColor(255, 255, 255, 255), 25.0f);
 
 			if (settings::world::grenade_snaplines)
 				draw_snaplines(screen_pos, ImVec4(255, 255, 255, 255));
 
 			if (settings::world::grenade_distance)
-				draw_distance(screen_pos, dist);
+				draw_distance(screen_pos, dist,ImColor(195,195,195,255));
 
 			if (settings::world::grenade_trajectory)
 				draw_path(process.readv<FVector3>(ent + 0x10C0).world_to_screen(local_viewmatrix), screen_pos, smoke_tick_begin);
