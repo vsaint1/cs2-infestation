@@ -1,10 +1,9 @@
-#pragma once
+﻿#pragma once
 #include "globals.h"
 #include "math.h"
 #include "../memory/memory.h"
 #include <thread>
 #include "esp/esp.h"
-
 
 
 void cache_entities() {
@@ -63,6 +62,16 @@ void cache_entities() {
 			if (settings::misc::bTeamcheck && local_team == e_team)
 				continue;
 
+			auto m_pclippingweapon = process.readv<uintptr_t>(pcs_pawn + 0x1308);
+			auto entity_identity = process.readv<uintptr_t>(m_pclippingweapon + 0x10);
+			auto des_name = process.readv<uintptr_t>(entity_identity + 0x20);
+
+			std::string weap_name = process.read_str(des_name);
+
+			
+			if (weap_name.empty())
+				weap_name = "unknown_weapon";
+
 			std::string e_name = process.read_str(pcs_pawn + offsets::m_iszPlayerName);
 			bool e_spotted = process.readv<bool>(pcs_pawn + offsets::bSpottedByMask);
 			Entity entity;
@@ -72,6 +81,7 @@ void cache_entities() {
 			entity.health = e_health;
 			entity.visible = e_spotted & (1 << local_index - 1);
 			entity.position = pcs_pos.distance(local_pos) / 100;
+			entity.weapon_name = weap_name.substr(7);
 			temp.push_back(entity);
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -165,10 +175,12 @@ void entities_loop()
 		if (settings::world::grenade_esp && std::find(std::begin(nades), std::end(nades), classname) != std::end(nades)) {
 
 			auto normalized_str = classname.erase(classname.find("_projectile"), 11).c_str();
-			LOG("CLASS_NAME: %s ABS_ORIGIN: %.2f %.2f %.2f",normalized_str, abs_origin.x, abs_origin.y, abs_origin.z);
-		
+			LOG("CLASS_NAME: %s ABS_ORIGIN: %.2f %.2f %.2f", normalized_str, abs_origin.x, abs_origin.y, abs_origin.z);
+
 
 #ifdef _DEBUG
+			ImGui::SetNextWindowSize(ImVec2(200.0f, 100.0f));
+
 			ImGui::Begin(classname.c_str());
 
 			ImGui::Text("X coordinate: %.2f", abs_origin.x);
@@ -189,12 +201,12 @@ void entities_loop()
 				draw_distance(screen_pos, dist);
 
 			if (settings::world::grenade_trajectory)
-				draw_path(process.readv<FVector3>(ent + 0x10C0).world_to_screen(local_viewmatrix), screen_pos,smoke_tick_begin);
+				draw_path(process.readv<FVector3>(ent + 0x10C0).world_to_screen(local_viewmatrix), screen_pos, smoke_tick_begin);
 
 
 			// C_BaseCSGrenadeProjectile
 			if (settings::world::grenade_timer && classname.compare("smokegrenade") == 0)
-				draw_timer_progress(smoke_tick_begin, ImVec2(screen_pos.x, screen_pos.y - 30), ImVec4(255, 0, 0, 255),i);
+				draw_timer_progress(smoke_tick_begin, ImVec2(screen_pos.x, screen_pos.y - 30), ImVec4(255, 0, 0, 255), i);
 
 
 
