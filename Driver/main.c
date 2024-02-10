@@ -16,7 +16,7 @@ NTSTATUS driver_unload(PDRIVER_OBJECT driver_object) {
 	return STATUS_SUCCESS;
 }
 
-NTSTATUS driver_entry(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_path) {
+NTSTATUS driver_initialize(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_path) {
 	
 	UNREFERENCED_PARAMETER(registry_path);
 
@@ -41,26 +41,26 @@ NTSTATUS driver_entry(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_pat
 	return STATUS_SUCCESS;
 }
 // NOTE: to use this driver, you need to change the current driver_entry to driver_initialize
-//NTSTATUS driver_entry(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_path) {
-//	UNREFERENCED_PARAMETER(driver_object);
-//	UNREFERENCED_PARAMETER(registry_path);
-//
-//	message("manual mapped driver, system range start is %p driver_entry at %p\n", MmSystemRangeStart, driver_entry);
-//
-//	NTSTATUS status = STATUS_SUCCESS;
-//	__try {
-//		UNICODE_STRING driver_name = RTL_CONSTANT_STRING(L"\\Driver\\infestation");
-//
-//		status = IoCreateDriver(&driver_name, &driver_initialize);
-//	}
-//	__except (EXCEPTION_EXECUTE_HANDLER) {
-//		status = GetExceptionCode();
-//	}
-//
-//	if (!NT_SUCCESS(status)) {
-//		message("driver_initialize failed with status 0x%08X\n", status);
-//		driver_unload(driver_object);
-//	}
-//
-//	return status;
-//}
+NTSTATUS driver_entry(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_path) {
+	UNREFERENCED_PARAMETER(driver_object);
+	UNREFERENCED_PARAMETER(registry_path);
+
+	message("manual mapped driver, system range start is %p driver_entry at %p\n", MmSystemRangeStart, driver_entry);
+
+	NTSTATUS status = STATUS_SUCCESS;
+	__try {
+		UNICODE_STRING driver_name = RTL_CONSTANT_STRING(L"\\Driver\\infestation");
+
+		status = IoCreateDriver(&driver_name, &driver_initialize);
+	}
+	__except (EXCEPTION_EXECUTE_HANDLER) {
+		status = GetExceptionCode();
+	}
+
+	if (!NT_SUCCESS(status)) {
+		message("driver_initialize failed with status 0x%08X\n", status);
+		driver_unload(driver_object);
+	}
+
+	return status;
+}
