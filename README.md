@@ -7,6 +7,9 @@ Project with awesome features and low performance impact.
 - Screenshot **project** running on 4.5 - VERSION 
 <img src="./examples/bostil.png">
 
+- Screenshot **project** running on 5 - VERSION 
+<img src="./examples/bostil_5.png">
+
 - Process  **running**, very low memory usage.
 <img src="./examples/running.png">
 
@@ -16,7 +19,7 @@ Project with awesome features and low performance impact.
 - **OBS: This demo is using old version (3.0)**
 <a target="_blank" href="https://streamable.com/g937bg">Watch the demo</a>
 
-### Features (4.5)
+### Features (5.0)
 
 #### Mouse
 - [x] Aimbot
@@ -24,12 +27,12 @@ Project with awesome features and low performance impact.
 - [ ] RCS
 
 #### ESP
-- [x] Player **(Box, Skeleton,Name, Distance, SnapLines, Health)**
+- [x] Player **(Box, Skeleton,Name, Distance, SnapLines, Health, Weapon)**
 - [ ] Flags
 
 #### WORLD
-- [x] Weapon **(Name, Distance, SnapLines)**
-- [x] Grenade **(Trajectory, Name, Distance, Timer)**
+- [x] Weapon **(Name, Distance, SnapLines, Icons)**
+- [x] Grenade **(Trajectory, Name, Distance, Timer, Icons)**
 - [ ] Bomb-Timer
 
 #### MISC
