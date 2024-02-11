@@ -38,7 +38,7 @@ struct screen_center {
 
 
 WPARAM main_loop();
-void render();
+void draw();
 
 bool load_image_from_memory(void* data, size_t size, IDirect3DTexture9** out_texture)
 {
@@ -182,7 +182,7 @@ void setup_window()
 
 
 
-void render() {
+void draw() {
 	ImGui_ImplDX9_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
@@ -210,6 +210,7 @@ void render() {
 		ImGui_ImplDX9_CreateDeviceObjects();
 	}
 }
+
 WPARAM main_loop() {
 
 #if _DEBUG
@@ -274,7 +275,7 @@ WPARAM main_loop() {
 			SetWindowPos(own_hwnd, (HWND)0, xy.x, xy.y, width, height, SWP_NOREDRAW);
 			p_Device->Reset(&p_Params);
 		}
-		render();
+		draw();
 	}
 
 
