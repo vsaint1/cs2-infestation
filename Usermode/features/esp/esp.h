@@ -2,7 +2,7 @@
 
 //#include "../../memory/driver.h" // if you want to use the driver very easy to change
 #include "../math.h"
-#include "../../overlay/drawing.h"
+#include "../../overlay/draw/drawing.h"
 #include "../cheat.h"
 #include "../aimbot/aimbot.h"
 
@@ -21,10 +21,10 @@ void draw_esp(FVector3 head_pos, FVector3 screen_pos, Entity entity, uintptr_t  
 				draw_filled_box(screen_pos.x - (width / 2) - 5, head_pos.y - 1, width, height, 1, ImVec4(44, 44, 44, 255));
 
 			if (settings::visuals::bName)
-				draw_text(entity.name.c_str(), ImVec2(head_pos.x, head_pos.y - 10), ImVec4(255, 243, 247, 255));
+				draw_text(entity.name.c_str(), ImVec2(head_pos.x, head_pos.y - 10), ImVec4(255, 243, 247, 255), 14.5f);
 
 			if (settings::visuals::distance)
-				draw_distance(screen_pos, entity.position);
+				draw_distance_ex(screen_pos, entity.position, ImColor(255, 201, 14, 233));
 
 			if (settings::visuals::bSnaplines)
 				draw_snaplines(screen_pos, ImColor(255, 255, 255, 255));
@@ -36,7 +36,7 @@ void draw_esp(FVector3 head_pos, FVector3 screen_pos, Entity entity, uintptr_t  
 				draw_skeleton(bone_array, view_matrix, entity.visible);
 
 			if (settings::visuals::bWeapon)
-				draw_text(ImGui::GetIO().Fonts->Fonts[1], entity.weapon_name.c_str(), screen_pos, ImColor(255, 255, 255, 255), entity.position > 10 ? 9.0f : 11.0f);
+				draw_icon_ex(ImGui::GetIO().Fonts->Fonts[1], entity.weapon_name.c_str(), {entity.position > 10?  screen_pos.x - 10:screen_pos.x,screen_pos.y,screen_pos.z}, ImColor(255, 255, 255, 255), entity.position > 10 ? 8.0f : 14.5f);
 
 			// flags
 			//draw_text(entity.name.c_str(), ImVec2(screen_pos.x - width / 2 , head_pos.y - 10), ImVec4(255, 243, 247, 255));
@@ -47,6 +47,6 @@ void draw_esp(FVector3 head_pos, FVector3 screen_pos, Entity entity, uintptr_t  
 	}
 
 	if (settings::misc::bWatermark)
-		draw_text("[CODE] - https://github.com/vsaint1/cs2-infestation", ImVec2(200, 10), ImColor(255, 255, 255, 255));
+		draw_text("[CODE] - https://github.com/vsaint1/cs2-infestation", ImVec2(200, 10), ImColor(255, 255, 255, 255), 13.0f);
 
 }
