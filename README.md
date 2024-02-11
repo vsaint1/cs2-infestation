@@ -1,67 +1,39 @@
-# CS2 - FREE GAMING CHAIR 
+# INFESTATION
 
-Project with awesome features and low performance impact.
+Infestation is an open source external Counter-Strike 2 read only kernel-level gameplay enhancer.
+- `Infestation` Project name
+- `Open Source` This application is open source and for everyone to modify, use or learn from
+- `external` We do not inject any DLLs into the target process
+- `read only` Currently we do not Write to process memory
+- `kernel` Available, but not needed.
+ 
 
-## Usermode
+## Features 
 
-- Screenshot **project** running on 4.5 - VERSION 
-<img src="./examples/bostil.png">
+Press `HOME` to open overlay menu.
 
-- Screenshot **project** running on 5 - VERSION 
-<img src="./examples/bostil_5.png">
+- Aimbot
+	`FOV`,`TargetHitBox`,`Key selection`,`Visible-Check`,`Humanizer`
+- ESP
+	`Skeleton`, `Boxes`, `Weapon`,`Distance`,`Name`,`Health`,`Snaplines`
+- World
+	Weapons
+		`Icon`, `Distance`,`Snaplines`
+    Grenades
+		`Icon`, `Distance`,`Snaplines`,`Trajectory`,`Timer`
+- Misc
+	`Team-Check`, `Save FPS`,`Ant-Screencapture`
 
-- Process  **running**, very low memory usage.
-<img src="./examples/running.png">
+## References
 
-- Total **binary** size 
-<img src="./examples/size.png">
+Check the upcoming features, improvements and upgrades made to `infestation`.
 
-- **OBS: This demo is using old version (3.0)**
-<a target="_blank" href="https://streamable.com/g937bg">Watch the demo</a>
-
-### Features (5.0)
-
-#### Mouse
-- [x] Aimbot
-- [ ] Triggerbot
-- [ ] RCS
-
-#### ESP
-- [x] Player **(Box, Skeleton,Name, Distance, SnapLines, Health, Weapon)**
-- [ ] Flags
-
-#### WORLD
-- [x] Weapon **(Name, Distance, SnapLines, Icons)**
-- [x] Grenade **(Trajectory, Name, Distance, Timer, Icons)**
-- [ ] Bomb-Timer
-
-#### MISC
-- [x] Team-Check
-- [ ] Anti-Screencapture
-- [ ] Radar
-- [ ] Bunny-hop
-- [ ] Sound-ESP
-
-
-#### Config
-- [ ] Create
-- [ ] Load
-- [ ] Delete
-
-## Driver
-The driver can be used in any windows 10/11 versions.
-
-- [x] Kernel fully recoded with extra addons
-- [x] kernel **mouse_movement** 
-- [x] Kernel **mouse_down** and **mouse_up** 
-- [x] Kernel manual mapping  
-- [ ] Kernel IO **Write Process Memory** (not needed, implement yourself if you want)
+- [TODOS](https://github.com/vsaint1/cs2-infestation/blob/master/TODO.md)
+- [LOGS](https://github.com/vsaint1/cs2-infestation/blob/master/CHANGELOG.md)
 
 ## How to use ?
-### 1.1
-- Download the latest release from [here](https://www.infestation.com.br)
 
-### 1.2
+- Download the latest release from [here](https://github.com/vsaint1/cs2-infestation)
 
 - Clone the repository
 - Open the solution in Visual Studio 2022 v143
@@ -74,6 +46,10 @@ The driver can be used in any windows 10/11 versions.
 - Load the driver manually with services or driver mapper
 - Run the executable
 - Press `HOME` to toggle the Menu
+
+## Alternatives
+
+- [Valthrun](https://github.com/Valthrun/Valthrun) - `RUST`
 
 ## Disclaimer
 
