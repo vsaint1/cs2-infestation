@@ -12,17 +12,20 @@ Infestation is an open source external Counter-Strike 2 read only kernel-level g
 
 Press `HOME` to open overlay menu.
 
-- Aimbot
-	`FOV`,`TargetHitBox`,`Key selection`,`Visible-Check`,`Humanizer`
+- AIMBOT
+	`FOV`, `TargetHitBox`, `Key selection`, `Visible-Check`, `Humanizer`
+
 - ESP
 	`Skeleton`, `Boxes`, `Weapon`,`Distance`,`Name`,`Health`,`Snaplines`
-- World
-	Weapons
-		`Icon`, `Distance`,`Snaplines`
-    Grenades
-		`Icon`, `Distance`,`Snaplines`,`Trajectory`,`Timer`
+ 
+-	WORLD
+	- Weapons
+	- `Icon`, `Distance`,`Snaplines`
+	Grenades
+	- `Icon`, `Distance`,`Snaplines`,`Trajectory`,`Timer`
+
 - Misc
-	`Team-Check`, `Save FPS`,`Ant-Screencapture`
+	`Team-Check`, `Save FPS`, `Anti-Screencapture`
 
 ## References
 
