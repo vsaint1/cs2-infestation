@@ -19,8 +19,9 @@ Press `HOME` to open overlay menu.
 	`Skeleton`, `Boxes`, `Weapon`,`Distance`,`Name`,`Health`,`Snaplines`
  
 -	WORLD
-	- Weapons
+	Weapons
 	- `Icon`, `Distance`,`Snaplines`
+	
 	Grenades
 	- `Icon`, `Distance`,`Snaplines`,`Trajectory`,`Timer`
 
