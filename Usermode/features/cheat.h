@@ -84,7 +84,7 @@ void cache_entities() {
 			entity.weapon_name = weap_name.substr(7);
 			temp.push_back(entity);
 
-			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			std::this_thread::sleep_for(std::chrono::milliseconds(settings::misc::sleep_for_ms));
 		}
 
 		entities.clear();
@@ -112,14 +112,14 @@ void entities_loop()
 		uintptr_t ent = process.readv<uintptr_t>(entity_list + 8LL * ((i & 0x7FFF) >> 9) + 16);
 		if (!ent)
 			continue;
-		uintptr_t entbase = ent;
 
 		ent = process.readv<uintptr_t>(ent + 120LL * (i & 0x1FF));
+
 		if (!ent)
 			continue;
 
-
 		uintptr_t entitiy_identity = process.readv<uintptr_t>(ent + 0x10);
+
 		if (!entitiy_identity)
 			continue;
 
@@ -128,6 +128,10 @@ void entities_loop()
 			continue;
 
 		std::string classname = process.read_str(designer_name);
+
+		if (classname.empty())
+			continue;
+
 #if _DEBUG
 
 		LOG("CLASS_NAME: %s\n", classname.c_str());
@@ -163,13 +167,13 @@ void entities_loop()
 
 
 			if (settings::world::weapon_name)
-				draw_text(ImGui::GetIO().Fonts->Fonts[1], classname.substr(7).c_str(), screen_pos, ImColor(255, 255, 255, 255), dist > 10 ? 10.0f : 12.0f);
-			
+				draw_icon(ImGui::GetIO().Fonts->Fonts[1], classname.substr(7).c_str(), screen_pos, ImColor(255, 255, 255, 255), 14.0f);
+
 			if (settings::world::weapon_snaplines)
 				draw_snaplines(screen_pos, ImVec4(255, 255, 255, 255));
 
 			if (settings::world::weapon_distance)
-				draw_distance(screen_pos, dist,ImColor(195,195,195,255));
+				draw_distance_a(screen_pos, dist, ImColor(195, 195, 195, 255));
 		}
 
 		if (settings::world::grenade_esp && std::find(std::begin(nades), std::end(nades), classname) != std::end(nades)) {
@@ -191,14 +195,13 @@ void entities_loop()
 #endif // _DEBUG
 
 			auto smoke_tick_begin = process.readv<bool>(ent + 0x11A1);
-			if (settings::world::grenade_name)
-				draw_text(ImGui::GetIO().Fonts->Fonts[1], normalized_str, screen_pos, ImColor(255, 255, 255, 255), 25.0f);
+			if (settings::world::grenade_esp)
+				draw_grenade_esp(ImGui::GetIO().Fonts->Fonts[1], normalized_str, dist, ImVec2(screen_pos.x, screen_pos.y), ImColor(255, 255, 255, 255), 20.0f);
+				
 
 			if (settings::world::grenade_snaplines)
 				draw_snaplines(screen_pos, ImVec4(255, 255, 255, 255));
 
-			if (settings::world::grenade_distance)
-				draw_distance(screen_pos, dist,ImColor(195,195,195,255));
 
 			if (settings::world::grenade_trajectory)
 				draw_path(process.readv<FVector3>(ent + 0x10C0).world_to_screen(local_viewmatrix), screen_pos, smoke_tick_begin);
@@ -206,7 +209,7 @@ void entities_loop()
 
 			// C_BaseCSGrenadeProjectile
 			if (settings::world::grenade_timer && classname.compare("smokegrenade") == 0)
-				draw_timer_progress(smoke_tick_begin, ImVec2(screen_pos.x, screen_pos.y - 30), ImVec4(255, 0, 0, 255), i);
+				draw_timer_progress(ImGui::GetIO().Fonts->Fonts[1], 20.0f, "smokegrenade", smoke_tick_begin, dist, ImVec2(screen_pos.x, screen_pos.y), ImVec4(255, 0, 0, 255), i);
 
 
 
