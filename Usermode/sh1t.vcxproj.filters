@@ -80,7 +80,7 @@
     <ClInclude Include="protection\xor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="overlay\drawing.h">
+    <ClInclude Include="overlay\draw\drawing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="features\math.h">
@@ -111,6 +111,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="utils\gun_icon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
