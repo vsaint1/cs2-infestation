@@ -1,68 +1,7 @@
 #pragma once
+#include "../../utils/helper.h"
 
 
-
-void create_style() {
-	ImGuiStyle* style = &ImGui::GetStyle();
-
-	style->WindowRounding = 5.3f;
-	style->FrameRounding = 2.3f;
-	style->ScrollbarRounding = 5.f;
-	style->WindowTitleAlign = ImVec2(0.5f, 0.5f);
-	style->GrabMinSize = 20.0f;
-
-	style->Colors[ImGuiCol_Text] = ImVec4(0.80f, 0.80f, 0.83f, 1.00f);
-	style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.30f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_TitleBgActive] = ImVec4(1.0f, 0.23f, 0.29f, 1.00f);
-	style->Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.0f, 0.23f, 0.29f, 1.00f);
-	style->Colors[ImGuiCol_TextDisabled] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
-	style->Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_ChildBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-	style->Colors[ImGuiCol_PopupBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-	style->Colors[ImGuiCol_Border] = ImVec4(0.80f, 0.80f, 0.83f, 0.88f);
-	style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.92f, 0.91f, 0.88f, 0.00f);
-	style->Colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.92f, 0.18f, 0.29f, 0.78f);
-	style->Colors[ImGuiCol_FrameBgActive] = ImVec4(0.80f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 0.98f, 0.95f, 0.75f);
-	style->Colors[ImGuiCol_TitleBgActive] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-	style->Colors[ImGuiCol_MenuBarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-	style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_Tab] = ImLerp(style->Colors[ImGuiCol_Header], style->Colors[ImGuiCol_TitleBgActive], 1.00f);
-	style->Colors[ImGuiCol_TabHovered] = ImLerp(style->Colors[ImGuiCol_TabActive], style->Colors[ImGuiCol_TabActive], 0.50f);
-	style->Colors[ImGuiCol_TabActive] = ImVec4(0.30f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_TabUnfocused] = ImLerp(style->Colors[ImGuiCol_Tab], style->Colors[ImGuiCol_TitleBg], 0.80f);
-	style->Colors[ImGuiCol_TabUnfocusedActive] = ImLerp(style->Colors[ImGuiCol_TabActive], style->Colors[ImGuiCol_TitleBg], 0.40f);
-	style->Colors[ImGuiCol_CheckMark] = ImVec4(0.30f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_SliderGrab] = ImVec4(0.30f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.25f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_Button] = ImVec4(0.30f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_ButtonHovered] = ImVec4(0.25f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_ButtonActive] = ImVec4(0.20f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_Header] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_HeaderHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_HeaderActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_ResizeGrip] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-	style->Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_PlotLines] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
-	style->Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
-	style->Colors[ImGuiCol_PlotHistogram] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
-	style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
-
-	style->Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.20f, 0.22f, 0.27f, 0.73f);
-}
-void set_helper(const char* text) {
-
-	ImGui::SameLine();
-	ImGui::TextColored(ImColor(105, 105, 105), "(?)");
-	if (ImGui::IsItemHovered())
-		ImGui::SetTooltip(text);
-}
 
 
 
@@ -122,7 +61,7 @@ void draw_menu() {
 
 
 	ImGui::SetNextWindowSize(ImVec2(500.0f, 350.0f), ImGuiCond_Once);
-	ImGui::Begin(("Infestation - 4.5"), &settings::bMenu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
+	ImGui::Begin(("Infestation - 5.5"), &settings::bMenu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
 
 	ImGui::BeginTabBar(("##tabs"), ImGuiTabBarFlags_None);
 	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowSize().x / 2 - 100, 50));
@@ -161,7 +100,7 @@ void draw_menu() {
 		ImGui::Checkbox("Name", &settings::visuals::bName);
 		set_helper("Draw enemies name");
 		ImGui::Checkbox("Skeleton", &settings::visuals::bSkeleton);
-		set_helper("Draw enemies skeleton");
+		set_helper("Draw enemies skeleton, bones are with update issue",ImColor(211, 67, 18, 255),'!');
 		ImGui::Checkbox("Health", &settings::visuals::bHealth);
 		set_helper("Draw enemies health");
 		ImGui::Checkbox("Snap Lines", &settings::visuals::bSnaplines);
@@ -205,8 +144,8 @@ void draw_menu() {
 				set_helper("Draw lines to Grenade projectile");
 				ImGui::Checkbox("Grenade Timer", &settings::world::grenade_timer);
 				set_helper("Draw Grenade timer");
-				ImGui::Checkbox("Grenade Trajectory - DEV", &settings::world::grenade_trajectory);
-				set_helper("This feature is under development, need to fix bounces, velocity and trajectory calculations");
+				ImGui::Checkbox("Grenade Trajectory", &settings::world::grenade_trajectory);
+				set_helper("This feature is under development, need to fix bounces, velocity and trajectory calculations",ImColor(211, 67, 18, 255),'!');
 
 			}
 		}
@@ -223,9 +162,13 @@ void draw_menu() {
 		ImGui::Checkbox("Watermark", &settings::misc::bWatermark);
 		set_helper("Enable/Disable Watermark");
 
+		ImGui::SliderInt("##save_fps",&settings::misc::sleep_for_ms, 0, 1000,"%dms");
+		set_helper("Using higher number will update slowly but reduces [CPU/Memory] usage", ImColor(211, 67, 18, 255), '!');
+
 		if (ImGui::Button("Github"))
 			ShellExecuteA(NULL, "open", "https://github.com/vsaint1/cs2-infestation", NULL, NULL, SW_SHOWNORMAL);
 
+		
 		ImGui::EndTabItem();
 
 	}

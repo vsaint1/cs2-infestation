@@ -81,6 +81,8 @@ namespace settings {
 	namespace misc {
 		bool bTeamcheck = true;
 		bool bWatermark = true;
+		int sleep_for_ms = 10;
+
 
 	}
 
@@ -101,6 +103,8 @@ enum EBone : int {
 	LeftKnee = 26,
 	RightFoot = 24,
 	LeftFoot = 27,
+	Center= 29,
+
 };
 
 
