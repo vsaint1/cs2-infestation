@@ -27,7 +27,7 @@ Press `HOME` to open overlay menu.
 	- `Icon`, `Distance`,`Snaplines`,`Trajectory`,`Timer`
 
 - Misc
-	`Team-Check`, `Save FPS`, `Anti-Screencapture`
+- `Team-Check`, `Save FPS`, `Anti-Screencapture`
 
 ## References
 
