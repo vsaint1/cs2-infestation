@@ -1,18 +1,19 @@
 #include "custom_components.h"
 
-void component::color_picker(ImColor& original_color) {
+void component::color_picker(const char* id,ImColor& original_color) {
+
 
 	ImGui::SameLine();
 	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 5);
 	ImVec4 color = ImVec4(original_color.Value.x, original_color.Value.y, original_color.Value.z, original_color.Value.w);
-	ImGui::ColorButton("##color_btn", ImVec4(original_color.Value.x, original_color.Value.y, original_color.Value.z, original_color.Value.w), ImGuiColorEditFlags_NoTooltip, ImVec2(15, 10));
-
+	
+	ImGui::ColorButton(id, ImVec4(original_color.Value.x, original_color.Value.y, original_color.Value.z, original_color.Value.w), ImGuiColorEditFlags_NoTooltip, ImVec2(15, 10));
 	if (ImGui::IsItemClicked())
-		ImGui::OpenPopup("##color_picker");
+		ImGui::OpenPopup(id);
 
 
-	if (ImGui::BeginPopup("##color_picker")) {
-		if (ImGui::ColorPicker4("##picker", &color.x, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_AlphaBar))
+	if (ImGui::BeginPopup(id)) {
+		if (ImGui::ColorPicker4(id, &color.x, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_AlphaBar))
 			original_color = ImColor(color.x, color.y, color.z, color.w);
 
 		ImGui::EndPopup();

@@ -5,7 +5,7 @@
 #include <string>
 
 namespace component {
-	void color_picker(ImColor& original_color);
+	void color_picker(const char* id,ImColor& original_color);
 
 	void set_helper(const char* text, ImColor color = ImColor(105, 105, 105), char symbol = '?');
 

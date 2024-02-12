@@ -160,23 +160,23 @@ public:
 			return std::string(buffer, it);
 	}
 
-	uintptr_t read_arr(uintptr_t BaseAddress, std::vector<DWORD> Offsets)
+	uintptr_t read_arr(uintptr_t address, std::vector<DWORD> offsets)
 	{
 		
-		uintptr_t Address = 0;
+		uintptr_t addr = 0;
 
-		if (Offsets.size() == 0)
-			return BaseAddress;
+		if (offsets.size() == 0)
+			return address;
 
-		if (!read_raw(BaseAddress, &Address,sizeof(uintptr_t)))
+		if (!read_raw(address, &addr,sizeof(uintptr_t)))
 			return 0;
 	
-		for (int i = 0; i < Offsets.size() - 1; i++)
+		for (int i = 0; i < offsets.size() - 1; i++)
 		{
-			if (!read_raw(Address + Offsets[i], &Address,sizeof(uintptr_t)))
+			if (!read_raw(address + offsets[i], &addr,sizeof(uintptr_t)))
 				return 0;
 		}
-		return Address == 0 ? 0 : Address + Offsets[Offsets.size() - 1];
+		return addr == 0 ? 0 : addr + offsets[offsets.size() - 1];
 	}
 
 
