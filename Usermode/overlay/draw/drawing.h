@@ -172,7 +172,7 @@ void draw_path(FVector3 initial_pos, FVector3 current_pos, bool spawned) {
 
 
 
-void draw_filled_box(int x, int y, int w, int h, int border, ImVec4 border_color) {
+void draw_filled_box(int x, int y, int w, int h, int border, ImColor border_color) {
 	int shadow_offset = 1;
 	ImVec4 shadow_color = ImVec4(0.2f, 0.2f, 0.2f, 0.5f);
 	draw_filled_rect(x + shadow_offset, y + shadow_offset, w, h, shadow_color);
