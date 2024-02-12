@@ -59,15 +59,34 @@ void draw_grenade_esp(ImFont* font, const char* text, float distance, ImVec2 cen
 
 
 
+	ImVec2 text_size = ImGui::CalcTextSize(text);
+
+
 	if (settings::world::grenade_distance)
 		draw_distance(center, distance);
 
+	if (settings::world::grenade_name) {
+		draw_text(strcmp(text, "smokegrenade") == 0 ? "smoke" : text, ImVec2(center.x, center.y - 5), color);
+		return;
+	}
 
-	ImVec2 text_size = ImGui::CalcTextSize(text);
-	ImGui::GetBackgroundDrawList()->AddCircleFilled(center, 20.0f, IM_COL32(50, 50, 50, 100), MAX_NUM_SEGMENTS);
-	ImGui::GetBackgroundDrawList()->AddCircle(center, 20.0f + 2.0f, IM_COL32(255, 255, 255, 255), MAX_NUM_SEGMENTS, 1.5f);
+	// we only want to draw grenade warning on molotov and hegrenade 
+	const char* grenade_warnings[2] = { "molotov", "hegrenade" };
 
+	if (std::find(std::begin(grenade_warnings), std::end(grenade_warnings), text) == std::end(grenade_warnings) && distance > 5 && distance < 10) {
 
+		ImGui::GetBackgroundDrawList()->AddCircleFilled(center, 20.0f, IM_COL32(255, 201, 14, 100), MAX_NUM_SEGMENTS);
+		ImGui::GetBackgroundDrawList()->AddCircle(center, 20.0f + 2.0f, IM_COL32(255, 255, 255, 255), MAX_NUM_SEGMENTS, 1.5f);
+	}
+	else if (std::find(std::begin(grenade_warnings), std::end(grenade_warnings), text) == std::end(grenade_warnings) && distance < 5) {
+		ImGui::GetBackgroundDrawList()->AddCircleFilled(center, 20.0f, IM_COL32(136, 0, 21, 100), MAX_NUM_SEGMENTS);
+		ImGui::GetBackgroundDrawList()->AddCircle(center, 20.0f + 2.0f, IM_COL32(255, 255, 255, 255), MAX_NUM_SEGMENTS, 1.5f);
+	}
+	else {
+		ImGui::GetBackgroundDrawList()->AddCircleFilled(center, 20.0f, IM_COL32(50, 50, 50, 100), MAX_NUM_SEGMENTS);
+		ImGui::GetBackgroundDrawList()->AddCircle(center, 20.0f + 2.0f, IM_COL32(255, 255, 255, 255), MAX_NUM_SEGMENTS, 1.5f);
+	}
+	
 	if (!strcmp(text, "smokegrenade")) {
 
 		ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(center.x - text_size.x / 2 + 1 + 30, center.y - text_size.y / 2 + 1 - 10), ImColor(0, 0, 0, 255), gun_icon(text));
@@ -100,7 +119,7 @@ void draw_distance_ex(FVector3 local_position, float distance, ImColor color = I
 	ImVec2 text_size = ImGui::CalcTextSize(distance_str.c_str());
 	int gambeta = distance > 10 ? 15 : 20;
 
-	draw_text(distance_str.c_str(), ImVec2(local_position.x, local_position.y + gambeta - text_size.y / 2 + 5), color, distance > 10 ? 18.0f: 14.5f   );
+	draw_text(distance_str.c_str(), ImVec2(local_position.x, local_position.y + gambeta - text_size.y / 2 + 5), color, distance > 10 ? 18.0f : 14.5f);
 
 }
 
@@ -249,10 +268,12 @@ void draw_timer_progress(ImFont* font, float font_size, const char* name, bool t
 	if (settings::world::grenade_distance)
 		draw_distance(center, distance);
 
-	ImVec2 text_size = ImGui::CalcTextSize(name);
+	if (!settings::world::grenade_name) {
+		ImVec2 text_size = ImGui::CalcTextSize(name);
 
-	ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(center.x - text_size.x / 2 + 1 + 30, center.y - text_size.y / 2 + 1 - 10), ImColor(0, 0, 0, 255), gun_icon(name));
-	ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(center.x - text_size.x / 2 + 30, center.y - text_size.y / 2 - 10), ImColor(255, 255, 255, 255), gun_icon(name));
+		ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(center.x - text_size.x / 2 + 1 + 30, center.y - text_size.y / 2 + 1 - 10), ImColor(0, 0, 0, 255), gun_icon(name));
+		ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(center.x - text_size.x / 2 + 30, center.y - text_size.y / 2 - 10), ImColor(255, 255, 255, 255), gun_icon(name));
+	}
 
 
 
@@ -269,7 +290,7 @@ void draw_skeleton(uintptr_t bonearray, view_matrix_t view_matrix, bool visible)
 		ImVec2 TextSize = ImGui::CalcTextSize(number.c_str());
 		ImGui::GetForegroundDrawList()->AddText(ImVec2(bone.x - TextSize.x / 2, bone.y - TextSize.y / 2), ImColor(255, 255, 255, 255), number.c_str());
 
-}
+	}
 #else
 	ImColor hidden_color = ImColor(255, 0, 0, 255);
 	ImColor visible_color = ImColor(0, 255, 0, 255);
@@ -302,5 +323,5 @@ void draw_skeleton(uintptr_t bonearray, view_matrix_t view_matrix, bool visible)
 	ImGui::GetBackgroundDrawList()->AddLine({ left_knee.x, left_knee.y }, { left_foot.x, left_foot.y }, visible ? visible_color : hidden_color);
 #endif
 
-};
+	};
 

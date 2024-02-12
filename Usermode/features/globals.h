@@ -81,6 +81,7 @@ namespace settings {
 	namespace misc {
 		bool bTeamcheck = true;
 		bool bWatermark = true;
+		bool bAntiScreencapture = true;
 		int sleep_for_ms = 10;
 
 

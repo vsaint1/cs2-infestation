@@ -36,7 +36,7 @@ void draw_esp(FVector3 head_pos, FVector3 screen_pos, Entity entity, uintptr_t  
 				draw_skeleton(bone_array, view_matrix, entity.visible);
 
 			if (settings::visuals::bWeapon)
-				draw_icon_ex(ImGui::GetIO().Fonts->Fonts[1], entity.weapon_name.c_str(), {entity.position > 10?  screen_pos.x - 10:screen_pos.x,screen_pos.y,screen_pos.z}, ImColor(255, 255, 255, 255), entity.position > 10 ? 8.0f : 14.5f);
+				draw_icon_ex(ImGui::GetIO().Fonts->Fonts[1], entity.weapon_name.c_str(), {screen_pos.x - 10,screen_pos.y,screen_pos.z}, ImColor(255, 255, 255, 255), entity.position > 10 ? 8.0f : 13.0f);
 
 			// flags
 			//draw_text(entity.name.c_str(), ImVec2(screen_pos.x - width / 2 , head_pos.y - 10), ImVec4(255, 243, 247, 255));

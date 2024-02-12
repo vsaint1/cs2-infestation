@@ -25,3 +25,10 @@
 - [x] Fixed String crash
 - [x] Improved rendering methods
 - [x] Rendering based on distance
+
+# 6.0
+
+- [x] Grenade Warning **(Molly** and **Frag)**
+- [x] Anti-OBS
+
+<img src="./examples/grenade_warning.gif">
