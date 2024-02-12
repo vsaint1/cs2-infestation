@@ -38,21 +38,8 @@ struct FQuaternion {
 };
 
 
-class Entity {
-public:
-	uintptr_t pawn;
-	int health;
-	bool visible;
-	std::string name;
-	float position;
-	std::string weapon_name;
-};
 
-
-
-std::vector<Entity> entities;
-
-struct view_matrix_t {
+struct ViewMatrix {
 	float* operator[](int index) { return matrix[index]; }
 
 	float matrix[4][4];
@@ -94,7 +81,7 @@ struct FVector3 {
 
 	constexpr const bool isZero() const noexcept { return x == 0.f && y == 0.f && z == 0.f; }
 
-	FVector3 world_to_screen(view_matrix_t matrix) const {
+	FVector3 world_to_screen(ViewMatrix matrix) const {
 		float _x = matrix[0][0] * x + matrix[0][1] * y + matrix[0][2] * z + matrix[0][3];
 		float _y = matrix[1][0] * x + matrix[1][1] * y + matrix[1][2] * z + matrix[1][3];
 
@@ -119,7 +106,7 @@ struct FVector3 {
 	float x, y, z;
 };
 
-bool world_to_screen(const FVector3& pos, FVector3& out, view_matrix_t matrix) {
+inline bool world_to_screen(const FVector3& pos, FVector3& out, ViewMatrix matrix) {
 	out.x = matrix[0][0] * pos.x + matrix[0][1] * pos.y + matrix[0][2] * pos.z + matrix[0][3];
 	out.y = matrix[1][0] * pos.x + matrix[1][1] * pos.y + matrix[1][2] * pos.z + matrix[1][3];
 
