@@ -18,13 +18,13 @@ void draw_esp(FVector3 head_pos, FVector3 screen_pos, PlayerEntity entity, uintp
 
 
 			if (settings::visuals::bBox)
-				draw_filled_box(screen_pos.x - (width / 2) - 5, head_pos.y - 1, width, height, 1, ImVec4(44, 44, 44, 255));
+				draw_filled_box(screen_pos.x - (width / 2) - 5, head_pos.y - 1, width, height, 1,settings::colors::player_box);
 
 			if (settings::visuals::bName)
-				draw_text(entity.name.c_str(), ImVec2(head_pos.x, head_pos.y - 10), ImVec4(255, 243, 247, 255), 14.5f);
+				draw_text(entity.name.c_str(), ImVec2(head_pos.x, head_pos.y - 10), settings::colors::player_name, 14.5f);
 
 			if (settings::visuals::distance)
-				draw_distance_ex(screen_pos, entity.get_distance(), ImColor(255, 201, 14, 233));
+				draw_distance_ex(screen_pos, entity.get_distance(),settings::colors::player_distance);
 
 			if (settings::visuals::bSnaplines)
 				draw_snaplines(screen_pos, settings::colors::player_snaplines);

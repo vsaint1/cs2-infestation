@@ -94,10 +94,15 @@ void draw_menu() {
 		ImGui::Text("Player");
 		ImGui::Checkbox("Enabled", &settings::visuals::esp);
 		component::set_helper("Enable/Disable ESP");
+
 		ImGui::Checkbox("Box", &settings::visuals::bBox);
 		component::set_helper("Draw enemies 2D box");
+		component::color_picker("##box",settings::colors::player_box);
+
 		ImGui::Checkbox("Name", &settings::visuals::bName);
 		component::set_helper("Draw enemies name");
+		component::color_picker("##name",settings::colors::player_name);
+
 		ImGui::Checkbox("Skeleton", &settings::visuals::bSkeleton);
 		component::set_helper("Draw enemies skeleton, bones are with update issue", ImColor(211, 67, 18, 255), '!');
 		ImGui::Checkbox("Health", &settings::visuals::bHealth);
@@ -105,11 +110,15 @@ void draw_menu() {
 
 		ImGui::Checkbox("Snap Lines", &settings::visuals::bSnaplines);
 		component::set_helper("Draw lines to enemies");
-		component::color_picker(settings::colors::player_snaplines);
+		component::color_picker("##snap_lines",settings::colors::player_snaplines);
+
 		ImGui::Checkbox("Distance", &settings::visuals::distance);
 		component::set_helper("Draw distance to enemies");
+		component::color_picker("##distance",settings::colors::player_distance);
+
 		ImGui::Checkbox("Weapon", &settings::visuals::bWeapon);
 		component::set_helper("Draw enemies current weapon");
+		component::color_picker("##weapon",settings::colors::player_weapon);
 
 		ImGui::NextColumn();
 
