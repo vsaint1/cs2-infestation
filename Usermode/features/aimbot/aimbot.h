@@ -5,7 +5,7 @@
 
 
 
-void aimbot(Entity entity, FVector3 head_bone) {
+void aimbot(PlayerEntity entity, FVector3 head_bone) {
 
 	float closest_pawn = FLT_MAX;
 

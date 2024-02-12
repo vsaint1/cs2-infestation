@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <string> 
 #include <TlHelp32.h>
 #include "../utils/helper_macro.h"
@@ -151,13 +152,33 @@ public:
 
 	std::string read_str(uintptr_t address)
 	{
-		char buffer[64];
+		char buffer[256];
 		this->read_virtual(handle, (void*)address, &buffer, sizeof(buffer), 0);
 		const auto& it = std::find(buffer, buffer + 64, '\0');
 
 		if (it != buffer + 64)
 			return std::string(buffer, it);
 	}
+
+	uintptr_t read_arr(uintptr_t BaseAddress, std::vector<DWORD> Offsets)
+	{
+		
+		uintptr_t Address = 0;
+
+		if (Offsets.size() == 0)
+			return BaseAddress;
+
+		if (!read_raw(BaseAddress, &Address,sizeof(uintptr_t)))
+			return 0;
+	
+		for (int i = 0; i < Offsets.size() - 1; i++)
+		{
+			if (!read_raw(Address + Offsets[i], &Address,sizeof(uintptr_t)))
+				return 0;
+		}
+		return Address == 0 ? 0 : Address + Offsets[Offsets.size() - 1];
+	}
+
 
 	bool process_opened(std::string process_name)
 	{

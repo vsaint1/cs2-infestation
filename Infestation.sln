@@ -3,16 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Driver", "Driver\km-mouse.vcxproj", "{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "km-mouse", "Driver\km-mouse.vcxproj", "{099D3591-88DE-488C-A83C-4A3AEFD6A47E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6E8C2E65-627C-40D3-90CA-0CC98C045B32}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		CHANGELOG.md = CHANGELOG.md
 		LICENSE = LICENSE
 		README.md = README.md
+		TODO.md = TODO.md
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Usermode", "Usermode\sh1t.vcxproj", "{39ABDFA7-D878-44B4-8659-2983C44EA723}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sh1t", "Usermode\sh1t.vcxproj", "{39ABDFA7-D878-44B4-8659-2983C44EA723}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,24 +26,24 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Debug|ARM64.ActiveCfg = Debug|ARM64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Debug|ARM64.Build.0 = Debug|ARM64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Debug|ARM64.Deploy.0 = Debug|ARM64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Debug|x64.ActiveCfg = Debug|x64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Debug|x64.Build.0 = Debug|x64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Debug|x64.Deploy.0 = Debug|x64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Debug|x86.ActiveCfg = Debug|x64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Debug|x86.Build.0 = Debug|x64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Debug|x86.Deploy.0 = Debug|x64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Release|ARM64.ActiveCfg = Release|ARM64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Release|ARM64.Build.0 = Release|ARM64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Release|ARM64.Deploy.0 = Release|ARM64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Release|x64.ActiveCfg = Release|x64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Release|x64.Build.0 = Release|x64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Release|x64.Deploy.0 = Release|x64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Release|x86.ActiveCfg = Release|x64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Release|x86.Build.0 = Release|x64
-		{6391C02C-4D72-4191-B3B9-BF7B873B6A1E}.Release|x86.Deploy.0 = Release|x64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Debug|ARM64.Build.0 = Debug|ARM64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Debug|ARM64.Deploy.0 = Debug|ARM64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Debug|x64.ActiveCfg = Debug|x64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Debug|x64.Build.0 = Debug|x64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Debug|x64.Deploy.0 = Debug|x64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Debug|x86.ActiveCfg = Debug|x64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Debug|x86.Build.0 = Debug|x64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Debug|x86.Deploy.0 = Debug|x64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Release|ARM64.ActiveCfg = Release|ARM64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Release|ARM64.Build.0 = Release|ARM64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Release|ARM64.Deploy.0 = Release|ARM64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Release|x64.ActiveCfg = Release|x64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Release|x64.Build.0 = Release|x64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Release|x64.Deploy.0 = Release|x64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Release|x86.ActiveCfg = Release|x64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Release|x86.Build.0 = Release|x64
+		{099D3591-88DE-488C-A83C-4A3AEFD6A47E}.Release|x86.Deploy.0 = Release|x64
 		{39ABDFA7-D878-44B4-8659-2983C44EA723}.Debug|ARM64.ActiveCfg = Debug|x64
 		{39ABDFA7-D878-44B4-8659-2983C44EA723}.Debug|ARM64.Build.0 = Debug|x64
 		{39ABDFA7-D878-44B4-8659-2983C44EA723}.Debug|x64.ActiveCfg = Debug|x64

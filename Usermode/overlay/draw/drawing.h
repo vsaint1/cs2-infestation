@@ -71,22 +71,28 @@ void draw_grenade_esp(ImFont* font, const char* text, float distance, ImVec2 cen
 	}
 
 	// we only want to draw grenade warning on molotov and hegrenade 
-	const char* grenade_warnings[2] = { "molotov", "hegrenade" };
+	const std::string grenade_warnings[2] = { "molotov", "hegrenade" };
 
-	if (std::find(std::begin(grenade_warnings), std::end(grenade_warnings), text) == std::end(grenade_warnings) && distance > 5 && distance < 10) {
 
-		ImGui::GetBackgroundDrawList()->AddCircleFilled(center, 20.0f, IM_COL32(255, 201, 14, 100), MAX_NUM_SEGMENTS);
-		ImGui::GetBackgroundDrawList()->AddCircle(center, 20.0f + 2.0f, IM_COL32(255, 255, 255, 255), MAX_NUM_SEGMENTS, 1.5f);
+	if (std::find(std::begin(grenade_warnings), std::end(grenade_warnings), text) != std::end(grenade_warnings)) {
+		if (distance > 5 && distance < 10) {
+
+			ImGui::GetBackgroundDrawList()->AddCircleFilled(center, 20.0f, IM_COL32(255, 201, 14, 100), MAX_NUM_SEGMENTS);
+			ImGui::GetBackgroundDrawList()->AddCircle(center, 20.0f + 2.0f, IM_COL32(255, 255, 255, 255), MAX_NUM_SEGMENTS, 1.5f);
+		}
+		else if (distance < 5) {
+			ImGui::GetBackgroundDrawList()->AddCircleFilled(center, 20.0f, IM_COL32(136, 0, 21, 100), MAX_NUM_SEGMENTS);
+			ImGui::GetBackgroundDrawList()->AddCircle(center, 20.0f + 2.0f, IM_COL32(255, 255, 255, 255), MAX_NUM_SEGMENTS, 1.5f);
+		}
+		else {
+			ImGui::GetBackgroundDrawList()->AddCircleFilled(center, 20.0f, IM_COL32(50, 50, 50, 100), MAX_NUM_SEGMENTS);
+			ImGui::GetBackgroundDrawList()->AddCircle(center, 20.0f + 2.0f, IM_COL32(255, 255, 255, 255), MAX_NUM_SEGMENTS, 1.5f);
+		}
 	}
-	else if (std::find(std::begin(grenade_warnings), std::end(grenade_warnings), text) == std::end(grenade_warnings) && distance < 5) {
-		ImGui::GetBackgroundDrawList()->AddCircleFilled(center, 20.0f, IM_COL32(136, 0, 21, 100), MAX_NUM_SEGMENTS);
-		ImGui::GetBackgroundDrawList()->AddCircle(center, 20.0f + 2.0f, IM_COL32(255, 255, 255, 255), MAX_NUM_SEGMENTS, 1.5f);
-	}
-	else {
-		ImGui::GetBackgroundDrawList()->AddCircleFilled(center, 20.0f, IM_COL32(50, 50, 50, 100), MAX_NUM_SEGMENTS);
-		ImGui::GetBackgroundDrawList()->AddCircle(center, 20.0f + 2.0f, IM_COL32(255, 255, 255, 255), MAX_NUM_SEGMENTS, 1.5f);
-	}
-	
+
+	ImGui::GetBackgroundDrawList()->AddCircleFilled(center, 20.0f, IM_COL32(50, 50, 50, 100), MAX_NUM_SEGMENTS);
+	ImGui::GetBackgroundDrawList()->AddCircle(center, 20.0f + 2.0f, IM_COL32(255, 255, 255, 255), MAX_NUM_SEGMENTS, 1.5f);
+
 	if (!strcmp(text, "smokegrenade")) {
 
 		ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(center.x - text_size.x / 2 + 1 + 30, center.y - text_size.y / 2 + 1 - 10), ImColor(0, 0, 0, 255), gun_icon(text));
@@ -279,7 +285,7 @@ void draw_timer_progress(ImFont* font, float font_size, const char* name, bool t
 
 }
 
-void draw_skeleton(uintptr_t bonearray, view_matrix_t view_matrix, bool visible) {
+void draw_skeleton(uintptr_t bonearray, ViewMatrix view_matrix, bool visible) {
 
 #if _DEBUG
 	for (int i = 0; i < 32; i++) {
@@ -323,5 +329,5 @@ void draw_skeleton(uintptr_t bonearray, view_matrix_t view_matrix, bool visible)
 	ImGui::GetBackgroundDrawList()->AddLine({ left_knee.x, left_knee.y }, { left_foot.x, left_foot.y }, visible ? visible_color : hidden_color);
 #endif
 
-	};
+};
 

@@ -1,14 +1,13 @@
 ﻿#pragma once
 #include "globals.h"
-#include "math.h"
+#include "../sdk/player/player_entity.h"
 #include "../memory/memory.h"
 #include <thread>
 #include "esp/esp.h"
 
-
 void cache_entities() {
 	while (true) {
-		std::vector<Entity> temp;
+		std::vector<PlayerEntity> temp;
 		uintptr_t local_player = process.readv<uintptr_t>(client + offsets::dwLocalPlayerPawn);
 
 		if (!local_player)
@@ -16,11 +15,11 @@ void cache_entities() {
 
 		global_pawn = local_player;
 
-		FVector3 local_pos = process.readv<FVector3>(local_player + offsets::m_vecOrigin);
+		FVector3 local_pos = process.readv<FVector3>(local_player + offsets::C_BasePlayerPawn::m_vOldOrigin);
 
 		int local_index = 1;
 
-		int local_team = process.readv<int>(local_player + offsets::m_iTeamNum);
+		int local_team = process.readv<int>(local_player + offsets::C_BaseEntity::m_iTeamNum);
 
 
 		uintptr_t entity_list = process.readv<uintptr_t>(client + offsets::dwEntityList);
@@ -35,7 +34,7 @@ void cache_entities() {
 			if (!player)
 				continue;
 
-			std::uint32_t h_pawn = process.readv<std::uint32_t>(player + offsets::dwPlayerPawn);
+			std::uint32_t h_pawn = process.readv<std::uint32_t>(player + offsets::CCSPlayerController::m_hPlayerPawn);
 
 			uintptr_t list_entry2 = process.readv<uintptr_t>(entity_list + 0x8 * ((h_pawn & 0x7FFF) >> 9) + 16);
 
@@ -44,44 +43,40 @@ void cache_entities() {
 
 			uintptr_t pcs_pawn = process.readv<uintptr_t>(list_entry2 + 120 * (h_pawn & 0x1FF));
 
-			if (pcs_pawn == local_player) {
+			if (PlayerEntity::is_localplayer(pcs_pawn,local_player)) {
 				local_index = i;
 				continue;
 			}
 
-			FVector3 pcs_pos = process.readv<FVector3>(pcs_pawn + offsets::m_vecOrigin);
+			FVector3 e_position = process.readv<FVector3>(pcs_pawn + offsets::C_BasePlayerPawn::m_vOldOrigin);
 
-			int e_health = process.readv<int>(pcs_pawn + offsets::m_iHealth);
+			int e_health = process.readv<int>(pcs_pawn + offsets::C_BaseEntity::m_iHealth);
 
 
-			if (e_health <= 0 || e_health > 100)
+			if (PlayerEntity::is_dead(e_health))
 				continue;
 
-			int e_team = process.readv<int>(pcs_pawn + offsets::m_iTeamNum);
+			int e_team = process.readv<int>(pcs_pawn + offsets::C_BaseEntity::m_iTeamNum);
 
-			if (settings::misc::bTeamcheck && local_team == e_team)
+			if (settings::misc::bTeamcheck && PlayerEntity::is_team_mate(local_team,e_team))
 				continue;
 
-			auto m_pclippingweapon = process.readv<uintptr_t>(pcs_pawn + 0x1308);
-			auto entity_identity = process.readv<uintptr_t>(m_pclippingweapon + 0x10);
-			auto des_name = process.readv<uintptr_t>(entity_identity + 0x20);
-
+			auto m_pclippingweapon = process.readv<uintptr_t>(pcs_pawn + offsets::C_CSPlayerPawnBase::m_pClippingWeapon);
+			auto entity_identity = process.readv<uintptr_t>(m_pclippingweapon + offsets::CEntityInstance::m_pEntity);
+			auto des_name = process.readv<uintptr_t>(entity_identity + offsets::CEntityIdentity::m_designerName);
+	
 			std::string weap_name = process.read_str(des_name);
 
+			std::string e_name = process.read_str(pcs_pawn + offsets::CBasePlayerController::m_iszPlayerName);
+			bool e_spotted = process.readv<bool>(pcs_pawn + offsets::C_CSPlayerPawn::m_entitySpottedState + offsets::EntitySpottedState_t::m_bSpottedByMask);
 
-			if (weap_name.empty())
-				weap_name = "unknown_weapon";
-
-			std::string e_name = process.read_str(pcs_pawn + offsets::m_iszPlayerName);
-			bool e_spotted = process.readv<bool>(pcs_pawn + offsets::bSpottedByMask);
-			Entity entity;
-
-			entity.pawn = pcs_pawn;
-			entity.name = e_name.empty() ? "unknown" : e_name;
-			entity.health = e_health;
-			entity.visible = e_spotted & (1 << local_index - 1);
-			entity.position = pcs_pos.distance(local_pos) / 100;
-			entity.weapon_name = weap_name.substr(7);
+			PlayerEntity entity;
+			entity.set_pawn(pcs_pawn);
+			entity.set_is_visible(e_spotted, local_index);
+			entity.set_health(e_health);
+			entity.set_weapon(weap_name);
+			entity.set_player_name(e_name);
+			entity.set_distance(local_pos,e_position);
 			temp.push_back(entity);
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(settings::misc::sleep_for_ms));
@@ -118,12 +113,12 @@ void entities_loop()
 		if (!ent)
 			continue;
 
-		uintptr_t entitiy_identity = process.readv<uintptr_t>(ent + 0x10);
+		uintptr_t entitiy_identity = process.readv<uintptr_t>(ent + offsets::CEntityInstance::m_pEntity);
 
 		if (!entitiy_identity)
 			continue;
 
-		uintptr_t designer_name = process.readv<uintptr_t>(entitiy_identity + 0x20);
+		uintptr_t designer_name = process.readv<uintptr_t>(entitiy_identity + offsets::CEntityIdentity::m_designerName);
 		if (!designer_name)
 			continue;
 
@@ -142,9 +137,9 @@ void entities_loop()
 			continue;
 
 
-		auto node = process.readv<uintptr_t>(ent + 0x318);
+		auto node = process.readv<uintptr_t>(ent + offsets::C_BaseEntity::m_pGameSceneNode);
 
-		FVector3 abs_origin = process.readv<FVector3>(node + 0x80);
+		FVector3 abs_origin = process.readv<FVector3>(node + offsets::CGameSceneNode::m_vecOrigin);
 
 		if (abs_origin.isZero())
 			continue;
@@ -153,9 +148,9 @@ void entities_loop()
 		const char* nades[5] = { "smokegrenade_projectile","hegrenade_projectile","flashbang_projectile","molotov_projectile","flashbang_projectile" };
 
 
-		float dist = abs_origin.distance(process.readv<FVector3>(global_pawn + offsets::m_vecOrigin)) / 100;
+		float dist = abs_origin.distance(process.readv<FVector3>(global_pawn + offsets::C_BasePlayerPawn::m_vOldOrigin)) / 100;
 
-		view_matrix_t local_viewmatrix = process.readv<view_matrix_t>(client + offsets::dwViewMatrix);
+		ViewMatrix local_viewmatrix = process.readv<ViewMatrix>(client + offsets::dwViewMatrix);
 
 		FVector3 screen_pos = abs_origin.world_to_screen(local_viewmatrix);
 
@@ -194,7 +189,8 @@ void entities_loop()
 			ImGui::End();
 #endif // _DEBUG
 
-			auto smoke_tick_begin = process.readv<bool>(ent + 0x11A1);
+			auto smoke_tick_begin = process.readv<bool>(ent + offsets::C_SmokeGrenadeProjectile::m_nSmokeEffectTickBegin);
+
 			if (settings::world::grenade_esp)
 				draw_grenade_esp(ImGui::GetIO().Fonts->Fonts[1], normalized_str, dist, ImVec2(screen_pos.x, screen_pos.y), ImColor(255, 255, 255, 255), 20.0f);
 				
@@ -204,10 +200,9 @@ void entities_loop()
 
 
 			if (settings::world::grenade_trajectory)
-				draw_path(process.readv<FVector3>(ent + 0x10C0).world_to_screen(local_viewmatrix), screen_pos, smoke_tick_begin);
+				draw_path(process.readv<FVector3>(ent + offsets::C_BaseCSGrenadeProjectile::m_vInitialPosition).world_to_screen(local_viewmatrix), screen_pos, smoke_tick_begin);
 
 
-			// C_BaseCSGrenadeProjectile
 			if (settings::world::grenade_timer && classname.compare("smokegrenade") == 0)
 				draw_timer_progress(ImGui::GetIO().Fonts->Fonts[1], 20.0f, "smokegrenade", smoke_tick_begin, dist, ImVec2(screen_pos.x, screen_pos.y), ImVec4(255, 0, 0, 255), i);
 
@@ -227,10 +222,10 @@ void entity_loop() {
 
 		entities_loop();
 
-		view_matrix_t local_viewmatrix = process.readv<view_matrix_t>(client + offsets::dwViewMatrix);
+		ViewMatrix local_viewmatrix = process.readv<ViewMatrix>(client + offsets::dwViewMatrix);
 
-		for (Entity& entity : entities) {
-			FVector3 origin = process.readv<FVector3>(entity.pawn + offsets::m_vecOrigin);
+		for (PlayerEntity& entity : entities) {
+			FVector3 origin = process.readv<FVector3>(entity.pawn + offsets::C_BasePlayerPawn::m_vOldOrigin);
 
 			FVector3 head{ origin.x,origin.y,origin.z };
 
@@ -244,24 +239,18 @@ void entity_loop() {
 			uintptr_t  p_gamescene = process.readv<uint64_t>(entity.pawn + 0x318);
 			uintptr_t  p_bonearray = process.readv<uint64_t>(p_gamescene + 0x160 + 0x80); // m_modelState  + bArray
 
-			FVector3 entity_pos = process.readv<FVector3>(entity.pawn + offsets::m_vecOrigin);
+			FVector3 entity_pos = process.readv<FVector3>(entity.pawn + offsets::C_BasePlayerPawn::m_vOldOrigin);
 
-			FVector3 head_pos = FVector3(entity_pos.x, entity_pos.y, entity_pos.z + 63);
-
-			FVector3 head_bone = process.readv<FVector3>(p_bonearray + EBone::Head * 32);
-
-
-			if (!world_to_screen(head_bone, head_pos, local_viewmatrix))
-				continue;
+			FVector3 head_bone = process.readv<FVector3>(p_bonearray + EBone::Head * 32).world_to_screen(local_viewmatrix);
 
 			if (screen_pos.z >= 0.01f)
-				draw_esp(head_pos, screen_pos, entity, p_bonearray, local_viewmatrix);
+				draw_esp(head_bone, screen_pos, entity, p_bonearray, local_viewmatrix);
 
 
 			if (settings::aimbot::aim_fov > 0)
 				ImGui::GetBackgroundDrawList()->AddCircle(ImVec2(width / 2, height / 2), settings::aimbot::aim_fov, ImColor(255, 255, 255, 255), 100);
 
-			std::thread(aimbot, entity, head_pos).detach();
+			std::thread(aimbot, entity, head_bone).detach();
 		}
 
 	}

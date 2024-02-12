@@ -1,6 +1,5 @@
 #pragma once
-#include "../../utils/helper.h"
-
+#include "../../utils/ui/custom_components.h"
 
 
 
@@ -56,12 +55,12 @@ void draw_menu() {
 	if (!settings::bMenu)
 		return;
 
-	create_style();
+	component::create_style();
 
 
 
 	ImGui::SetNextWindowSize(ImVec2(500.0f, 350.0f), ImGuiCond_Once);
-	ImGui::Begin(("Infestation - 5.5"), &settings::bMenu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
+	ImGui::Begin(("Infestation - 6.0"), &settings::bMenu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
 
 	ImGui::BeginTabBar(("##tabs"), ImGuiTabBarFlags_None);
 	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowSize().x / 2 - 100, 50));
@@ -72,14 +71,14 @@ void draw_menu() {
 	if (ImGui::BeginTabItem(("Aimbot"))) {
 		ImGui::Text("Aimbot");
 		ImGui::Checkbox("Enabled", &settings::aimbot::aimbot);
-		set_helper("Enable/Disable Aimbot");
+		component::set_helper("Enable/Disable Aimbot");
 		ImGui::Checkbox("Visible Check", &settings::aimbot::visible_check);
-		set_helper("Enable/Disable Visible Check");
+		component::set_helper("Enable/Disable Visible Check");
 		ImGui::SliderFloat("FOV", &settings::aimbot::aim_fov, 0.f, 100.f, "%.0f");
-		set_helper("Aimbot FOV");
+		component::set_helper("Aimbot FOV");
 		ImGui::Combo("Target", &settings::aimbot::selectedhitbox, settings::aimbot::hitbox, IM_ARRAYSIZE(settings::aimbot::hitbox));
 		ImGui::SliderInt("Smooth", &settings::aimbot::smooth, 0, 10, "%d");
-		set_helper("Aimbot Smooth");
+		component::set_helper("Aimbot Smooth");
 		hotkey_button(hotkeys::aimkey, change_key, keystatus);
 
 		ImGui::EndTabItem();
@@ -94,58 +93,60 @@ void draw_menu() {
 		ImGui::SetColumnOffset(1, 150);
 		ImGui::Text("Player");
 		ImGui::Checkbox("Enabled", &settings::visuals::esp);
-		set_helper("Enable/Disable ESP");
+		component::set_helper("Enable/Disable ESP");
 		ImGui::Checkbox("Box", &settings::visuals::bBox);
-		set_helper("Draw enemies 2D box");
+		component::set_helper("Draw enemies 2D box");
 		ImGui::Checkbox("Name", &settings::visuals::bName);
-		set_helper("Draw enemies name");
+		component::set_helper("Draw enemies name");
 		ImGui::Checkbox("Skeleton", &settings::visuals::bSkeleton);
-		set_helper("Draw enemies skeleton, bones are with update issue",ImColor(211, 67, 18, 255),'!');
+		component::set_helper("Draw enemies skeleton, bones are with update issue", ImColor(211, 67, 18, 255), '!');
 		ImGui::Checkbox("Health", &settings::visuals::bHealth);
-		set_helper("Draw enemies health");
+		component::set_helper("Draw enemies health");
+
 		ImGui::Checkbox("Snap Lines", &settings::visuals::bSnaplines);
-		set_helper("Draw lines to enemies");
+		component::set_helper("Draw lines to enemies");
+		component::color_picker(settings::colors::player_snaplines);
 		ImGui::Checkbox("Distance", &settings::visuals::distance);
-		set_helper("Draw distance to enemies");
+		component::set_helper("Draw distance to enemies");
 		ImGui::Checkbox("Weapon", &settings::visuals::bWeapon);
-		set_helper("Draw enemies current weapon");
+		component::set_helper("Draw enemies current weapon");
 
 		ImGui::NextColumn();
 
 		ImGui::Checkbox("World", &settings::world::esp);
-		set_helper("Enable/Disable World ESP");
+		component::set_helper("Enable/Disable World ESP");
 		ImGui::Spacing();
 
 		if (settings::world::esp) {
 
 			ImGui::Checkbox("Weapons", &settings::world::weapon_esp);
 			ImGui::SameLine();
-			set_helper("Enable/Disable Weapons ESP");
+			component::set_helper("Enable/Disable Weapons ESP");
 			if (settings::world::weapon_esp) {
 				ImGui::Checkbox("Weapon Icon", &settings::world::weapon_name);
-				set_helper("Draw weapon name");
+				component::set_helper("Draw weapon name");
 				ImGui::Checkbox("Weapon Distance", &settings::world::weapon_distance);
-				set_helper("Draw distance to weapon");
+				component::set_helper("Draw distance to weapon");
 				ImGui::Checkbox("Weapon Snap Lines", &settings::world::weapon_snaplines);
-				set_helper("Draw lines to weapon");
+				component::set_helper("Draw lines to weapon");
 
 			}
 
 			ImGui::Spacing();
 			ImGui::Checkbox("Grenades", &settings::world::grenade_esp);
-			set_helper("Enable/Disable Grenades ESP");
+			component::set_helper("Enable/Disable Grenades ESP");
 
 			if (settings::world::grenade_esp) {
 				ImGui::Checkbox("Grenade Name", &settings::world::grenade_name);
-				set_helper("Grenade projectile name");
+				component::set_helper("Grenade projectile name");
 				ImGui::Checkbox("Grenade Distance", &settings::world::grenade_distance);
-				set_helper("Grenade projectile distance");
+				component::set_helper("Grenade projectile distance");
 				ImGui::Checkbox("Grenade Snap Lines", &settings::world::grenade_snaplines);
-				set_helper("Draw lines to Grenade projectile");
+				component::set_helper("Draw lines to Grenade projectile");
 				ImGui::Checkbox("Grenade Timer", &settings::world::grenade_timer);
-				set_helper("Draw Grenade timer");
+				component::set_helper("Draw Grenade timer");
 				ImGui::Checkbox("Grenade Trajectory", &settings::world::grenade_trajectory);
-				set_helper("This feature is under development, need to fix bounces, velocity and trajectory calculations",ImColor(211, 67, 18, 255),'!');
+				component::set_helper("This feature is under development, need to fix bounces, velocity and trajectory calculations", ImColor(211, 67, 18, 255), '!');
 
 			}
 		}
@@ -158,21 +159,20 @@ void draw_menu() {
 
 	if (ImGui::BeginTabItem("Misc")) {
 		ImGui::Checkbox("Team-Check", &settings::misc::bTeamcheck);
-		set_helper("Enable/Disable Team-Check");
+		component::set_helper("Enable/Disable Team-Check");
 		ImGui::Checkbox("Watermark", &settings::misc::bWatermark);
-		set_helper("Enable/Disable Watermark");
+		component::set_helper("Enable/Disable Watermark");
 		ImGui::Checkbox("Anti-Screencapture", &settings::misc::bWatermark);
-		set_helper("Hides your ESP from being captured by OBS only");
+		component::set_helper("Hides your ESP from being captured by OBS only");
 
-		ImGui::SliderInt("##save_fps",&settings::misc::sleep_for_ms, 0, 1000,"%dms");
-		set_helper("Using higher number will update slowly but reduces [CPU/Memory] usage", ImColor(211, 67, 18, 255), '!');
+		ImGui::SliderInt("##save_fps", &settings::misc::sleep_for_ms, 0, 1000, "%dms");
+		component::set_helper("Using higher number will update slowly but reduces [CPU/Memory] usage", ImColor(211, 67, 18, 255), '!');
 
 		if (ImGui::Button("Github"))
 			ShellExecuteA(NULL, "open", "https://github.com/vsaint1/cs2-infestation", NULL, NULL, SW_SHOWNORMAL);
 
-		
-		ImGui::EndTabItem();
 
+		ImGui::EndTabItem();
 	}
 
 	ImGui::EndTabBar();

@@ -8,7 +8,7 @@
 
 
 
-void draw_esp(FVector3 head_pos, FVector3 screen_pos, Entity entity, uintptr_t  bone_array, view_matrix_t view_matrix) {
+void draw_esp(FVector3 head_pos, FVector3 screen_pos, PlayerEntity entity, uintptr_t  bone_array, ViewMatrix view_matrix) {
 	if (global_pawn) {
 
 		if (settings::visuals::esp) {
@@ -24,19 +24,19 @@ void draw_esp(FVector3 head_pos, FVector3 screen_pos, Entity entity, uintptr_t  
 				draw_text(entity.name.c_str(), ImVec2(head_pos.x, head_pos.y - 10), ImVec4(255, 243, 247, 255), 14.5f);
 
 			if (settings::visuals::distance)
-				draw_distance_ex(screen_pos, entity.position, ImColor(255, 201, 14, 233));
+				draw_distance_ex(screen_pos, entity.get_distance(), ImColor(255, 201, 14, 233));
 
 			if (settings::visuals::bSnaplines)
-				draw_snaplines(screen_pos, ImColor(255, 255, 255, 255));
+				draw_snaplines(screen_pos, settings::colors::player_snaplines);
 
 			if (settings::visuals::bHealth)
 				draw_progressbar(screen_pos.x + 25, head_pos.y, width, height, 2, entity.health);
 
 			if (settings::visuals::bSkeleton)
-				draw_skeleton(bone_array, view_matrix, entity.visible);
+				draw_skeleton(bone_array, view_matrix, entity.is_visible());
 
 			if (settings::visuals::bWeapon)
-				draw_icon_ex(ImGui::GetIO().Fonts->Fonts[1], entity.weapon_name.c_str(), {screen_pos.x - 10,screen_pos.y,screen_pos.z}, ImColor(255, 255, 255, 255), entity.position > 10 ? 8.0f : 13.0f);
+				draw_icon_ex(ImGui::GetIO().Fonts->Fonts[1], entity.weapon_name.c_str(), {screen_pos.x - 10,screen_pos.y,screen_pos.z}, ImColor(255, 255, 255, 255), entity.get_distance() > 10 ? 8.0f : 13.0f);
 
 			// flags
 			//draw_text(entity.name.c_str(), ImVec2(screen_pos.x - width / 2 , head_pos.y - 10), ImVec4(255, 243, 247, 255));
