@@ -136,7 +136,7 @@ void draw_menu() {
 			set_helper("Enable/Disable Grenades ESP");
 
 			if (settings::world::grenade_esp) {
-				ImGui::Checkbox("Grenade Icon", &settings::world::grenade_name);
+				ImGui::Checkbox("Grenade Name", &settings::world::grenade_name);
 				set_helper("Grenade projectile name");
 				ImGui::Checkbox("Grenade Distance", &settings::world::grenade_distance);
 				set_helper("Grenade projectile distance");
@@ -161,6 +161,8 @@ void draw_menu() {
 		set_helper("Enable/Disable Team-Check");
 		ImGui::Checkbox("Watermark", &settings::misc::bWatermark);
 		set_helper("Enable/Disable Watermark");
+		ImGui::Checkbox("Anti-Screencapture", &settings::misc::bWatermark);
+		set_helper("Hides your ESP from being captured by OBS only");
 
 		ImGui::SliderInt("##save_fps",&settings::misc::sleep_for_ms, 0, 1000,"%dms");
 		set_helper("Using higher number will update slowly but reduces [CPU/Memory] usage", ImColor(211, 67, 18, 255), '!');

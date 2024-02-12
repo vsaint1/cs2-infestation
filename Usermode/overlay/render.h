@@ -227,6 +227,11 @@ WPARAM main_loop() {
 			DispatchMessage(&Message);
 		}
 
+		if (settings::misc::bAntiScreencapture)
+			SetWindowDisplayAffinity(own_hwnd, WDA_EXCLUDEFROMCAPTURE);
+		else
+			SetWindowDisplayAffinity(own_hwnd, WDA_NONE);
+
 		HWND hwnd_active = GetForegroundWindow();
 		if (GetAsyncKeyState(0x23) & 1)
 			exit(0);
