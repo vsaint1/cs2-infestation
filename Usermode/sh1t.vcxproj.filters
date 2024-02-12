@@ -39,6 +39,12 @@
     <ClCompile Include="external\imgui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sdk\player\player_entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\ui\custom_components.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="memory\driver.h">
@@ -113,7 +119,13 @@
     <ClInclude Include="utils\gun_icon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="utils\helper.h">
+    <ClInclude Include="sdk\base_entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\player\player_entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\ui\custom_components.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

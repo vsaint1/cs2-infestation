@@ -151,6 +151,8 @@
     <ClCompile Include="external\imgui\imgui_tables.cpp" />
     <ClCompile Include="external\imgui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="sdk\player\player_entity.cpp" />
+    <ClCompile Include="utils\ui\custom_components.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\imgui\imconfig.h" />
@@ -175,9 +177,11 @@
     <ClInclude Include="overlay\render.h" />
     <ClInclude Include="overlay\weapon_font.h" />
     <ClInclude Include="protection\xor.h" />
+    <ClInclude Include="sdk\base_entity.h" />
+    <ClInclude Include="sdk\player\player_entity.h" />
     <ClInclude Include="utils\gun_icon.h" />
-    <ClInclude Include="utils\helper.h" />
     <ClInclude Include="utils\helper_macro.h" />
+    <ClInclude Include="utils\ui\custom_components.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Driver\.clang-format" />
