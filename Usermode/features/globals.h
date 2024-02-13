@@ -19,10 +19,10 @@ namespace hotkeys {
 static int keystatus = 0;
 
 namespace offsets {
-	std::ptrdiff_t dwEntityList = 0x18B0FC8;
-	std::ptrdiff_t dwLocalPlayerPawn = 0x17262E8;
+	std::ptrdiff_t dwEntityList = 0x18B1FE8;
+	std::ptrdiff_t dwLocalPlayerPawn = 0x17272E8;
 	std::ptrdiff_t dwGameEntitySystem_getHighestEntityIndex = 0x1510;
-	std::ptrdiff_t dwViewMatrix = 0x19102B0;
+	std::ptrdiff_t dwViewMatrix = 0x19112D0;
 
 	namespace CBasePlayerController { // C_BaseEntity
 		std::ptrdiff_t m_nFinalPredictedTick = 0x558; // int32_t
@@ -131,7 +131,7 @@ namespace settings {
 		inline int smooth = 0;
 		bool fov_circle = false;
 		inline int selectedhitbox = 0;
-		inline const char* hitbox[] = { ("Head"), ("Chest") };
+		inline const char* hitbox[] = { ("Head"), ("Neck"),("Chest"),("Pelvis"),("Automatic")};
 
 	}; // namespace aimbot
 
@@ -157,7 +157,7 @@ namespace settings {
 		bool grenade_trajectory = false;
 		bool grenade_name = false;
 		bool grenade_snaplines = false;
-		bool grenade_timer = false;
+		bool grenade_timer = true;
 
 		bool weapon_esp = false;
 		bool weapon_name = false;
@@ -168,7 +168,8 @@ namespace settings {
 	namespace misc {
 		bool bTeamcheck = true;
 		bool bWatermark = true;
-		bool bAntiScreencapture = true;
+		bool bAntiScreencapture = false;
+		bool bExperimentalFeatures = true;
 		int sleep_for_ms = 10;
 
 
