@@ -2,9 +2,11 @@
 #include "../../features/math.h"
 #include "../../external/imgui/imgui_internal.h"
 #include "../../utils/gun_icon.h"
+#include "../../sdk/grenade_entity.h"
 
 constexpr int MAX_NUM_SEGMENTS = 20;
 constexpr float PI = 3.14159265;
+constexpr int MAX_NUM_TRAIL = 50;
 
 
 
@@ -136,41 +138,53 @@ void draw_filled_rect(int x, int y, int w, int h, ImVec4 color) {
 }
 
 
-void draw_path(FVector3 initial_pos, FVector3 current_pos, bool spawned) {
+void draw_path(FVector3 current_pos, bool smoke_tick_begin) {
+	if (smoke_tick_begin)
+		return;
 
-	static std::vector<FVector3> previous_positions;
+	static std::vector<FVector3> trail_positions;
+	trail_positions.push_back(current_pos);
 
-	if (spawned)
+	for (size_t i = 1; i < trail_positions.size(); ++i) {
+		ImVec2 p1 = ImVec2(trail_positions[i - 1].x, trail_positions[i - 1].y);
+		ImVec2 p2 = ImVec2(trail_positions[i].x, trail_positions[i].y);
+		ImGui::GetForegroundDrawList()->AddLine(p1, p2, IM_COL32(255, 255, 255, 255), 2.0f);
+	}
+
+	if (trail_positions.size() > MAX_NUM_SEGMENTS)
+		trail_positions.erase(trail_positions.begin());
+
+
+}
+
+void draw_path(GrenadeEntity& grenade) {
+
+	if (grenade.exploded())
+		return;
+
+	if (grenade.tick_began())
 		return;
 
 
-	previous_positions.push_back(current_pos);
+	static std::map<int, std::vector<FVector3>> grenade_trails;
 
-	float distance = std::hypot(current_pos.x - initial_pos.x, current_pos.y - initial_pos.y);
 
-	int num_segments = static_cast<int>(distance / 10.0f);
-
-	float alpha_decay_rate = 255.0f / static_cast<float>(num_segments);
-
-	float alpha = 255.0f;
-
-	for (int i = 0; i < num_segments; ++i) {
-		float t = static_cast<float>(i) / num_segments;
-		ImVec2 p1 = ImVec2(initial_pos.x * (1 - t) + current_pos.x * t, initial_pos.y * (1 - t) + current_pos.y * t);
-		t = static_cast<float>(i + 1) / num_segments;
-		ImVec2 p2 = ImVec2(initial_pos.x * (1 - t) + current_pos.x * t, initial_pos.y * (1 - t) + current_pos.y * t);
-
-		alpha -= alpha_decay_rate;
-		if (alpha < 0.0f) alpha = 0.0f;
-
-		ImGui::GetForegroundDrawList()->AddLine(p1, p2, IM_COL32(255, 255, 255, static_cast<int>(alpha)), 2.0f);
+	if (grenade_trails.find(grenade.idx) == grenade_trails.end()) {
+		grenade_trails[grenade.idx] = std::vector<FVector3>();
 	}
 
-	if (previous_positions.size() > MAX_NUM_SEGMENTS)
-		previous_positions.erase(previous_positions.begin(), previous_positions.end() - MAX_NUM_SEGMENTS);
+	grenade_trails[grenade.idx].push_back(grenade.get_current_position());
+
+	std::vector<FVector3>& trail_positions = grenade_trails[grenade.idx];
+	for (size_t i = 1; i < trail_positions.size(); ++i) {
+		ImVec2 p1 = ImVec2(trail_positions[i - 1].x, trail_positions[i - 1].y);
+		ImVec2 p2 = ImVec2(trail_positions[i].x, trail_positions[i].y);
+		ImGui::GetForegroundDrawList()->AddLine(p1, p2, IM_COL32(255, 255, 255, 255), 2.0f);
+	}
+
+	if (trail_positions.size() > MAX_NUM_TRAIL)
+		trail_positions.erase(trail_positions.begin());
 }
-
-
 
 void draw_filled_box(int x, int y, int w, int h, int border, ImColor border_color) {
 	int shadow_offset = 1;
@@ -238,7 +252,7 @@ void draw_progressbar(int x, int y, int w, int h, int thick, int health)
 		draw_text(health_str.c_str(), ImVec2(x + (w / 2) - 22, bar_y + 5), ImVec4(255, 255, 255, 255));
 }
 
-void draw_timer_progress(ImFont* font, float font_size, const char* name, bool tick_begin, float distance, const ImVec2& center, ImVec4 color, int idx) {
+void draw_timer_progress(ImFont* font, float font_size, GrenadeEntity& grenade, ImColor color, int idx) {
 	static float timers[32];
 #ifdef _DEBUG
 	ImGui::SetNextWindowSize(ImVec2(100.0f, 100.0f), ImGuiCond_Once);
@@ -246,46 +260,51 @@ void draw_timer_progress(ImFont* font, float font_size, const char* name, bool t
 	ImGui::Begin("Timers");
 	ImGui::Text("Grenade idx %d", idx);
 	ImGui::Text("Time %.1f", timers[idx]);
-	ImGui::Text("TickBegin %s", tick_begin ? "Fade in" : "Fade out");
+	ImGui::Text("TickBegin %s", grenade.tick_began() ? "Fade in" : "Fade out");
 	ImGui::End();
 #endif // _DEBUG
 
-	if (!tick_begin)
+	if (grenade.get_current_position().invalid())
+		return;
+
+	if (!grenade.tick_began())
 		return;
 
 	float radius = 20.0f;
 	float thickness = 2.0f;
 
 
-	if (timers[idx] < 0.0f)
-		timers[idx] = 20.0f;
+	if (timers[grenade.idx] < 0.0f && std::isnan(timers[grenade.idx]) && std::isinf(timers[grenade.idx]))
+		timers[grenade.idx] = 20.0f;
+	else
+		timers[grenade.idx] -= ImGui::GetIO().DeltaTime;
 
-	timers[idx] -= ImGui::GetIO().DeltaTime;
+	ImVec2 center = ImVec2(grenade.get_current_position().x, grenade.get_current_position().y);
 
 	ImGui::GetBackgroundDrawList()->AddCircleFilled(center, radius, IM_COL32(50, 50, 50, 100), MAX_NUM_SEGMENTS);
 
-	float progress = timers[idx] / 20.0f;
+	float progress = timers[grenade.idx] / 20.0f;
 	ImVec2 start(cosf(-PI * 0.5f), sinf(-PI * 0.5f));
 	ImVec2 end(cosf(PI * 2.0f * progress - PI * 0.5f), sinf(PI * 2.0f * progress - PI * 0.5f));
-	ImGui::GetBackgroundDrawList()->PathArcTo(center, radius - thickness * 0.5f, PI * 0.5f, PI * 2.0f * progress + PI * 0.5f, MAX_NUM_SEGMENTS);
+	ImGui::GetBackgroundDrawList()->PathArcTo(grenade.center(), radius - thickness * 0.5f, PI * 0.5f, PI * 2.0f * progress + PI * 0.5f, MAX_NUM_SEGMENTS);
 	ImGui::GetBackgroundDrawList()->PathStroke(IM_COL32(255, 0, 0, 255), false, thickness);
 
 
 	if (settings::world::grenade_distance)
-		draw_distance(center, distance);
+		draw_distance(center, grenade.get_distance());
 
 	if (!settings::world::grenade_name) {
-		ImVec2 text_size = ImGui::CalcTextSize(name);
+		ImVec2 text_size = ImGui::CalcTextSize(grenade.class_name.c_str());
 
-		ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(center.x - text_size.x / 2 + 1 + 30, center.y - text_size.y / 2 + 1 - 10), ImColor(0, 0, 0, 255), gun_icon(name));
-		ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(center.x - text_size.x / 2 + 30, center.y - text_size.y / 2 - 10), ImColor(255, 255, 255, 255), gun_icon(name));
+		ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(center.x - text_size.x / 2 + 1 + 30, center.y - text_size.y / 2 + 1 - 10), ImColor(0, 0, 0, 255), gun_icon(grenade.class_name));
+		ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(center.x - text_size.x / 2 + 30, center.y - text_size.y / 2 - 10), ImColor(255, 255, 255, 255), gun_icon(grenade.class_name));
 	}
 
 
 
 }
 
-void draw_skeleton(uintptr_t bonearray, ViewMatrix view_matrix, bool visible) {
+void draw_skeleton(PlayerEntity &entity) {
 
 #if _DEBUG
 	for (int i = 0; i < 32; i++) {
@@ -301,32 +320,32 @@ void draw_skeleton(uintptr_t bonearray, ViewMatrix view_matrix, bool visible) {
 	ImColor hidden_color = ImColor(255, 0, 0, 255);
 	ImColor visible_color = ImColor(0, 255, 0, 255);
 
-	FVector3 head = process.readv<FVector3>(bonearray + EBone::Head * 32).world_to_screen(view_matrix);
-	FVector3 neck = process.readv<FVector3>(bonearray + EBone::Neck * 32).world_to_screen(view_matrix);
-	FVector3 right_shoulder = process.readv<FVector3>(bonearray + EBone::RightShoulder * 32).world_to_screen(view_matrix);
-	FVector3 left_shoulder = process.readv<FVector3>(bonearray + EBone::LeftShoulder * 32).world_to_screen(view_matrix);
-	FVector3 right_arm = process.readv<FVector3>(bonearray + EBone::RightArm * 32).world_to_screen(view_matrix);
-	FVector3 left_arm = process.readv<FVector3>(bonearray + EBone::LeftArm * 32).world_to_screen(view_matrix);
-	FVector3 right_hand = process.readv<FVector3>(bonearray + EBone::RightHand * 32).world_to_screen(view_matrix);
-	FVector3 left_hand = process.readv<FVector3>(bonearray + EBone::LeftHand * 32).world_to_screen(view_matrix);
-	FVector3 root = process.readv<FVector3>(bonearray + EBone::Root * 32).world_to_screen(view_matrix);
-	FVector3 right_knee = process.readv<FVector3>(bonearray + EBone::RightKnee * 32).world_to_screen(view_matrix);
-	FVector3 left_knee = process.readv<FVector3>(bonearray + EBone::LeftKnee * 32).world_to_screen(view_matrix);
-	FVector3 right_foot = process.readv<FVector3>(bonearray + EBone::RightFoot * 32).world_to_screen(view_matrix);
-	FVector3 left_foot = process.readv<FVector3>(bonearray + EBone::LeftFoot * 32).world_to_screen(view_matrix);
-
-	ImGui::GetBackgroundDrawList()->AddLine({ head.x, head.y }, { neck.x, neck.y }, visible ? visible_color : hidden_color);
-	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y }, { right_shoulder.x, right_shoulder.y }, visible ? visible_color : hidden_color);
-	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y }, { left_shoulder.x, left_shoulder.y }, visible ? visible_color : hidden_color);
-	ImGui::GetBackgroundDrawList()->AddLine({ right_shoulder.x, right_shoulder.y }, { right_arm.x, right_arm.y }, visible ? visible_color : hidden_color);
-	ImGui::GetBackgroundDrawList()->AddLine({ left_shoulder.x, left_shoulder.y }, { left_arm.x, left_arm.y }, visible ? visible_color : hidden_color);
-	ImGui::GetBackgroundDrawList()->AddLine({ right_arm.x, right_arm.y }, { right_hand.x, right_hand.y }, visible ? visible_color : hidden_color);
-	ImGui::GetBackgroundDrawList()->AddLine({ left_arm.x, left_arm.y }, { left_hand.x, left_hand.y }, visible ? visible_color : hidden_color);
-	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y }, { root.x, root.y }, visible ? visible_color : hidden_color);
-	ImGui::GetBackgroundDrawList()->AddLine({ root.x, root.y }, { right_knee.x, right_knee.y }, visible ? visible_color : hidden_color);
-	ImGui::GetBackgroundDrawList()->AddLine({ root.x, root.y }, { left_knee.x, left_knee.y }, visible ? visible_color : hidden_color);
-	ImGui::GetBackgroundDrawList()->AddLine({ right_knee.x, right_knee.y }, { right_foot.x, right_foot.y }, visible ? visible_color : hidden_color);
-	ImGui::GetBackgroundDrawList()->AddLine({ left_knee.x, left_knee.y }, { left_foot.x, left_foot.y }, visible ? visible_color : hidden_color);
+	FVector3 head = entity.get_bone_pos_2d(EBone::Head);
+	FVector3 neck =  entity.get_bone_pos_2d(EBone::Neck);
+	FVector3 right_shoulder =  entity.get_bone_pos_2d(EBone::RightShoulder);
+	FVector3 left_shoulder =  entity.get_bone_pos_2d(EBone::LeftShoulder);
+	FVector3 right_arm =  entity.get_bone_pos_2d(EBone::RightArm);
+	FVector3 left_arm =  entity.get_bone_pos_2d(EBone::LeftArm);
+	FVector3 right_hand =  entity.get_bone_pos_2d(EBone::RightHand);
+	FVector3 left_hand =  entity.get_bone_pos_2d(EBone::LeftHand);
+	FVector3 root =  entity.get_bone_pos_2d(EBone::Root);
+	FVector3 right_knee =  entity.get_bone_pos_2d(EBone::RightKnee);
+	FVector3 left_knee =  entity.get_bone_pos_2d(EBone::LeftKnee);
+	FVector3 right_foot =  entity.get_bone_pos_2d(EBone::RightFoot);
+	FVector3 left_foot =  entity.get_bone_pos_2d(EBone::LeftFoot);
+	
+	ImGui::GetBackgroundDrawList()->AddLine({ head.x, head.y }, { neck.x, neck.y }, entity.is_visible() ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y }, { right_shoulder.x, right_shoulder.y }, entity.is_visible() ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y }, { left_shoulder.x, left_shoulder.y }, entity.is_visible() ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ right_shoulder.x, right_shoulder.y }, { right_arm.x, right_arm.y }, entity.is_visible() ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ left_shoulder.x, left_shoulder.y }, { left_arm.x, left_arm.y }, entity.is_visible() ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ right_arm.x, right_arm.y }, { right_hand.x, right_hand.y }, entity.is_visible() ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ left_arm.x, left_arm.y }, { left_hand.x, left_hand.y }, entity.is_visible() ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y }, { root.x, root.y }, entity.is_visible() ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ root.x, root.y }, { right_knee.x, right_knee.y }, entity.is_visible() ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ root.x, root.y }, { left_knee.x, left_knee.y }, entity.is_visible() ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ right_knee.x, right_knee.y }, { right_foot.x, right_foot.y }, entity.is_visible() ? visible_color : hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ left_knee.x, left_knee.y }, { left_foot.x, left_foot.y }, entity.is_visible() ? visible_color : hidden_color);
 #endif
 
 };
