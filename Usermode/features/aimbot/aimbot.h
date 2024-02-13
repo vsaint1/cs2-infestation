@@ -2,16 +2,26 @@
 #include "../globals.h"
 #include "../math.h"
 
+std::pair<float, float> calc_bone(PlayerEntity& entity, int hit_box) {
+
+	EBone desired_bone = EBone::Head;
+
+	if (hit_box == 0)
+		desired_bone == EBone::Head;
+	else if (hit_box == 1)
+		desired_bone == EBone::Neck;
+
+	auto dx = entity.get_bone_pos_2d(desired_bone).x - (width / 2);
+	auto dy = entity.get_bone_pos_2d(desired_bone).y - (height / 2);
+
+	return { dx,dy };
+}
 
 
-
-void aimbot(PlayerEntity entity, FVector3 head_bone) {
+void aimbot(PlayerEntity entity) {
 
 	float closest_pawn = FLT_MAX;
 
-	auto dx = head_bone.x - (width / 2);
-	auto dy = head_bone.y - (height / 2);
-	auto dist = sqrtf(dx * dx + dy * dy);
 
 
 	if (settings::aimbot::aimbot) {
@@ -19,15 +29,14 @@ void aimbot(PlayerEntity entity, FVector3 head_bone) {
 		if (settings::bMenu)
 			return;
 
-		if (settings::aimbot::visible_check && !entity.visible)
+		if (settings::aimbot::visible_check && !entity.is_visible())
 			return;
 
 		if (GetAsyncKeyState(hotkeys::aimkey)) {
 
-			if (settings::aimbot::smooth > 0) {
-				dx = dx / (rand() % settings::aimbot::smooth + 1);
-				dy = dy / (rand() % settings::aimbot::smooth + 1);
-			}
+			auto [dx, dy] = calc_bone(entity, settings::aimbot::selectedhitbox);
+			auto dist = sqrtf(dx * dx + dy * dy);
+
 
 			if (dist < closest_pawn) {
 
@@ -37,16 +46,14 @@ void aimbot(PlayerEntity entity, FVector3 head_bone) {
 					return;
 
 
-				if (entity.health <= 0)
+				if (entity.is_dead(entity.health))
 					return;
 
-				// todo: calculate with bone to be more accurate
-				if (settings::aimbot::selectedhitbox == 0)
-					dx, dy;
 
-				if (settings::aimbot::selectedhitbox == 1)
-					dy = dy + 20;
-
+				if (settings::aimbot::smooth > 0) {
+					dx = dx / (rand() % settings::aimbot::smooth + 1);
+					dy = dy / (rand() % settings::aimbot::smooth + 1);
+				}
 
 
 				mouse_event(MOUSEEVENTF_MOVE, dx, dy, NULL, NULL); // using default mouse_event
