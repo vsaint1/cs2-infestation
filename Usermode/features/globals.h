@@ -184,26 +184,6 @@ namespace settings {
 	};
 } // namespace settings
 
-enum EBone : int {
-
-	Head = 6,
-	Neck = 5,
-	RightShoulder = 8,
-	LeftShoulder = 13,
-	RightArm = 9,
-	LeftArm = 14,
-	RightHand = 11,
-	LeftHand = 16,
-	Root = 0,
-	RightKnee = 23,
-	LeftKnee = 26,
-	RightFoot = 24,
-	LeftFoot = 27,
-	Center = 29,
-
-};
-
-
 
 static const char* key_names[] = {
 	"Press any key..",
