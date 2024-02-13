@@ -4,6 +4,7 @@
 #include <cmath>
 #include <numbers>
 #include <string>
+#include <algorithm>
 #include <vector>
 
 #define M_PI 3.14159265358979323846264338327950288419716939937510
@@ -80,6 +81,14 @@ struct FVector3 {
 	}
 
 	constexpr const bool isZero() const noexcept { return x == 0.f && y == 0.f && z == 0.f; }
+
+	constexpr const bool invalid() const noexcept { return !x || !y || !z; }
+
+	const  bool valid() const noexcept {
+		return !std::isnan(x) && !std::isinf(x) &&
+			!std::isnan(y) && !std::isinf(y) &&
+			!std::isnan(z) && !std::isinf(z);
+	}
 
 	FVector3 world_to_screen(ViewMatrix matrix) const {
 		float _x = matrix[0][0] * x + matrix[0][1] * y + matrix[0][2] * z + matrix[0][3];
