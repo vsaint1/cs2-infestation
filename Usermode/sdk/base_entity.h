@@ -4,7 +4,7 @@
 class BaseEntity {
 public:
 	unsigned int idx;
-	const char* class_name;
+	std::string class_name;
 	uintptr_t pawn;
 	FVector3 origin;
 
@@ -16,8 +16,12 @@ public:
 		this->idx = idx;
 	}
 
+	const char* get_class_name() {
+		return this->class_name.c_str();
+	}
+
 	void set_class_name(std::string clazz_name) {
-		this->class_name = clazz_name.c_str();
+		this->class_name = clazz_name;
 	}
 
 	void set_pawn_origin(FVector3& pawn_origin) {
