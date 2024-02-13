@@ -60,7 +60,7 @@ void draw_menu() {
 
 
 	ImGui::SetNextWindowSize(ImVec2(500.0f, 350.0f), ImGuiCond_Once);
-	ImGui::Begin(("Infestation - 6.0"), &settings::bMenu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
+	ImGui::Begin(("Infestation - 6.5"), &settings::bMenu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
 
 	ImGui::BeginTabBar(("##tabs"), ImGuiTabBarFlags_None);
 	ImGui::SetCursorPos(ImVec2(ImGui::GetWindowSize().x / 2 - 100, 50));
@@ -97,11 +97,11 @@ void draw_menu() {
 
 		ImGui::Checkbox("Box", &settings::visuals::bBox);
 		component::set_helper("Draw enemies 2D box");
-		component::color_picker("##box",settings::colors::player_box);
+		component::color_picker("##box", settings::colors::player_box);
 
 		ImGui::Checkbox("Name", &settings::visuals::bName);
 		component::set_helper("Draw enemies name");
-		component::color_picker("##name",settings::colors::player_name);
+		component::color_picker("##name", settings::colors::player_name);
 
 		ImGui::Checkbox("Skeleton", &settings::visuals::bSkeleton);
 		component::set_helper("Draw enemies skeleton, bones are with update issue", ImColor(211, 67, 18, 255), '!');
@@ -110,15 +110,15 @@ void draw_menu() {
 
 		ImGui::Checkbox("Snap Lines", &settings::visuals::bSnaplines);
 		component::set_helper("Draw lines to enemies");
-		component::color_picker("##snap_lines",settings::colors::player_snaplines);
+		component::color_picker("##snap_lines", settings::colors::player_snaplines);
 
 		ImGui::Checkbox("Distance", &settings::visuals::distance);
 		component::set_helper("Draw distance to enemies");
-		component::color_picker("##distance",settings::colors::player_distance);
+		component::color_picker("##distance", settings::colors::player_distance);
 
 		ImGui::Checkbox("Weapon", &settings::visuals::bWeapon);
 		component::set_helper("Draw enemies current weapon");
-		component::color_picker("##weapon",settings::colors::player_weapon);
+		component::color_picker("##weapon", settings::colors::player_weapon);
 
 		ImGui::NextColumn();
 
@@ -152,10 +152,16 @@ void draw_menu() {
 				component::set_helper("Grenade projectile distance");
 				ImGui::Checkbox("Grenade Snap Lines", &settings::world::grenade_snaplines);
 				component::set_helper("Draw lines to Grenade projectile");
+#ifdef _DEBUG
+
 				ImGui::Checkbox("Grenade Timer", &settings::world::grenade_timer);
 				component::set_helper("Draw Grenade timer");
-				ImGui::Checkbox("Grenade Trajectory", &settings::world::grenade_trajectory);
-				component::set_helper("This feature is under development, need to fix bounces, velocity and trajectory calculations", ImColor(211, 67, 18, 255), '!');
+#endif // _DEBUG
+
+				ImGui::Checkbox("Grenade Trajectory - DEBUG", &settings::world::grenade_trajectory);
+				component::set_helper("This feature is under development", ImColor(211, 67, 18, 255), '!');
+
+
 
 			}
 		}
