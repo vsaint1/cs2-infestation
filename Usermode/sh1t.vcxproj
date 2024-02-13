@@ -133,6 +133,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -178,6 +179,7 @@
     <ClInclude Include="overlay\weapon_font.h" />
     <ClInclude Include="protection\xor.h" />
     <ClInclude Include="sdk\base_entity.h" />
+    <ClInclude Include="sdk\grenade_entity.h" />
     <ClInclude Include="sdk\player\player_entity.h" />
     <ClInclude Include="utils\gun_icon.h" />
     <ClInclude Include="utils\helper_macro.h" />

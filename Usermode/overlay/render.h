@@ -4,10 +4,10 @@
 #include <d3dx9tex.h>
 #include <dwmapi.h>
 
-#include "../External/Imgui/imgui_internal.h"
-#include "../External/Imgui/imgui.h"
-#include "../External/Imgui/imgui_impl_win32.h"
-#include "../External/Imgui/imgui_impl_dx9.h"
+#include "../external/imgui/imgui_internal.h"
+#include "../external/imgui/imgui.h"
+#include "../external/imgui/imgui_impl_win32.h"
+#include "../external/imgui/imgui_impl_dx9.h"
 #include "../features/globals.h"
 #include "../features/menu/menu.h"
 #include "../features/cheat.h"
