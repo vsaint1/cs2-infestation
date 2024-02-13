@@ -43,7 +43,7 @@ void cache_entities() {
 
 			uintptr_t pcs_pawn = process.readv<uintptr_t>(list_entry2 + 120 * (h_pawn & 0x1FF));
 
-			if (PlayerEntity::is_localplayer(pcs_pawn,local_player)) {
+			if (PlayerEntity::is_localplayer(pcs_pawn, local_player)) {
 				local_index = i;
 				continue;
 			}
@@ -52,31 +52,30 @@ void cache_entities() {
 
 			int e_health = process.readv<int>(pcs_pawn + offsets::C_BaseEntity::m_iHealth);
 
-
 			if (PlayerEntity::is_dead(e_health))
 				continue;
 
 			int e_team = process.readv<int>(pcs_pawn + offsets::C_BaseEntity::m_iTeamNum);
 
-			if (settings::misc::bTeamcheck && PlayerEntity::is_team_mate(local_team,e_team))
+			if (settings::misc::bTeamcheck && PlayerEntity::is_team_mate(local_team, e_team))
 				continue;
 
 			auto m_pclippingweapon = process.readv<uintptr_t>(pcs_pawn + offsets::C_CSPlayerPawnBase::m_pClippingWeapon);
 			auto entity_identity = process.readv<uintptr_t>(m_pclippingweapon + offsets::CEntityInstance::m_pEntity);
 			auto des_name = process.readv<uintptr_t>(entity_identity + offsets::CEntityIdentity::m_designerName);
-	
+
 			std::string weap_name = process.read_str(des_name);
 
 			std::string e_name = process.read_str(pcs_pawn + offsets::CBasePlayerController::m_iszPlayerName);
 			bool e_spotted = process.readv<bool>(pcs_pawn + offsets::C_CSPlayerPawn::m_entitySpottedState + offsets::EntitySpottedState_t::m_bSpottedByMask);
-
+				
 			PlayerEntity entity;
 			entity.set_pawn(pcs_pawn);
 			entity.set_is_visible(e_spotted, local_index);
 			entity.set_health(e_health);
 			entity.set_weapon(weap_name);
 			entity.set_player_name(e_name);
-			entity.set_distance(local_pos,e_position);
+			entity.set_distance(local_pos, e_position);
 			temp.push_back(entity);
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(settings::misc::sleep_for_ms));
@@ -102,7 +101,7 @@ void entities_loop()
 	auto max_entities = process.readv<int>(entity_list + offsets::dwGameEntitySystem_getHighestEntityIndex);
 
 
-	for (auto i = 65; i < max_entities; i++) {
+	for (unsigned int i = 65; i < max_entities; i++) {
 
 		uintptr_t ent = process.readv<uintptr_t>(entity_list + 8LL * ((i & 0x7FFF) >> 9) + 16);
 		if (!ent)
@@ -157,7 +156,6 @@ void entities_loop()
 		if (screen_pos.z < 0.001f)
 			continue;
 
-
 		if (settings::world::weapon_esp && classname.find("weapon_") != std::string::npos) {
 
 
@@ -172,6 +170,8 @@ void entities_loop()
 		}
 
 		if (settings::world::grenade_esp && std::find(std::begin(nades), std::end(nades), classname) != std::end(nades)) {
+
+			static std::vector<GrenadeEntity> grenades; // ensure gets destroyed once scope ends
 
 			auto normalized_str = classname.erase(classname.find("_projectile"), 11).c_str();
 			LOG("CLASS_NAME: %s ABS_ORIGIN: %.2f %.2f %.2f", normalized_str, abs_origin.x, abs_origin.y, abs_origin.z);
@@ -190,22 +190,34 @@ void entities_loop()
 #endif // _DEBUG
 
 			auto smoke_tick_begin = process.readv<bool>(ent + offsets::C_SmokeGrenadeProjectile::m_nSmokeEffectTickBegin);
+			auto initial_pos = process.readv<FVector3>(ent + offsets::C_BaseCSGrenadeProjectile::m_vInitialPosition);
+			auto exploded = process.readv<bool>(ent + 0x110C);
+
+
+			GrenadeEntity grenade;
+			grenade.set_idx(i);
+			grenade.set_pawn(ent);
+			grenade.set_class_name(classname);
+			grenade.set_current_position(abs_origin.world_to_screen(local_viewmatrix));
+			grenade.set_initial_position(initial_pos);
+			grenade.set_tick_begin(smoke_tick_begin);
+			grenade.set_distance(dist);
+			grenade.set_exploded(exploded);
+
+			grenades.push_back(grenade);
 
 			if (settings::world::grenade_esp)
 				draw_grenade_esp(ImGui::GetIO().Fonts->Fonts[1], normalized_str, dist, ImVec2(screen_pos.x, screen_pos.y), ImColor(255, 255, 255, 255), 20.0f);
-				
 
 			if (settings::world::grenade_snaplines)
-				draw_snaplines(screen_pos, ImVec4(255, 255, 255, 255));
-
+				draw_snaplines(abs_origin.world_to_screen(local_viewmatrix), ImVec4(255, 255, 255, 255));
 
 			if (settings::world::grenade_trajectory)
-				draw_path(process.readv<FVector3>(ent + offsets::C_BaseCSGrenadeProjectile::m_vInitialPosition).world_to_screen(local_viewmatrix), screen_pos, smoke_tick_begin);
+				draw_path(grenade);
 
-
+			// TODO: fix timer in Release build
 			if (settings::world::grenade_timer && classname.compare("smokegrenade") == 0)
-				draw_timer_progress(ImGui::GetIO().Fonts->Fonts[1], 20.0f, "smokegrenade", smoke_tick_begin, dist, ImVec2(screen_pos.x, screen_pos.y), ImVec4(255, 0, 0, 255), i);
-
+				draw_timer_progress(ImGui::GetIO().Fonts->Fonts[1], 20.0f, grenade, ImColor(255, 0, 0, 255), i);
 
 
 		}
@@ -219,6 +231,9 @@ void entities_loop()
 void entity_loop() {
 
 	if (global_pawn) {
+
+		if (settings::aimbot::aim_fov > 0)
+			ImGui::GetBackgroundDrawList()->AddCircle(ImVec2(width / 2, height / 2), settings::aimbot::aim_fov, ImColor(255, 255, 255, 255), 100);
 
 		entities_loop();
 
@@ -236,21 +251,16 @@ void entity_loop() {
 
 
 			//CSkeletonInstance
-			uintptr_t  p_gamescene = process.readv<uint64_t>(entity.pawn + 0x318);
-			uintptr_t  p_bonearray = process.readv<uint64_t>(p_gamescene + 0x160 + 0x80); // m_modelState  + bArray
-
-			FVector3 entity_pos = process.readv<FVector3>(entity.pawn + offsets::C_BasePlayerPawn::m_vOldOrigin);
-
-			FVector3 head_bone = process.readv<FVector3>(p_bonearray + EBone::Head * 32).world_to_screen(local_viewmatrix);
+			uintptr_t  p_gamescene = process.readv<uint64_t>(entity.pawn + offsets::C_BaseEntity::m_pGameSceneNode);
+			uintptr_t  p_bonearray = process.readv<uint64_t>(p_gamescene + offsets::CSkeletonInstance::m_modelState + offsets::CGameSceneNode::m_vecOrigin);
+			
+			entity.set_player_bonearray(p_bonearray);
+			entity.set_local_viewmatrix(local_viewmatrix);
 
 			if (screen_pos.z >= 0.01f)
-				draw_esp(head_bone, screen_pos, entity, p_bonearray, local_viewmatrix);
+				draw_esp(screen_pos, entity);
 
-
-			if (settings::aimbot::aim_fov > 0)
-				ImGui::GetBackgroundDrawList()->AddCircle(ImVec2(width / 2, height / 2), settings::aimbot::aim_fov, ImColor(255, 255, 255, 255), 100);
-
-			std::thread(aimbot, entity, head_bone).detach();
+			std::thread(aimbot, entity).detach();
 		}
 
 	}
