@@ -8,11 +8,11 @@
 
 
 
-void draw_esp(FVector3 head_pos, FVector3 screen_pos, PlayerEntity entity, uintptr_t  bone_array, ViewMatrix view_matrix) {
+void draw_esp(FVector3 screen_pos, PlayerEntity &entity) {
 	if (global_pawn) {
 
 		if (settings::visuals::esp) {
-
+			FVector3 head_pos = entity.get_bone_pos_2d(EBone::Head);
 			float height = abs(screen_pos.y - head_pos.y);
 			float width = height / 2.0f;
 
@@ -33,7 +33,7 @@ void draw_esp(FVector3 head_pos, FVector3 screen_pos, PlayerEntity entity, uintp
 				draw_progressbar(screen_pos.x + 25, head_pos.y, width, height, 2, entity.health);
 
 			if (settings::visuals::bSkeleton)
-				draw_skeleton(bone_array, view_matrix, entity.is_visible());
+				draw_skeleton(entity);
 
 			if (settings::visuals::bWeapon)
 				draw_icon_ex(ImGui::GetIO().Fonts->Fonts[1], entity.weapon_name.c_str(), {screen_pos.x - 10,screen_pos.y,screen_pos.z}, ImColor(255, 255, 255, 255), entity.get_distance() > 10 ? 8.0f : 13.0f);
