@@ -2,17 +2,32 @@
 #include "../globals.h"
 #include "../math.h"
 
-std::pair<float, float> calc_bone(PlayerEntity& entity, int hit_box) {
+EBone select_bone(int& hit_box, int health) {
 
-	EBone desired_bone = EBone::Head;
+    switch (hit_box) {
+        case 0:
+            return EBone::Head;
+        case 1:
+            return EBone::Neck;
+        case 2:
+            return EBone::Chest;
+        default:
+            if (health > 70)
+                return EBone::Head;
+            else if (health > 40 && health < 70)
+                return EBone::Neck;
+            else
+                return EBone::Chest;
+    }
 
-	if (hit_box == 0)
-		desired_bone == EBone::Head;
-	else if (hit_box == 1)
-		desired_bone == EBone::Neck;
+}
 
-	auto dx = entity.get_bone_pos_2d(desired_bone).x - (width / 2);
-	auto dy = entity.get_bone_pos_2d(desired_bone).y - (height / 2);
+
+std::pair<float, float> calc_bone(PlayerEntity& entity, int& hit_box) {
+
+
+	auto dx = entity.get_bone_pos_2d(select_bone(hit_box,entity.health)).x - (width / 2);
+	auto dy = entity.get_bone_pos_2d(select_bone(hit_box,entity.health)).y - (height / 2);
 
 	return { dx,dy };
 }
@@ -21,7 +36,6 @@ std::pair<float, float> calc_bone(PlayerEntity& entity, int hit_box) {
 void aimbot(PlayerEntity entity) {
 
 	float closest_pawn = FLT_MAX;
-
 
 
 	if (settings::aimbot::aimbot) {
@@ -63,4 +77,3 @@ void aimbot(PlayerEntity entity) {
 		}
 	}
 }
-
