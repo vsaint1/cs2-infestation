@@ -52,7 +52,14 @@ void PlayerEntity::set_player_health(int& current_health) {
 	this->health = current_health;
 }
 
-bool PlayerEntity::is_dead(int& health) {
+void PlayerEntity::set_player_bonearray(uintptr_t& bonearray) {
+	this->bone_array = bonearray;
+}
+void PlayerEntity::set_local_viewmatrix(ViewMatrix& viewmatrix) {
+	this->local_viewmatrix = viewmatrix;
+}
+
+bool PlayerEntity::is_dead(int health) {
 
 	return health <= 0 || health > 100;
 }
