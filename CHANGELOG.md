@@ -32,3 +32,15 @@
 - [x] Anti-OBS
 
 <img src="./examples/grenade_warning.gif">
+
+
+# 6.5
+
+- [x] Improved aimbot **(Bone Calculation)**
+- [x] Grenade Trails
+- [x] Fixed aimbot fov dissapearing
+- [x] ESP logic
+- [x] Reduced CPU usage
+
+
+<img src="./examples/bostil_6_5.gif">
