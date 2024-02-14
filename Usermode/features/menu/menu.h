@@ -104,7 +104,10 @@ void draw_menu() {
 		component::color_picker("##name", settings::colors::player_name);
 
 		ImGui::Checkbox("Skeleton", &settings::visuals::bSkeleton);
-		component::set_helper("Draw enemies skeleton, bones are with update issue", ImColor(211, 67, 18, 255), '!');
+		component::set_helper("Draw enemies skeleton");
+		component::color_picker("##visible", settings::colors::skeleton_visible_color);
+		component::color_picker("#hidden", settings::colors::skeleton_hidden_color);
+
 		ImGui::Checkbox("Health", &settings::visuals::bHealth);
 		component::set_helper("Draw enemies health");
 
@@ -152,14 +155,17 @@ void draw_menu() {
 				component::set_helper("Grenade projectile distance");
 				ImGui::Checkbox("Grenade Snap Lines", &settings::world::grenade_snaplines);
 				component::set_helper("Draw lines to Grenade projectile");
-#ifdef _DEBUG
 
-				ImGui::Checkbox("Grenade Timer", &settings::world::grenade_timer);
-				component::set_helper("Draw Grenade timer");
-#endif // _DEBUG
+				if (settings::misc::bExperimentalFeatures) {
 
-				ImGui::Checkbox("Grenade Trajectory - DEBUG", &settings::world::grenade_trajectory);
-				component::set_helper("This feature is under development", ImColor(211, 67, 18, 255), '!');
+					ImGui::Checkbox("Grenade Timer", &settings::world::grenade_timer);
+					component::set_helper("This is experimental feature", ImColor(211, 67, 18, 255), '!');
+
+					ImGui::Checkbox("Grenade Trajectory", &settings::world::grenade_trajectory);
+					component::set_helper("This is experimental feature", ImColor(211, 67, 18, 255), '!');
+					component::color_picker("##nade_trail", settings::colors::grenade_trail_color);
+
+				}
 
 
 
@@ -177,9 +183,10 @@ void draw_menu() {
 		component::set_helper("Enable/Disable Team-Check");
 		ImGui::Checkbox("Watermark", &settings::misc::bWatermark);
 		component::set_helper("Enable/Disable Watermark");
-		ImGui::Checkbox("Anti-Screencapture", &settings::misc::bWatermark);
+		ImGui::Checkbox("Anti-Screencapture", &settings::misc::bAntiScreencapture);
 		component::set_helper("Hides your ESP from being captured by OBS only");
-
+		ImGui::Checkbox("Experimental", &settings::misc::bExperimentalFeatures);
+		component::set_helper("This enables using features under development, may also experience bugs and possible crashes", ImColor(211, 67, 18, 255), '!');
 		ImGui::SliderInt("##save_fps", &settings::misc::sleep_for_ms, 0, 1000, "%dms");
 		component::set_helper("Using higher number will update slowly but reduces [CPU/Memory] usage", ImColor(211, 67, 18, 255), '!');
 
