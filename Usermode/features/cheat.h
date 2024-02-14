@@ -5,6 +5,7 @@
 #include <thread>
 #include "esp/esp.h"
 
+
 void cache_entities() {
 	while (true) {
 		std::vector<PlayerEntity> temp;
@@ -15,16 +16,17 @@ void cache_entities() {
 
 		global_pawn = local_player;
 
-		FVector3 local_pos = process.readv<FVector3>(local_player + offsets::C_BasePlayerPawn::m_vOldOrigin);
+		FVector3 local_pos = process.readv<FVector3>(global_pawn + offsets::C_BasePlayerPawn::m_vOldOrigin);
 
 		int local_index = 1;
 
 		int local_team = process.readv<int>(local_player + offsets::C_BaseEntity::m_iTeamNum);
 
+		ViewMatrix local_viewmatrix = process.readv<ViewMatrix>(client + offsets::dwViewMatrix);
 
 		uintptr_t entity_list = process.readv<uintptr_t>(client + offsets::dwEntityList);
 
-		for (int i = 1; i < 32; i++) {
+		for (int i = 1; i <= 32; i++) {
 			uintptr_t list_entry = process.readv<uintptr_t>(entity_list + (8 * (i & 0x7FFF) >> 9) + 16);
 			if (!list_entry)
 				continue;
@@ -66,9 +68,14 @@ void cache_entities() {
 
 			std::string weap_name = process.read_str(des_name);
 
-			std::string e_name = process.read_str(pcs_pawn + offsets::CBasePlayerController::m_iszPlayerName);
+			std::string e_name = process.read_str(player + offsets::CBasePlayerController::m_iszPlayerName);
+
 			bool e_spotted = process.readv<bool>(pcs_pawn + offsets::C_CSPlayerPawn::m_entitySpottedState + offsets::EntitySpottedState_t::m_bSpottedByMask);
-				
+
+			//CSkeletonInstance
+			uintptr_t  p_gamescene = process.readv<uintptr_t>(pcs_pawn + offsets::C_BaseEntity::m_pGameSceneNode);
+			uintptr_t  p_bonearray = process.readv<uintptr_t>(p_gamescene + offsets::CSkeletonInstance::m_modelState + offsets::CGameSceneNode::m_vecOrigin);
+
 			PlayerEntity entity;
 			entity.set_pawn(pcs_pawn);
 			entity.set_is_visible(e_spotted, local_index);
@@ -76,9 +83,12 @@ void cache_entities() {
 			entity.set_weapon(weap_name);
 			entity.set_player_name(e_name);
 			entity.set_distance(local_pos, e_position);
+			entity.set_player_bonearray(p_bonearray);
+			entity.set_local_viewmatrix(local_viewmatrix);
+
 			temp.push_back(entity);
 
-			std::this_thread::sleep_for(std::chrono::milliseconds(settings::misc::sleep_for_ms));
+			//std::this_thread::sleep_for(std::chrono::milliseconds(settings::misc::sleep_for_ms));
 		}
 
 		entities.clear();
@@ -99,7 +109,6 @@ void entities_loop()
 
 	uintptr_t entity_list = process.readv<uintptr_t>(client + offsets::dwEntityList);
 	auto max_entities = process.readv<int>(entity_list + offsets::dwGameEntitySystem_getHighestEntityIndex);
-
 
 	for (unsigned int i = 65; i < max_entities; i++) {
 
@@ -171,7 +180,6 @@ void entities_loop()
 
 		if (settings::world::grenade_esp && std::find(std::begin(nades), std::end(nades), classname) != std::end(nades)) {
 
-			static std::vector<GrenadeEntity> grenades; // ensure gets destroyed once scope ends
 
 			auto normalized_str = classname.erase(classname.find("_projectile"), 11).c_str();
 			LOG("CLASS_NAME: %s ABS_ORIGIN: %.2f %.2f %.2f", normalized_str, abs_origin.x, abs_origin.y, abs_origin.z);
@@ -191,35 +199,32 @@ void entities_loop()
 
 			auto smoke_tick_begin = process.readv<bool>(ent + offsets::C_SmokeGrenadeProjectile::m_nSmokeEffectTickBegin);
 			auto initial_pos = process.readv<FVector3>(ent + offsets::C_BaseCSGrenadeProjectile::m_vInitialPosition);
-			auto exploded = process.readv<bool>(ent + 0x110C);
+			auto exploded = process.readv<bool>(ent + offsets::C_BaseCSGrenadeProjectile::m_bExplodeEffectBegan);
 
-
-			GrenadeEntity grenade;
+			static GrenadeEntity grenade;
 			grenade.set_idx(i);
 			grenade.set_pawn(ent);
 			grenade.set_class_name(classname);
-			grenade.set_current_position(abs_origin.world_to_screen(local_viewmatrix));
+			grenade.set_current_position(screen_pos);
 			grenade.set_initial_position(initial_pos);
 			grenade.set_tick_begin(smoke_tick_begin);
 			grenade.set_distance(dist);
 			grenade.set_exploded(exploded);
 
-			grenades.push_back(grenade);
 
 			if (settings::world::grenade_esp)
 				draw_grenade_esp(ImGui::GetIO().Fonts->Fonts[1], normalized_str, dist, ImVec2(screen_pos.x, screen_pos.y), ImColor(255, 255, 255, 255), 20.0f);
 
 			if (settings::world::grenade_snaplines)
-				draw_snaplines(abs_origin.world_to_screen(local_viewmatrix), ImVec4(255, 255, 255, 255));
+				draw_snaplines(screen_pos, ImVec4(255, 255, 255, 255));
 
 			if (settings::world::grenade_trajectory)
 				draw_path(grenade);
 
-			// TODO: fix timer in Release build
 			if (settings::world::grenade_timer && classname.compare("smokegrenade") == 0)
 				draw_timer_progress(ImGui::GetIO().Fonts->Fonts[1], 20.0f, grenade, ImColor(255, 0, 0, 255), i);
 
-
+			grenade.~grenade();
 		}
 
 	}
@@ -237,25 +242,13 @@ void entity_loop() {
 
 		entities_loop();
 
-		ViewMatrix local_viewmatrix = process.readv<ViewMatrix>(client + offsets::dwViewMatrix);
-
 		for (PlayerEntity& entity : entities) {
+
 			FVector3 origin = process.readv<FVector3>(entity.pawn + offsets::C_BasePlayerPawn::m_vOldOrigin);
 
 			FVector3 head{ origin.x,origin.y,origin.z };
 
-			FVector3 screen_pos = origin.world_to_screen(local_viewmatrix);
-
-			if (screen_pos.z < 0.001f)
-				continue;
-
-
-			//CSkeletonInstance
-			uintptr_t  p_gamescene = process.readv<uint64_t>(entity.pawn + offsets::C_BaseEntity::m_pGameSceneNode);
-			uintptr_t  p_bonearray = process.readv<uint64_t>(p_gamescene + offsets::CSkeletonInstance::m_modelState + offsets::CGameSceneNode::m_vecOrigin);
-			
-			entity.set_player_bonearray(p_bonearray);
-			entity.set_local_viewmatrix(local_viewmatrix);
+			FVector3 screen_pos = origin.world_to_screen(entity.get_local_vm());
 
 			if (screen_pos.z >= 0.01f)
 				draw_esp(screen_pos, entity);
