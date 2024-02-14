@@ -1,5 +1,5 @@
 #pragma once
-#include "../external/imgui/imgui.h"
+#include "imgui/imgui.h"
 #include <Windows.h>
 #include <cmath>
 #include <numbers>

@@ -1,6 +1,6 @@
 #pragma once
 #include <Windows.h>
-#include "../../external/imgui/imgui.h"
+#include "imgui/imgui.h"
 
 HWND entry_hwnd = NULL;
 int processid = 0;

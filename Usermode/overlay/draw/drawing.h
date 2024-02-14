@@ -1,6 +1,6 @@
 #pragma once
 #include "../../features/math.h"
-#include "../../external/imgui/imgui_internal.h"
+#include "imgui/imgui_internal.h"
 #include "../../utils/gun_icon.h"
 #include "../../sdk/grenade_entity.h"
 

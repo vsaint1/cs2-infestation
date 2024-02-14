@@ -1,6 +1,6 @@
 #pragma once
-#include "../../external/imgui/imgui_internal.h"
-#include "../../external/imgui/imgui.h"
+#include "imgui/imgui_internal.h"
+#include "imgui/imgui.h"
 #include <algorithm>
 #include <string>
 

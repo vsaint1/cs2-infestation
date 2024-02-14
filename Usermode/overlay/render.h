@@ -4,10 +4,11 @@
 #include <d3dx9tex.h>
 #include <dwmapi.h>
 
-#include "../external/imgui/imgui_internal.h"
-#include "../external/imgui/imgui.h"
-#include "../external/imgui/imgui_impl_win32.h"
-#include "../external/imgui/imgui_impl_dx9.h"
+#include "imgui/imgui_internal.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_win32.h"
+#include "imgui/imgui_impl_dx9.h"
+
 #include "../features/globals.h"
 #include "../features/menu/menu.h"
 #include "../features/cheat.h"
@@ -69,7 +70,7 @@ HRESULT init_wndparams(HWND hWnd)
 	p_Params.BackBufferHeight = height;
 	p_Params.EnableAutoDepthStencil = TRUE;
 	p_Params.AutoDepthStencilFormat = D3DFMT_D16;
-	p_Params.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
+	p_Params.PresentationInterval = D3DPRESENT_INTERVAL_ONE;
 
 	if (FAILED(p_Object->CreateDeviceEx(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &p_Params, 0, &p_Device))) {
 		p_Object->Release();
