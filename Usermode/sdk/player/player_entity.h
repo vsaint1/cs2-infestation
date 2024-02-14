@@ -1,6 +1,4 @@
 #pragma once
-#include <cstdint>
-#include <map>
 #include "../base_entity.h"
 #include "../../memory/memory.h"
 
@@ -8,6 +6,7 @@ enum EBone : uint8_t {
 
 	Head = 6,
 	Neck = 5,
+	Chest = 4,
 	RightShoulder = 8,
 	LeftShoulder = 13,
 	RightArm = 9,
@@ -25,20 +24,22 @@ enum EBone : uint8_t {
 class PlayerEntity : public BaseEntity {
 
 	uintptr_t bone_array;
-	ViewMatrix local_viewmatrix;
 	float distance;
 	int team;
 	bool visible;
-
+	ViewMatrix view_matrix;
 public:
 
 	std::string name;
 	std::string weapon_name;
 	unsigned int health;
 
+	FVector3 get_bone_pos_2d(EBone bone);
 
-	FVector3 get_bone_pos_2d(EBone bone) {
-		return process.readv<FVector3>(bone_array + static_cast<int>(bone) * 32).world_to_screen(local_viewmatrix);
+	FVector3 get_bone_pos_2d(int i);
+
+	ViewMatrix get_local_vm() {
+		return this->view_matrix;
 	}
 
 	void set_is_visible(bool& spotted_state, int& local_idx);
@@ -61,13 +62,14 @@ public:
 
 	void set_player_bonearray(uintptr_t& bonearray);
 
-	void set_local_viewmatrix(ViewMatrix& viewmatrix);
+	void set_local_viewmatrix(ViewMatrix& vm);
 
 	static bool is_dead(int health);
 
 	static bool is_localplayer(uintptr_t& pawn, uintptr_t& local_pawn);
 
 	static bool is_team_mate(int& local_team, int& entity_team);
+
 
 };
 

@@ -55,9 +55,13 @@ void PlayerEntity::set_player_health(int& current_health) {
 void PlayerEntity::set_player_bonearray(uintptr_t& bonearray) {
 	this->bone_array = bonearray;
 }
-void PlayerEntity::set_local_viewmatrix(ViewMatrix& viewmatrix) {
-	this->local_viewmatrix = viewmatrix;
+
+void PlayerEntity::set_local_viewmatrix(ViewMatrix& vm){
+
+	this->view_matrix = vm;
+
 }
+
 
 bool PlayerEntity::is_dead(int health) {
 
@@ -71,4 +75,14 @@ bool PlayerEntity::is_localplayer(uintptr_t& pawn, uintptr_t& local_pawn) {
 bool PlayerEntity::is_team_mate(int& local_team, int& entity_team) {
 
 	return local_team == entity_team;
+}
+
+FVector3 PlayerEntity::get_bone_pos_2d(EBone bone) {
+
+	return process.readv<FVector3>(bone_array + static_cast<int>(bone) * 32).world_to_screen(view_matrix);
+}
+
+FVector3 PlayerEntity::get_bone_pos_2d(int i) {
+
+	return process.readv<FVector3>(bone_array + i * 32).world_to_screen(view_matrix);
 }
