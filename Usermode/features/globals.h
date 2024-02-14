@@ -101,6 +101,7 @@ namespace offsets {
 	}
 
 	namespace C_BaseCSGrenadeProjectile {
+		std::ptrdiff_t m_bExplodeEffectBegan = 0x110C; // bool
 		std::ptrdiff_t m_vInitialPosition = 0x10C0; // Vector
 		std::ptrdiff_t m_vInitialVelocity = 0x10CC; // Vector
 		std::ptrdiff_t m_nBounces = 0x10D8; // int32_t
@@ -157,7 +158,7 @@ namespace settings {
 		bool grenade_trajectory = false;
 		bool grenade_name = false;
 		bool grenade_snaplines = false;
-		bool grenade_timer = true;
+		bool grenade_timer = false;
 
 		bool weapon_esp = false;
 		bool weapon_name = false;
@@ -168,9 +169,9 @@ namespace settings {
 	namespace misc {
 		bool bTeamcheck = true;
 		bool bWatermark = true;
-		bool bAntiScreencapture = false;
-		bool bExperimentalFeatures = true;
-		int sleep_for_ms = 10;
+		bool bAntiScreencapture = true;
+		bool bExperimentalFeatures = false;
+		int sleep_for_ms = 0;
 
 
 	}
@@ -181,6 +182,11 @@ namespace settings {
 		ImColor player_snaplines = ImColor(255, 255, 255, 255);
 		ImColor player_distance = ImColor(255, 201, 14, 233);
 
+		ImColor skeleton_hidden_color = ImColor(255, 0, 0, 255);
+		ImColor skeleton_visible_color = ImColor(0, 255, 0, 255);
+		ImColor grenade_trail_color = ImColor(255, 255, 255, 255);
+
+		
 
 	};
 } // namespace settings
