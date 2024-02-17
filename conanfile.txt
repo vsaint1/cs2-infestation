@@ -1,0 +1,13 @@
+[requires]
+zlib/1.2.11
+spdlog/1.13.0
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
+[tool_requires]
+cmake/[>=3.23]
+
+[layout]
+cmake_layout
