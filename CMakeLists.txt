@@ -1,25 +1,30 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(infs-usermode VERSION 0.1.0 LANGUAGES CXX C DESCRIPTION "Free and open-source external cheetos for CS2" HOMEPAGE_URL https://github.com/vsaint1/cs2-infestation )
+project(infestation VERSION 0.1.0 LANGUAGES CXX C DESCRIPTION "Free and open-source external cheetos for CS2" HOMEPAGE_URL https://github.com/vsaint1/cs2-infestation)
+
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/build/generators/conan_toolchain.cmake)
+
+file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 11)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
+if (MSVC)
 
-file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+    set(CMAKE_GENERATOR_TOOLSET=v143)
 
-if(MSVC)
+elseif (LINUX)
 
-    set(CMAKE_GENERATOR_TOOLSET=143)
-    set(CMAKE_GENERATOR_PLATFORM=x64)
+    message(FATAL_ERROR "Unsupported linux build system")
 
-    add_executable(${PROJECT_NAME}-${CMAKE_PROJECT_VERSION} src/main.cpp ${SOURCES})
+else ()
 
-    #target_link_libraries(${PROJECT_NAME} PRIVATE ntdll.lib)
+    message(FATAL_ERROR "Unsupported unix build system")
 
-else()
-    message(FATAL_ERROR "Unsupported build")
-endif()
+endif ()
+
+find_package(ZLIB REQUIRED)
+find_package(spdlog REQUIRED)
+
+add_executable(${PROJECT_NAME} src/main.cpp ${SOURCES})
+target_link_libraries(${PROJECT_NAME} ZLIB::ZLIB spdlog::spdlog ntdll)
