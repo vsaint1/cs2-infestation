@@ -4,8 +4,11 @@
 #include <windows.h>
 #include <tlhelp32.h>
 #include <psapi.h>
-#include <chrono>
 #include <winternl.h>
+#include <optional>
+#include <vector>
+#include <charconv>
+#include <memory>
 #include "../utils/macros.h"
 
 struct SystemHandle {
