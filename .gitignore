@@ -23,6 +23,8 @@ $RECYCLE.BIN/
 
 *.idea
 
+CMakeUserPresets.json
+
 # Windows shortcuts
 *.lnk
 
