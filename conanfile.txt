@@ -1,6 +1,7 @@
 [requires]
 zlib/1.2.11
 spdlog/1.13.0
+sdl/2.28.5
 sdl_ttf/2.20.2
 
 [generators]
