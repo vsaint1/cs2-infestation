@@ -105,6 +105,8 @@ private:
 
     std::optional<void *> hijack_handle();
 
+    bool running_as_admin();
+
 };
 
 inline Memory memory{};

@@ -111,12 +111,38 @@ std::optional<void *> Memory::hijack_handle() {
   return {};
 }
 
+bool Memory::running_as_admin() {
+  bool elevated = false;
+  void *token = 0;
+
+  if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &token)) {
+    TOKEN_ELEVATION token_elevation;
+    DWORD c_size = sizeof(TOKEN_ELEVATION);
+    if (GetTokenInformation(token, TokenElevation, &token_elevation, sizeof(token_elevation), &c_size)) {
+      elevated = token_elevation.TokenIsElevated;
+    }
+  }
+
+  if (token != nullptr)
+    CloseHandle(token);
+
+  return elevated;
+}
+
 bool Memory::attach() {
   const auto pid = this->get_process_id(GAME_NAME);
 
+  if (!this->running_as_admin())
+    SPDLOG_WARN("Running without ROOT privileges");
+
   if (!pid.has_value()) {
-    SPDLOG_ERROR("Failed to attach on PROCESS_NAME: {}", GAME_NAME);
-    return false;
+    SPDLOG_ERROR("Failed to attach on PROCESS_NAME: {}, isn't running.", GAME_NAME);
+
+    // TODO: change to SDL SDL_ShowSimpleMessageBox
+    char buffer[64];
+    snprintf(buffer,sizeof(buffer),"Failed to launch, the PROCESS_NAME[%s] isnt running.",GAME_NAME);
+    MessageBoxA(0, buffer,"Error", MB_OK | MB_ICONERROR);
+    exit(EXIT_FAILURE);
   }
 
   this->m_pid = pid.value();
