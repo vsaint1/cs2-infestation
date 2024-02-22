@@ -25,6 +25,8 @@ endif ()
 
 find_package(ZLIB REQUIRED)
 find_package(spdlog REQUIRED)
+find_package(SDL2_ttf)
+find_package(SDL2)
 
 add_executable(${PROJECT_NAME} src/main.cpp ${SOURCES})
-target_link_libraries(${PROJECT_NAME} ZLIB::ZLIB spdlog::spdlog ntdll)
+target_link_libraries(${PROJECT_NAME} spdlog::spdlog sdl_ttf::sdl_ttf ZLIB::ZLIB SDL2::SDL2main)
