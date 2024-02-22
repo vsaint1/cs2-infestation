@@ -123,7 +123,7 @@ bool Memory::running_as_admin() {
     }
   }
 
-  if (token != nullptr)
+  if (token)
     CloseHandle(token);
 
   return elevated;
@@ -140,13 +140,14 @@ bool Memory::attach() {
 
     // TODO: change to SDL SDL_ShowSimpleMessageBox
     char buffer[64];
-    snprintf(buffer,sizeof(buffer),"Failed to launch, the PROCESS_NAME[%s] isnt running.",GAME_NAME);
-    MessageBoxA(0, buffer,"Error", MB_OK | MB_ICONERROR);
+    snprintf(buffer, sizeof(buffer), "Failed to launch, the PROCESS_NAME[%s] isnt running.", GAME_NAME);
+    MessageBoxA(0, buffer, "Error", MB_OK | MB_ICONERROR);
     exit(EXIT_FAILURE);
   }
 
   this->m_pid = pid.value();
 
+#if NDEBUG
   const auto handle = this->hijack_handle();
 
   if (!handle.has_value()) {
@@ -155,6 +156,9 @@ bool Memory::attach() {
   }
 
   this->m_handle = handle.value();
+#else
+  this->m_handle = OpenProcess(PROCESS_VM_READ, 0, this->m_pid);
+#endif
 
   return this->m_handle != nullptr;
 }
@@ -238,14 +242,16 @@ std::pair<std::optional<uintptr_t>, std::optional<uintptr_t>> Memory::get_module
 }
 
 std::string Memory::read_str(uintptr_t address) noexcept {
-  char buffer[128];
-  this->read_raw((void *)address, &buffer, sizeof(buffer));
-  const auto &it = std::find(buffer, buffer + 64, '\0');
+  std::string str;
+  char c;
 
-  if (it != buffer + 64)
-    return std::string(buffer, it);
+  do {
+    c = this->readv<char>(address);
+    str += c;
+    address++;
+  } while (c != '\0');
 
-  return "unknown";
+  return str;
 }
 
 bool Memory::readv(uintptr_t address, void *buffer, uintptr_t size) {
