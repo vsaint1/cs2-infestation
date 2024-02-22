@@ -31,7 +31,7 @@ public:
 
   bool should_close(SDL_Event *event);
 
-  void draw_rect(int x, int y, int w, int h, SDL_Color color);
+  void draw_rect(int x, int y, int w, int h, SDL_Color& color);
 
   void cleanup();
 };

@@ -91,13 +91,11 @@ bool WindowManager::should_close(SDL_Event *event) {
   return quit;
 }
 
-void WindowManager::draw_rect(int x, int y, int w, int h, SDL_Color color) {
+void WindowManager::draw_rect(int x, int y, int w, int h, SDL_Color &color) {
   SDL_Rect rect = {x, y, w, h};
+  SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
 
-  SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
-
-  SDL_RenderFillRect(this->m_renderer, &rect);
-  //SDL_RenderDrawRect(this->m_renderer, &rect);
+  SDL_RenderDrawRect(this->m_renderer, &rect);
 }
 
 void WindowManager::cleanup() {
