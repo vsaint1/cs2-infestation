@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <string>
 #include <string_view>
+#include <memory.h>
 
 
 #ifdef _DEBUG
@@ -22,6 +23,8 @@
 bool compare(std::string_view str1, std::string_view str2);
 
 #define EQUALS_IGNORE_CASE(str1, str2) compare(str1,str2)
+
+#define WINDOW_NAME "Counter-Strike 2"
 
 #define GAME_NAME "cs2.exe"
 
