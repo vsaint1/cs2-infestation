@@ -16,6 +16,7 @@ public:
 
   HWND m_hwnd;
 
+  TTF_Font *m_font;
   SDL_Window *m_window;
   SDL_Renderer *m_renderer;
 
@@ -31,7 +32,12 @@ public:
 
   bool should_close(SDL_Event *event);
 
-  void draw_rect(int x, int y, int w, int h, SDL_Color& color);
+  void render();
+
+  // TODO: create drawing stuff not here
+  void draw_rect(int x, int y, int w, int h, SDL_Color &color);
+
+  void draw_text(const std::string &text, int x, int y, SDL_Color& color);
 
   void cleanup();
 };

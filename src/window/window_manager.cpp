@@ -21,6 +21,12 @@ bool WindowManager::create() {
     return false;
   }
 
+  if (TTF_Init() != 0) {
+    SPDLOG_ERROR("Failed to initialize SDL_ttf:: {}", TTF_GetError());
+    SDL_Quit();
+    return false;
+  }
+
   m_window = SDL_CreateWindow("Infestation", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_width, m_height, SDL_WINDOW_BORDERLESS | SDL_WINDOW_ALWAYS_ON_TOP | SDL_WINDOW_VULKAN);
 
   if (!m_window) {
@@ -39,7 +45,7 @@ bool WindowManager::create() {
 }
 
 bool WindowManager::make_window_transparent(SDL_Window *window, COLORREF color_key) {
-  SDL_SetRenderDrawColor(m_renderer, 255, 0, 255, 255);
+  SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
   SDL_RenderClear(m_renderer);
   SDL_SysWMinfo wmInfo;
   SDL_VERSION(&wmInfo.version);
@@ -57,6 +63,7 @@ TTF_Font *WindowManager::load_font(const char *file_name, int font_size) {
   if (!font)
     SPDLOG_ERROR("FAILED TO LOAD FONT {}", TTF_GetError());
 
+  this->m_font = font;
   return font;
 }
 
@@ -91,6 +98,10 @@ bool WindowManager::should_close(SDL_Event *event) {
   return quit;
 }
 
+void WindowManager::render() {
+  std::thread(SDL_RenderPresent,this->m_renderer).join();
+}
+
 void WindowManager::draw_rect(int x, int y, int w, int h, SDL_Color &color) {
   SDL_Rect rect = {x, y, w, h};
   SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
@@ -98,7 +109,37 @@ void WindowManager::draw_rect(int x, int y, int w, int h, SDL_Color &color) {
   SDL_RenderDrawRect(this->m_renderer, &rect);
 }
 
+void WindowManager::draw_text(const std::string &text, int x, int y, SDL_Color &color) {
+  if (!m_font)
+    return;
+
+  SDL_Surface *surface = TTF_RenderText_Blended(m_font, text.c_str(), color);
+
+  if (!surface)
+
+    return;
+
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(m_renderer, surface);
+
+  if (!texture) {
+    SDL_FreeSurface(surface);
+    return;
+  }
+
+  SDL_Rect dstRect = {x, y, surface->w, surface->h};
+  SDL_RenderCopy(m_renderer, texture, nullptr, &dstRect);
+
+  SDL_DestroyTexture(texture);
+  SDL_FreeSurface(surface);
+}
+
 void WindowManager::cleanup() {
+
+  if (m_font) {
+    TTF_CloseFont(m_font);
+    m_font = nullptr;
+  }
+
   if (m_renderer) {
     SDL_DestroyRenderer(m_renderer);
     m_renderer = nullptr;
@@ -108,6 +149,8 @@ void WindowManager::cleanup() {
     SDL_DestroyWindow(m_window);
     m_window = nullptr;
   }
+
+  TTF_Quit();
 
   SDL_Quit();
 }
