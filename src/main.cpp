@@ -4,6 +4,10 @@
 #define SDL_MAIN_HANDLED
 #include "sdk/entity_list.hpp"
 #include "window/window_manager.h"
+typedef struct Color {
+
+  int r, g, b, a = 0;
+};
 
 int main() {
   memory.attach();
@@ -27,10 +31,17 @@ int main() {
 
   int x, y = 0;
 
+  SDL_Color red = {255, 0, 0, 255};
+  SDL_Color green = {0, 255, 0, 255};
+
   SDL_Event event;
   while (!manager.should_close(&event)) {
 
-    manager.draw_rect((manager.m_width - 100) / 2, (manager.m_height - 100) / 2, 100, 100, {255, 0, 255, 255});
+    if (GetAsyncKeyState(VK_XBUTTON2))
+      manager.draw_rect((manager.m_width - 100) / 2, (manager.m_height - 100) / 2, 100, 100, red);
+    else
+      manager.draw_rect((manager.m_width - 100) / 2, (manager.m_height - 100) / 2, 100, 100, green);
+
     SDL_RenderPresent(manager.m_renderer);
 
     auto cursor = SDL_GetGlobalMouseState(&x, &y);
