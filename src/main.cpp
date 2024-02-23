@@ -6,6 +6,7 @@
 #include "sdk/entity_list.hpp"
 #include "sdk/global_vars.hpp"
 #include "window/window_manager.h"
+#include "features/misc/bomb.hpp"
 
 int main() {
   memory.attach();
@@ -19,7 +20,7 @@ int main() {
   local_player = local_pawn.get_address();
   SPDLOG_INFO("MODULE_BASE: {}", address.value());
 
-  WindowManager manager;
+  static WindowManager manager;
 
   if (!manager.create()) {
     manager.cleanup();
@@ -33,8 +34,6 @@ int main() {
 
   SDL_Event event;
   while (!manager.should_close(&event)) {
-    global_vars = memory.readv<GlobalVarsBase>(memory.readv<uintptr_t>(address.value() + 0x171CE70));
-
     manager.make_window_transparent(manager.m_window, RGB(0, 0, 0));
 
     if (GetAsyncKeyState(VK_XBUTTON2))
@@ -42,43 +41,8 @@ int main() {
     else
       manager.draw_rect((manager.m_width - 100) / 2, (manager.m_height - 100) / 2, 100, 100, settings::colors::green);
 
-    auto temp_c4 = memory.readv<uintptr_t>(address.value() + 0x191B508);
-    auto plantedC4 = memory.readv<uintptr_t>(temp_c4);
-
-    auto bombplanted = memory.readv<bool>(address.value() + 0x191B508 - 0x8);
-
-
-    manager.draw_text(memory.read_str(global_vars.m_currentMapName), 300, 300, settings::colors::gray);
-    if (!bombplanted)
-      manager.draw_text("Wainting bomb", 36, 702,  settings::colors::gray);
-
-    manager.draw_text(std::to_string(global_vars.m_currentMapName), 36, 800,  settings::colors::gray);
-
-    if (bombplanted) {
-      auto bomb_site = memory.readv<int>(plantedC4 + 0xedc); // m_nBombSite
-
-      bool bomb_defused = memory.readv<bool>(plantedC4 + 0xf2c); // m_bBombDefused
-
-      auto temp_bomb_time = memory.readv<float>(plantedC4 + 0xf08); // m_flC4Blow
-      auto fl_bomb_time = temp_bomb_time - global_vars.m_flcurrentTime;
-
-      bool being_defused = memory.readv<bool>(plantedC4 + 0xf14); // m_bBeingDefused
-
-      float temp_defuse_time = memory.readv<float>(plantedC4 + 0xf28); // m_flDefuseCountDown
-      auto fl_defuse_time = temp_defuse_time - global_vars.m_flcurrentTime;
-
-
-      if (!bomb_defused) {
-        std::string bomb_timer(fmt::format("Bomb planted on {}, Explodes in {:.2f} ", bomb_site == 0 ? "A" : "B", fl_bomb_time));
-        manager.draw_text(bomb_timer, 36, 700,  settings::colors::gray);
-      }
-
-      if (being_defused && fl_defuse_time > 0) {
-        std::string defuse_timer(fmt::format("Bomb being defused, time remaining {:.2f}", fl_defuse_time));
-        manager.draw_text(defuse_timer, 36, 730,  settings::colors::red);
-      }
-
-    }
+  
+    misc::bomb_timer(manager);
 
     manager.render();
 
