@@ -9,14 +9,14 @@ int main() {
   memory.attach();
 
   SPDLOG_INFO("PID {} \n", memory.get_pid());
-  auto entity_list = memory.find_pattern("client.dll", "48 8B 0D ? ? ? ? 48 89 7C 24 ? 8B FA C1 EB")->rip();
+  auto e_list = memory.find_pattern("client.dll", "48 8B 0D ? ? ? ? 48 89 7C 24 ? 8B FA C1 EB")->rip();
+
   auto local_pawn = memory.find_pattern("client.dll", "48 8D 05 ? ? ? ? C3 CC CC CC CC CC CC CC CC 48 83 EC ? 8B 0D")->rip().add(0x138);
   SPDLOG_INFO("LOCAL_PLAYER: {:#04x}", local_pawn.get_address());
   auto [address, size] = memory.get_module_info("client.dll");
   client = address.value();
-  local_player = local_pawn.get_address();
+  local_player = memory.readv<uintptr_t>(local_pawn.get_address());
   SPDLOG_INFO("MODULE_BASE: {}", address.value());
-
   static WindowManager manager;
   if (!manager.create()) {
     manager.cleanup();
@@ -27,6 +27,10 @@ int main() {
 
   SDL_Event event;
   while (!manager.should_close(&event)) {
+
+    if (!local_player)
+      continue;
+
     manager.update();
     manager.make_window_transparent(manager.m_window, RGB(0, 0, 0));
 
@@ -36,7 +40,8 @@ int main() {
       manager.draw_rect((manager.m_width - 100) / 2, (manager.m_height - 100) / 2, 100, 100, settings::colors::green);
 
     misc::bomb_timer(manager);
-
+    int health = memory.readv<int>(local_player + 0x334);
+    manager.draw_text(std::to_string(health), 350, 350, settings::colors::green);
     manager.render();
 
     // SPDLOG_INFO("MOUSE_X: {} MOUSE_Y {}", x, y);
