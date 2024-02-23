@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(infestation VERSION 0.1.0 LANGUAGES CXX C DESCRIPTION "Free and open-source external cheetos for CS2" HOMEPAGE_URL https://github.com/vsaint1/cs2-infestation)
+project(infestation VERSION 0.5.0 LANGUAGES CXX C DESCRIPTION "Free and open-source external cheetos for CS2" HOMEPAGE_URL https://github.com/vsaint1/cs2-infestation)
 
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/build/generators/conan_toolchain.cmake)
 
