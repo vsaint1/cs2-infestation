@@ -9,7 +9,7 @@ int main() {
   memory.attach();
 
   SPDLOG_INFO("PID {} \n", memory.get_pid());
-  auto e_list = memory.find_pattern("client.dll", "48 8B 0D ? ? ? ? 48 89 7C 24 ? 8B FA C1 EB")->rip();
+  auto entity_list = memory.find_pattern("client.dll", "48 8B 0D ? ? ? ? 48 89 7C 24 ? 8B FA C1 EB")->rip();
 
   auto local_pawn = memory.find_pattern("client.dll", "48 8D 05 ? ? ? ? C3 CC CC CC CC CC CC CC CC 48 83 EC ? 8B 0D")->rip().add(0x138);
   SPDLOG_INFO("LOCAL_PLAYER: {:#04x}", local_pawn.get_address());
