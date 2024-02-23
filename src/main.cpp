@@ -2,10 +2,7 @@
 // Created by vsantos1 on 2/16/2024.
 //
 #define SDL_MAIN_HANDLED
-#include "features/globals.h"
 #include "sdk/entity_list.hpp"
-#include "sdk/global_vars.hpp"
-#include "window/window_manager.h"
 #include "features/misc/bomb.hpp"
 
 int main() {
