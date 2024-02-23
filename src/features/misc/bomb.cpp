@@ -2,12 +2,12 @@
 
 void misc::bomb_timer(WindowManager &manager) {
 
-  global_vars = memory.readv<GlobalVarsBase>(memory.readv<uintptr_t>(client + 0x171CE70));
+  global_vars = memory.readv<GlobalVarsBase>(memory.readv<uintptr_t>(client + offsets::dwGlobalVars));
 
-  auto temp_c4 = memory.readv<uintptr_t>(client + 0x191B508);
+  auto temp_c4 = memory.readv<uintptr_t>(client + offsets::dwPlantedC4);
   auto plantedC4 = memory.readv<uintptr_t>(temp_c4);
 
-  auto bombplanted = memory.readv<bool>(client + 0x191B508 - 0x8);
+  auto bombplanted = memory.readv<bool>(client + offsets::dwPlantedC4 - 0x8);
 
   if (!bombplanted)
     manager.draw_text("Waiting bomb", 36, 702, settings::colors::gray);
