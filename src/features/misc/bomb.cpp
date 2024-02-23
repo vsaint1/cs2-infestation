@@ -25,7 +25,7 @@ void misc::bomb_timer(WindowManager &manager) {
     float temp_defuse_time = memory.readv<float>(plantedC4 + offsets::C_PlantedC4::m_flDefuseCountDown);
     auto fl_defuse_time = temp_defuse_time - global_vars.m_flcurrentTime;
 
-    if (!bomb_defused) {
+    if (!bomb_defused && fl_bomb_time > 0) {
       std::string bomb_timer(fmt::format("Bomb planted on {}, Explodes in {:.2f} ", bomb_site == 0 ? "A" : "B", fl_bomb_time));
       manager.draw_text(bomb_timer, 36, 700, settings::colors::gray);
     }

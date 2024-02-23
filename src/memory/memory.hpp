@@ -46,7 +46,7 @@ public:
     Pattern rip(const ptrdiff_t offset = 0x03, const size_t length = 0x07) const;
 
     template<typename T>
-    T as() const {
+    T as() {
         return reinterpret_cast<T>(this->m_address);
     }
 
