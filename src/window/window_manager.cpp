@@ -15,7 +15,7 @@ bool WindowManager::create() {
   this->m_hwnd = target_window;
   this->m_width = GetSystemMetrics(SM_CXSCREEN);
   this->m_height = GetSystemMetrics(SM_CYSCREEN);
-
+  
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     SPDLOG_ERROR("Failed to initialize SDL: {}", SDL_GetError());
     return false;
@@ -102,35 +102,8 @@ void WindowManager::render() {
   std::thread(SDL_RenderPresent,this->m_renderer).join();
 }
 
-void WindowManager::draw_rect(int x, int y, int w, int h, SDL_Color &color) {
-  SDL_Rect rect = {x, y, w, h};
-  SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
-
-  SDL_RenderDrawRect(this->m_renderer, &rect);
-}
-
-void WindowManager::draw_text(const std::string &text, int x, int y, SDL_Color &color) {
-  if (!m_font)
-    return;
-
-  SDL_Surface *surface = TTF_RenderText_Blended(m_font, text.c_str(), color);
-
-  if (!surface)
-
-    return;
-
-  SDL_Texture *texture = SDL_CreateTextureFromSurface(m_renderer, surface);
-
-  if (!texture) {
-    SDL_FreeSurface(surface);
-    return;
-  }
-
-  SDL_Rect dstRect = {x, y, surface->w, surface->h};
-  SDL_RenderCopy(m_renderer, texture, nullptr, &dstRect);
-
-  SDL_DestroyTexture(texture);
-  SDL_FreeSurface(surface);
+void WindowManager::update() {
+  SDL_GetGlobalMouseState(&this->m_mouseX, &m_mouseY);
 }
 
 void WindowManager::cleanup() {
@@ -153,4 +126,36 @@ void WindowManager::cleanup() {
   TTF_Quit();
 
   SDL_Quit();
+}
+
+void WindowManager::draw_rect(int x, int y, int w, int h, SDL_Color &color) {
+  SDL_Rect rect = {x, y, w, h};
+  SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
+
+  SDL_RenderDrawRect(m_renderer, &rect);
+}
+
+void WindowManager::draw_text(const std::string &text, int x, int y, SDL_Color &color) {
+
+  if (!m_font)
+    return;
+
+  SDL_Surface *surface = TTF_RenderText_Blended(m_font, text.c_str(), color);
+
+  if (!surface)
+
+    return;
+
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(m_renderer, surface);
+
+  if (!texture) {
+    SDL_FreeSurface(surface);
+    return;
+  }
+
+  SDL_Rect dstRect = {x, y, surface->w, surface->h};
+  SDL_RenderCopy(m_renderer, texture, nullptr, &dstRect);
+
+  SDL_DestroyTexture(texture);
+  SDL_FreeSurface(surface);
 }
