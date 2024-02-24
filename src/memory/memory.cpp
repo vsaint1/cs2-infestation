@@ -242,16 +242,17 @@ std::pair<std::optional<uintptr_t>, std::optional<uintptr_t>> Memory::get_module
 }
 
 std::string Memory::read_str(uintptr_t address) noexcept {
-  std::string str;
-  char c;
+  static const int length = 64;
+			std::vector<char> buffer(length);
 
-  do {
-    c = this->readv<char>(address);
-    str += c;
-    address++;
-  } while (c != '\0');
+			this->read_raw(reinterpret_cast<void*>(address), buffer.data(), length);
 
-  return str;
+			const auto& it = find(buffer.begin(), buffer.end(), '\0');
+
+			if (it != buffer.end())
+				buffer.resize(distance(buffer.begin(), it));
+
+			return std::string(buffer.begin(), buffer.end());
 }
 
 bool Memory::readv(uintptr_t address, void *buffer, uintptr_t size) {
