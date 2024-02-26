@@ -174,6 +174,8 @@ namespace misc {
 namespace world {
 inline bool esp = false;
 inline bool grenade_esp = false;
+inline bool grenade_warning = false;
+
 inline bool grenade_distance = false;
 inline bool grenade_trajectory = false;
 inline bool grenade_name = false;
