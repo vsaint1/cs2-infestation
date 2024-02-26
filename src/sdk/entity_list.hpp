@@ -26,9 +26,12 @@ public:
     return memory.readv<T>(controller);
   }
 
+  const int max_entities(){
+    return memory.readv<int>(this + 0x1510);
+  }
 
 };
 
-inline EntityList *entity_list{};
+inline EntityList *g_entity_list{};
 
 #endif // SDK_ENTITY_LIST_H_
