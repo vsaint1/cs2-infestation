@@ -25,7 +25,7 @@ void show_menu(GLFWwindow *window) {
 
   component::create_style();
   ImGui::SetNextWindowSize(ImVec2(500.0f, 350.0f), ImGuiCond_Once);
-  ImGui::Begin(("Infestation - 6.5"), &settings::show_menu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
+  ImGui::Begin(("Infestation - 1.0.0"), &settings::show_menu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
 
   ImGui::BeginTabBar(("##tabs"), ImGuiTabBarFlags_None);
   ImGui::SetCursorPos(ImVec2(ImGui::GetWindowSize().x / 2 - 100, 50));
@@ -73,7 +73,7 @@ void show_menu(GLFWwindow *window) {
       component::set_helper("Enable/Disable Grenades ESP");
 
       if (settings::world::grenade_esp) {
-        ImGui::Checkbox("Grenade Name", &settings::world::grenade_warning);
+        ImGui::Checkbox("Grenade Warning", &settings::world::grenade_warning);
         component::set_helper("Grenade projectile warning");
         ImGui::Checkbox("Grenade Name", &settings::world::grenade_name);
         component::set_helper("Grenade projectile name");
@@ -100,6 +100,10 @@ void show_menu(GLFWwindow *window) {
   ImGui::SetNextItemWidth(100);
 
   if (ImGui::BeginTabItem("Misc")) {
+
+	ImGui::Checkbox("Bomb-Timer", &settings::misc::bomb_timer);
+    component::set_helper("Enable/Disable C4 timer");
+
     ImGui::Checkbox("Team-Check", &settings::misc::team_check);
     component::set_helper("Enable/Disable Team-Check");
 
