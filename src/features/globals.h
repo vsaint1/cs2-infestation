@@ -6,7 +6,6 @@
 #ifndef FEATURES_GLOBALS_H_
 #define FEATURES_GLOBALS_H_
 
-#include "imgui/imgui.h"
 #include "math.h"
 #include <cstddef>
 
@@ -166,7 +165,7 @@ namespace visuals {
 
 namespace misc {
 	inline bool experimental_features = false;
-
+	inline bool bomb_timer = false;
 	inline bool team_check = false;
 
 };

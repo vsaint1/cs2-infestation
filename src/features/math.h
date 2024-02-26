@@ -12,6 +12,8 @@
 #include <cmath>
 #include <numbers>
 #include <vector>
+#include "imgui/imgui_internal.h"
+#include "imgui/imgui.h"
 
 // TODO: change this to be cross-platform ;
 static int ww = GetSystemMetrics(SM_CXSCREEN);

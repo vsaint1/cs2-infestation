@@ -10,7 +10,7 @@
 #include "../globals.h"
 #include "../../memory/memory.hpp"
 #include "../../sdk/global_vars.hpp"
-#include "../../window/window_manager.h"
+#include "../../window/draw/drawing.hpp"
 
 namespace misc {
 

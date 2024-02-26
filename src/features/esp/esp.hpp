@@ -4,7 +4,7 @@
  */
 #ifndef FEATURES_ESP_WEAPON_H_
 #define FEATURES_ESP_WEAPON_H_
-#include "../../window/window_manager.h"
+#include "../../window/draw/drawing.hpp"
 
 namespace esp{
 
