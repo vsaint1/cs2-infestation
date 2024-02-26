@@ -151,7 +151,40 @@ inline ImColor weapon_dropped = ImColor(195, 195, 195, 255);
 inline ImColor bomb_timer = ImColor(195, 195, 195, 255);
 inline ImColor defuse_timer = ImColor(255, 0, 0, 255);
 
+inline ImColor grenade_trails = ImColor(255, 0, 0, 255);
+
 }; // namespace colors
+
+namespace aimbot {
+	inline bool aimbot = false;
+};
+
+namespace visuals {
+	inline bool player_esp = false;
+
+};
+
+namespace misc {
+	inline bool experimental_features = false;
+
+	inline bool team_check = false;
+
+};
+
+namespace world {
+inline bool esp = false;
+inline bool grenade_esp = false;
+inline bool grenade_distance = false;
+inline bool grenade_trajectory = false;
+inline bool grenade_name = false;
+inline bool grenade_snaplines = false;
+inline bool grenade_timer = false;
+
+inline bool weapon_esp = false;
+inline bool weapon_name = false;
+inline bool weapon_distance = false;
+inline bool weapon_snaplines = false;
+}; // namespace world
 
 } // namespace settings
 
