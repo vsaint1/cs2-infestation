@@ -14,7 +14,7 @@
 
 namespace misc {
 
-void bomb_timer(WindowManager& manager);
+void bomb_timer();
 
 }; // namespace misc
 #endif // FEATURES_MISC_BOMB_HPP_
