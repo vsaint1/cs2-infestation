@@ -26,6 +26,8 @@ bool compare(std::string_view str1, std::string_view str2);
 
 #define WINDOW_NAME "Counter-Strike 2"
 
+#define GLSL_VERSION "#version 130"
+
 #define GAME_NAME "cs2.exe"
 
 #define CLIENT_MODULE_NAME "client.dll"
