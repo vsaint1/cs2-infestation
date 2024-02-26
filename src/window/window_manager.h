@@ -5,46 +5,33 @@
 #ifndef WINDOW_WINDOW_MANAGER_H_
 #define WINDOW_WINDOW_MANAGER_H_
 #include "../utils/macros.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_syswm.h>
-#include <SDL2/SDL_ttf.h>
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include <GLFW/glfw3.h>
 
 class WindowManager {
 
 public:
   int m_width, m_height;
 
-  int m_mouseX, m_mouseY;
+  GLFWwindow *m_window;
 
-  HWND m_hwnd;
-  
-  TTF_Font *m_font;
-  SDL_Window *m_window;
-  SDL_Renderer *m_renderer;
+  bool create(const char* window_name);
 
-  bool create();
+  bool should_close();
 
-  bool make_window_transparent(SDL_Window *window, COLORREF color_key);
-
-  TTF_Font *load_font(const char *file_name, int font_size);
-
-  void send_events(HWND hwnd, int x, int y);
-
-  bool set_window_transparency(COLORREF color);
-
-  bool should_close(SDL_Event *event);
+  void pool_events();
 
   void render();
 
-  void update();
-  
+  void begin_frame();
+
   void cleanup();
 
-  void draw_rect(int x, int y, int w, int h, SDL_Color &color);
+  static bool mouse_state(GLFWwindow * window,int key);
 
-  void draw_text(const std::string &text, int x, int y, SDL_Color &color);
-
-  
+  static bool key_state(GLFWwindow* window,int key);
 };
 
 #endif // WINDOW_WINDOW_MANAGER_H_
