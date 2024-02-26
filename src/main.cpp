@@ -39,7 +39,7 @@ int main(int, char **) {
 
     manager.begin_frame();
 
-    if (WindowManager::key_state(manager.m_window, GLFW_KEY_INSERT) & 1)
+    if (GetAsyncKeyState(VK_INSERT) & 1)
       settings::show_menu = !settings::show_menu;
 
     if (settings::show_menu)
@@ -50,6 +50,8 @@ int main(int, char **) {
     misc::bomb_timer();
 
     esp::weapon();
+    
+    esp::grenades();
 
     ImGui::GetBackgroundDrawList()->AddCircle(ImVec2(width / 2, height / 2 - 25), 60, ImColor(255, 255, 255, 255), 100);
 
