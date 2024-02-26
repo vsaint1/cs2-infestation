@@ -30,13 +30,16 @@ int main(int, char **) {
 
   while (!manager.should_close()) {
 
+    if (WindowManager::key_state(manager.m_window, GLFW_KEY_END) & 1)
+      exit(0);
+
     local_viewmatrix = memory.readv<ViewMatrix>(client + offsets::dwViewMatrix);
 
     manager.pool_events();
 
     manager.begin_frame();
 
-    if (GetAsyncKeyState(VK_INSERT) & 1)
+    if (WindowManager::key_state(manager.m_window, GLFW_KEY_INSERT) & 1)
       settings::show_menu = !settings::show_menu;
 
     if (settings::show_menu)
