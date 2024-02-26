@@ -5,9 +5,12 @@
 #ifndef WINDOW_WINDOW_MANAGER_H_
 #define WINDOW_WINDOW_MANAGER_H_
 #include "../utils/macros.h"
+#include "fonts/tahoma_font.h"
+#include "fonts/weapon_font.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_internal.h"
 #include <GLFW/glfw3.h>
 
 class WindowManager {

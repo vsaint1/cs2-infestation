@@ -29,7 +29,7 @@ bool WindowManager::create(const char *window_name) {
   this->m_window = window;
 
   glfwMakeContextCurrent(window);
-  glfwSwapInterval(0);
+  glfwSwapInterval(GLFW_TRUE);
 
   IMGUI_CHECKVERSION();
 
@@ -39,7 +39,9 @@ bool WindowManager::create(const char *window_name) {
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
   ImGui::StyleColorsClassic();
-
+  io.Fonts->AddFontFromMemoryTTF(&tahoma_font, sizeof(tahoma_font), 13.0f, NULL, io.Fonts->GetGlyphRangesDefault());
+	io.Fonts->AddFontFromMemoryTTF(&weapon_font_icon, sizeof(weapon_font_icon), 17.0f, NULL, io.Fonts->GetGlyphRangesDefault());
+  
   ImGui_ImplGlfw_InitForOpenGL(window, false);
 
   ImGui_ImplOpenGL3_Init(GLSL_VERSION);
