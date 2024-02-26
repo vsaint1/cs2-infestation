@@ -12,3 +12,14 @@
 - [x] Render thread
 
 <img src="examples/bomb_timer.png" alt="bomb_timer">
+
+# 1.0.0
+
+- [x] Now using GLFW3
+- [x] Implemented ImGui
+- [x] Grenades ESP
+- [x] C4 timer
+- [x] Weapons ESP
+- [x] Small optimizations
+
+<img src="examples/version_1_0_0.png" alt="v1">

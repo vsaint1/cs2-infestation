@@ -30,8 +30,10 @@ int main(int, char **) {
 
   while (!manager.should_close()) {
 
-    if (WindowManager::key_state(manager.m_window, GLFW_KEY_END) & 1)
+    if (WindowManager::key_state(manager.m_window, GLFW_KEY_END) & 1) {
+      manager.cleanup();
       exit(0);
+    }
 
     local_viewmatrix = memory.readv<ViewMatrix>(client + offsets::dwViewMatrix);
 
@@ -50,7 +52,7 @@ int main(int, char **) {
     misc::bomb_timer();
 
     esp::weapon();
-    
+
     esp::grenades();
 
     ImGui::GetBackgroundDrawList()->AddCircle(ImVec2(width / 2, height / 2 - 25), 60, ImColor(255, 255, 255, 255), 100);

@@ -29,12 +29,12 @@ void misc::bomb_timer() {
 
     if (!bomb_defused && fl_bomb_time > 0) {
       std::string bomb_timer(fmt::format("Bomb planted on {}, Explodes in {:.2f} ", bomb_site == 0 ? "A" : "B", fl_bomb_time));
-      draw::text(bomb_timer.c_str(), ImVec2(30, 700), settings::colors::bomb_timer);
+      draw::text(bomb_timer.c_str(), ImVec2(100, 700), settings::colors::bomb_timer);
     }
 
     if (being_defused && fl_defuse_time > 0) {
       std::string defuse_timer(fmt::format("Bomb being defused, time remaining {:.2f}", fl_defuse_time));
-      draw::text(defuse_timer.c_str(), ImVec2(30, 740), settings::colors::bomb_timer);
+      draw::text(defuse_timer.c_str(), ImVec2(100, 740), settings::colors::defuse_timer);
     }
 
     const auto node = memory.readv<uintptr_t>(plantedC4 + offsets::C_BaseEntity::m_pGameSceneNode);
