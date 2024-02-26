@@ -28,7 +28,7 @@ find_package(spdlog REQUIRED)
 
 file(GLOB_RECURSE IMGUI  ${CMAKE_CURRENT_SOURCE_DIR}/external/include/imgui/*.cpp)
 
-add_executable(${PROJECT_NAME} src/main.cpp ${SOURCES} ${IMGUI})
+add_executable(${PROJECT_NAME} src/main.cpp ${SOURCES} ${IMGUI} "src/utils/ui/custom_components.cpp" "src/utils/ui/custom_components.h")
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/include)
 target_link_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/lib)
