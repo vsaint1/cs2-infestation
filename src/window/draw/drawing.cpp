@@ -44,7 +44,7 @@ void draw::grenade_esp(ImFont *font, const char *text, float distance, ImVec2 ce
     return;
   }
 
-  const char* grenade_warnings[2] = {"molotov", "hegrenade"};
+  const std::string grenade_warnings[2] = {"molotov", "hegrenade"};
 
   if (std::find(std::begin(grenade_warnings), std::end(grenade_warnings), text) != std::end(grenade_warnings)) {
     if (distance > 5 && distance < 10) {

@@ -43,6 +43,9 @@ void esp::render() {
     if (screen_pos.z < 0.001f)
       continue;
 
+    if (entity.type == EntityType::CHICKEN)
+      draw::text("mommy", ImVec2(screen_pos.x, screen_pos.y - 10), settings::colors::weapon_dropped);
+
     float dist = memory.readv<Vector3>(local_player + offsets::C_BasePlayerPawn::m_vOldOrigin).distance(abs_origin) / 100;
 
     auto clazz_name = memory.read_str(designer_name);
@@ -65,7 +68,6 @@ void esp::render() {
 
       if (settings::world::grenade_warning)
         draw::grenade_esp(ImGui::GetIO().Fonts->Fonts[1], normalized_str, dist, ImVec2(screen_pos.x, screen_pos.y), ImColor(255, 255, 255, 255), 20.0f);
-
     }
   }
 }
@@ -91,6 +93,5 @@ void esp::_inferno(const BaseEntity &ent) {
     float dist = memory.readv<Vector3>(local_player + offsets::C_BasePlayerPawn::m_vOldOrigin).distance(abs_origin) / 100;
 
     draw::grenade_esp(ImGui::GetIO().Fonts->Fonts[1], "molotov", dist, ImVec2(screen_pos.x, screen_pos.y), ImColor(255, 255, 255, 255), 20.0f);
-
   }
 }
