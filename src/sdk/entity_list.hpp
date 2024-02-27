@@ -5,12 +5,16 @@
 #ifndef SDK_ENTITY_LIST_H_
 #define SDK_ENTITY_LIST_H_
 
+#include "../features/globals.h"
 #include "../memory/memory.hpp"
+#include "base_entity.hpp"
 
 class EntityList {
 
 public:
   static EntityList *get();
+
+  void update();
 
   template <typename T> T get(const int i) {
     const auto list_entry = memory.readv<uintptr_t>(this + 8LL * ((i & 0x7FFF) >> 9) + 16);
@@ -26,10 +30,9 @@ public:
     return memory.readv<T>(controller);
   }
 
-  const int max_entities(){
-    return memory.readv<int>(this + 0x1510);
-  }
+  const int max_entities() { return memory.readv<int>(this + offsets::dwGameEntitySystem_getHighestEntityIndex); }
 
+  const std::string get_schema_name(const uintptr_t &entity);
 };
 
 inline EntityList *g_entity_list{};
