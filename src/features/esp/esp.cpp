@@ -3,14 +3,10 @@
  *   All rights reserved.
  */
 #include "esp.hpp"
-#include "../../sdk/entity_list.hpp"
-#include "../../window/draw/drawing.hpp"
-#include "../globals.h"
-#include "../math.h"
 
-void esp::weapon() {
+void esp::render() {
 
-  if (!settings::world::weapon_esp)
+  if (!local_player)
     return;
 
   const auto entity_list = EntityList::get();
@@ -18,14 +14,14 @@ void esp::weapon() {
   if (!entity_list)
     return;
 
-  for (auto i = 65; i < entity_list->max_entities(); i++) {
+  entity_list->update();
 
-    const auto entity = entity_list->get<uintptr_t>(i);
+  for (const auto &entity : entities) {
 
-    if (!entity)
-      continue;
+    if (entity.type == EntityType::INFERNO && settings::world::grenade_inferno_esp)
+      _inferno(entity);
 
-    uintptr_t entity_identity = memory.readv<uintptr_t>(entity + offsets::CEntityInstance::m_pEntity);
+    uintptr_t entity_identity = memory.readv<uintptr_t>(entity.pawn + offsets::CEntityInstance::m_pEntity);
 
     if (!entity_identity)
       continue;
@@ -35,15 +31,7 @@ void esp::weapon() {
     if (!designer_name)
       continue;
 
-    const auto clazz_name = memory.read_str(designer_name);
-
-    if (clazz_name.empty())
-      continue;
-
-    if (clazz_name.find("weapon_") == std::string::npos)
-      continue;
-
-    const auto node = memory.readv<uintptr_t>(entity + offsets::C_BaseEntity::m_pGameSceneNode);
+    const auto node = memory.readv<uintptr_t>(entity.pawn + offsets::C_BaseEntity::m_pGameSceneNode);
 
     Vector3 abs_origin = memory.readv<Vector3>(node + offsets::CGameSceneNode::m_vecOrigin);
 
@@ -55,64 +43,54 @@ void esp::weapon() {
     if (screen_pos.z < 0.001f)
       continue;
 
-    draw::text(clazz_name.substr(7).c_str(), ImVec2(screen_pos.x, screen_pos.y - 25), settings::colors::weapon_dropped);
-  }
-}
-
-void esp::grenades() {
-
-  if (!settings::world::grenade_esp)
-    return;
-
-  const auto entity_list = EntityList::get();
-
-  if (!entity_list)
-    return;
-
-  for (auto i = 65; i < entity_list->max_entities(); i++) {
-
-    const auto entity = entity_list->get<uintptr_t>(i);
-
-    if (!entity)
-      continue;
-
-    uintptr_t entity_identity = memory.readv<uintptr_t>(entity + offsets::CEntityInstance::m_pEntity);
-
-    if (!entity_identity)
-      continue;
-
-    uintptr_t designer_name = memory.readv<uintptr_t>(entity_identity + offsets::CEntityIdentity::m_designerName);
-
-    if (!designer_name)
-      continue;
+    float dist = memory.readv<Vector3>(local_player + offsets::C_BasePlayerPawn::m_vOldOrigin).distance(abs_origin) / 100;
 
     auto clazz_name = memory.read_str(designer_name);
 
-    if (clazz_name.empty())
-      continue;
+    if (entity.type == EntityType::WEAPON) {
 
-    const char *nades[5] = {"smokegrenade_projectile", "hegrenade_projectile", "flashbang_projectile", "molotov_projectile", "flashbang_projectile"};
+      if (settings::world::weapon_icon)
+        draw::icon_esp(ImGui::GetIO().Fonts->Fonts[1], clazz_name.substr(7).c_str(), screen_pos, ImColor(255, 255, 255, 255));
 
-    if (std::find(std::begin(nades), std::end(nades), clazz_name) == std::end(nades))
-      continue;
+      if (settings::world::weapon_name)
+        draw::text(clazz_name.substr(7).c_str(), ImVec2(screen_pos.x, screen_pos.y - 10), settings::colors::weapon_dropped);
 
-    auto normalized_str = clazz_name.erase(clazz_name.find("_projectile"), 11).c_str();
+      if (settings::world::weapon_distance)
+        draw::distance_a(ImVec2(screen_pos.x, screen_pos.y), dist, settings::colors::weapon_distance);
+    }
 
-    const auto node = memory.readv<uintptr_t>(entity + offsets::C_BaseEntity::m_pGameSceneNode);
+    if (entity.type == EntityType::GRENADE) {
 
-    Vector3 abs_origin = memory.readv<Vector3>(node + offsets::CGameSceneNode::m_vecOrigin);
+      const auto normalized_str = clazz_name.erase(clazz_name.find("_projectile"), 11).c_str();
 
-    if (abs_origin.is_zero())
-      continue;
+      if (settings::world::grenade_warning)
+        draw::grenade_esp(ImGui::GetIO().Fonts->Fonts[1], normalized_str, dist, ImVec2(screen_pos.x, screen_pos.y), ImColor(255, 255, 255, 255), 20.0f);
 
-    float dist = abs_origin.distance(memory.readv<Vector3>(local_player + offsets::C_BasePlayerPawn::m_vOldOrigin)) / 100;
+    }
+  }
+}
+
+void esp::_inferno(const BaseEntity &ent) {
+
+  auto burning = memory.readv<bool>(ent.pawn + offsets::C_Inferno::m_bFireIsBurning);
+
+  if (!burning)
+    return;
+
+  const auto node = memory.readv<uintptr_t>(ent.pawn + offsets::C_BaseEntity::m_pGameSceneNode);
+
+  Vector3 abs_origin = memory.readv<Vector3>(node + offsets::CGameSceneNode::m_vecOrigin);
+
+  if (!abs_origin.is_zero()) {
 
     Vector3 screen_pos = abs_origin.world_to_screen(local_viewmatrix);
 
     if (screen_pos.z < 0.001f)
-      continue;
+      return;
 
-    if (settings::world::grenade_warning)
-      draw::grenade_esp(ImGui::GetIO().Fonts->Fonts[1], normalized_str, dist, ImVec2(screen_pos.x, screen_pos.y), ImColor(255, 255, 255, 255), 20.0f);
+    float dist = memory.readv<Vector3>(local_player + offsets::C_BasePlayerPawn::m_vOldOrigin).distance(abs_origin) / 100;
+
+    draw::grenade_esp(ImGui::GetIO().Fonts->Fonts[1], "molotov", dist, ImVec2(screen_pos.x, screen_pos.y), ImColor(255, 255, 255, 255), 20.0f);
+
   }
-};
+}
