@@ -130,6 +130,28 @@ constexpr std::ptrdiff_t m_bBombDefused = 0xF2C;      // bool
 
 } // namespace C_PlantedC4
 
+namespace C_Inferno { // C_BaseModelEntity
+    constexpr std::ptrdiff_t m_nfxFireDamageEffect = 0xD10; // ParticleIndex_t
+    constexpr std::ptrdiff_t m_firePositions = 0xD14; // Vector[64]
+    constexpr std::ptrdiff_t m_fireParentPositions = 0x1014; // Vector[64]
+    constexpr std::ptrdiff_t m_bFireIsBurning = 0x1314; // bool[64]
+    constexpr std::ptrdiff_t m_BurnNormal = 0x1354; // Vector[64]
+    constexpr std::ptrdiff_t m_fireCount = 0x1654; // int32_t
+    constexpr std::ptrdiff_t m_nInfernoType = 0x1658; // int32_t
+    constexpr std::ptrdiff_t m_nFireLifetime = 0x165C; // float
+    constexpr std::ptrdiff_t m_bInPostEffectTime = 0x1660; // bool
+    constexpr std::ptrdiff_t m_lastFireCount = 0x1664; // int32_t
+    constexpr std::ptrdiff_t m_nFireEffectTickBegin = 0x1668; // int32_t
+    constexpr std::ptrdiff_t m_drawableCount = 0x8270; // int32_t
+    constexpr std::ptrdiff_t m_blosCheck = 0x8274; // bool
+    constexpr std::ptrdiff_t m_nlosperiod = 0x8278; // int32_t
+    constexpr std::ptrdiff_t m_maxFireHalfWidth = 0x827C; // float
+    constexpr std::ptrdiff_t m_maxFireHeight = 0x8280; // float
+    constexpr std::ptrdiff_t m_minBounds = 0x8284; // Vector
+    constexpr std::ptrdiff_t m_maxBounds = 0x8290; // Vector
+    constexpr std::ptrdiff_t m_flLastGrassBurnThink = 0x829C; // float
+}
+
 namespace C_BaseEntity {};
 }; // namespace offsets
 namespace settings {
@@ -146,6 +168,7 @@ inline ImColor skeleton_hidden_color = ImColor(255, 0, 0, 255);
 inline ImColor skeleton_visible_color = ImColor(0, 255, 0, 255);
 
 inline ImColor weapon_dropped = ImColor(195, 195, 195, 255);
+inline ImColor weapon_distance = ImColor(255, 201, 14, 233);
 
 inline ImColor bomb_timer = ImColor(195, 195, 195, 255);
 inline ImColor defuse_timer = ImColor(255, 0, 0, 255);
@@ -180,11 +203,13 @@ inline bool grenade_trajectory = false;
 inline bool grenade_name = false;
 inline bool grenade_snaplines = false;
 inline bool grenade_timer = false;
+inline bool grenade_inferno_esp = false;
 
 inline bool weapon_esp = false;
 inline bool weapon_name = false;
+inline bool weapon_icon = false;
 inline bool weapon_distance = false;
-inline bool weapon_snaplines = false;
+
 }; // namespace world
 
 } // namespace settings
