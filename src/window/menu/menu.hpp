@@ -25,7 +25,7 @@ void show_menu(GLFWwindow *window) {
 
   component::create_style();
   ImGui::SetNextWindowSize(ImVec2(500.0f, 350.0f), ImGuiCond_Once);
-  ImGui::Begin(("Infestation - 1.0.0"), &settings::show_menu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
+  ImGui::Begin(("Infestation - 1.5.0"), &settings::show_menu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
 
   ImGui::BeginTabBar(("##tabs"), ImGuiTabBarFlags_None);
   ImGui::SetCursorPos(ImVec2(ImGui::GetWindowSize().x / 2 - 100, 50));
@@ -50,7 +50,8 @@ void show_menu(GLFWwindow *window) {
 
     ImGui::NextColumn();
 
-    ImGui::Checkbox("World", &settings::world::esp);
+    ImGui::Text("World");
+    ImGui::Checkbox("Enabled##1", &settings::world::esp);
     component::set_helper("Enable/Disable World ESP");
     ImGui::Spacing();
 
@@ -60,12 +61,15 @@ void show_menu(GLFWwindow *window) {
       ImGui::SameLine();
       component::set_helper("Enable/Disable Weapons ESP");
       if (settings::world::weapon_esp) {
-        ImGui::Checkbox("Weapon Icon", &settings::world::weapon_name);
+        ImGui::Checkbox("Weapon Icon", &settings::world::weapon_icon);
+        component::set_helper("Draw weapon icon");
+        ImGui::Checkbox("Weapon Name", &settings::world::weapon_name);
         component::set_helper("Draw weapon name");
+        component::color_picker("##weapon_name",settings::colors::weapon_dropped);
         ImGui::Checkbox("Weapon Distance", &settings::world::weapon_distance);
         component::set_helper("Draw distance to weapon");
-        ImGui::Checkbox("Weapon Snap Lines", &settings::world::weapon_snaplines);
-        component::set_helper("Draw lines to weapon");
+        component::color_picker("##weapon_distance",settings::colors::weapon_distance);
+
       }
 
       ImGui::Spacing();
@@ -75,12 +79,12 @@ void show_menu(GLFWwindow *window) {
       if (settings::world::grenade_esp) {
         ImGui::Checkbox("Grenade Warning", &settings::world::grenade_warning);
         component::set_helper("Grenade projectile warning");
-        ImGui::Checkbox("Grenade Name", &settings::world::grenade_name);
+         ImGui::Checkbox("Grenade Name", &settings::world::grenade_name);
         component::set_helper("Grenade projectile name");
         ImGui::Checkbox("Grenade Distance", &settings::world::grenade_distance);
         component::set_helper("Grenade projectile distance");
-        ImGui::Checkbox("Grenade Snap Lines", &settings::world::grenade_snaplines);
-        component::set_helper("Draw lines to Grenade projectile");
+        ImGui::Checkbox("Grenade Molotov", &settings::world::grenade_inferno_esp);
+        component::set_helper("Grenade molotov's on group, may cause slowness to update ESP",ImColor(211, 67, 18, 255), '!');
 
         if (settings::misc::experimental_features) {
 
@@ -101,7 +105,7 @@ void show_menu(GLFWwindow *window) {
 
   if (ImGui::BeginTabItem("Misc")) {
 
-	ImGui::Checkbox("Bomb-Timer", &settings::misc::bomb_timer);
+    ImGui::Checkbox("Bomb-Timer", &settings::misc::bomb_timer);
     component::set_helper("Enable/Disable C4 timer");
 
     ImGui::Checkbox("Team-Check", &settings::misc::team_check);
