@@ -23,3 +23,15 @@
 - [x] Small optimizations
 
 <img src="examples/version_1_0_0.png" alt="v1">
+
+
+
+# 1.5.0
+
+- [x] Reading all entities in one call
+- [x] Better ESP logic
+- [x] **PAID** Chicken ESP
+
+<img src="examples/version_1_5_0.png" alt="v1">
+
+
