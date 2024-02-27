@@ -50,10 +50,8 @@ int main(int, char **) {
       glfwSetWindowAttrib(manager.m_window, GLFW_MOUSE_PASSTHROUGH, GLFW_TRUE);
 
     misc::bomb_timer();
-
-    esp::weapon();
-
-    esp::grenades();
+    
+    esp::render();
 
     ImGui::GetBackgroundDrawList()->AddCircle(ImVec2(width / 2, height / 2 - 25), 60, ImColor(255, 255, 255, 255), 100);
 
