@@ -84,3 +84,23 @@ void draw::icon_esp(ImFont *font, const char *text, Vector3 pos, ImColor color, 
   ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(pos.x - text_size.x / 2 + 1, pos.y - text_size.y / 2 + 1 - 15), ImColor(0, 0, 0, 255), gun_icon(text));
   ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(pos.x - text_size.x / 2, pos.y - text_size.y / 2 - 15), color, gun_icon(text));
 }
+
+void draw::path(Vector3 pos) {
+    static Vector3 last_trail_position; 
+    static std::vector<Vector3> trail_positions;
+    
+    if (pos != last_trail_position) {
+        trail_positions.push_back(pos);
+        last_trail_position = pos; 
+    }
+
+    for (size_t i = 1; i < trail_positions.size(); ++i) {
+        ImVec2 p1 = ImVec2(trail_positions[i - 1].x, trail_positions[i - 1].y);
+        ImVec2 p2 = ImVec2(trail_positions[i].x, trail_positions[i].y);
+        ImGui::GetForegroundDrawList()->AddLine(p1, p2, IM_COL32(255, 255, 255, 255), 2.0f);
+    }
+
+    if (trail_positions.size() > MAX_NUM_SEGMENTS)
+        trail_positions.erase(trail_positions.begin());
+
+}
