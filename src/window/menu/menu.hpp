@@ -10,14 +10,13 @@
 #include "../window_manager.h"
 
 void show_menu(GLFWwindow *window) {
-
   ImGuiIO &io = ImGui::GetIO();
 
   if (WindowManager::mouse_state(window, GLFW_MOUSE_BUTTON_LEFT)) {
     io.MouseDown[0] = true;
     io.MouseClicked[0] = true;
     io.MouseClickedPos[0].x = io.MousePos.x;
-    io.MouseClickedPos[0].x = io.MousePos.y;
+    io.MouseClickedPos[0].y = io.MousePos.y;
   } else
     io.MouseDown[0] = false;
 
@@ -54,7 +53,8 @@ void show_menu(GLFWwindow *window) {
     ImGui::Checkbox("Enabled##1", &settings::world::esp);
     component::set_helper("Enable/Disable World ESP");
     ImGui::Spacing();
-
+    ImGui::Checkbox("Chicken", &settings::world::chicken_esp);
+    component::set_helper("Draw chickens meme");
     if (settings::world::esp) {
 
       ImGui::Checkbox("Weapons", &settings::world::weapon_esp);
@@ -65,11 +65,10 @@ void show_menu(GLFWwindow *window) {
         component::set_helper("Draw weapon icon");
         ImGui::Checkbox("Weapon Name", &settings::world::weapon_name);
         component::set_helper("Draw weapon name");
-        component::color_picker("##weapon_name",settings::colors::weapon_dropped);
+        component::color_picker("##weapon_name", settings::colors::weapon_dropped);
         ImGui::Checkbox("Weapon Distance", &settings::world::weapon_distance);
         component::set_helper("Draw distance to weapon");
-        component::color_picker("##weapon_distance",settings::colors::weapon_distance);
-
+        component::color_picker("##weapon_distance", settings::colors::weapon_distance);
       }
 
       ImGui::Spacing();
@@ -79,12 +78,12 @@ void show_menu(GLFWwindow *window) {
       if (settings::world::grenade_esp) {
         ImGui::Checkbox("Grenade Warning", &settings::world::grenade_warning);
         component::set_helper("Grenade projectile warning");
-         ImGui::Checkbox("Grenade Name", &settings::world::grenade_name);
+        ImGui::Checkbox("Grenade Name", &settings::world::grenade_name);
         component::set_helper("Grenade projectile name");
         ImGui::Checkbox("Grenade Distance", &settings::world::grenade_distance);
         component::set_helper("Grenade projectile distance");
         ImGui::Checkbox("Grenade Molotov", &settings::world::grenade_inferno_esp);
-        component::set_helper("Grenade molotov's on group, may cause slowness to update ESP",ImColor(211, 67, 18, 255), '!');
+        component::set_helper("Grenade molotov's on group, may cause slowness to update ESP", ImColor(211, 67, 18, 255), '!');
 
         if (settings::misc::experimental_features) {
 
