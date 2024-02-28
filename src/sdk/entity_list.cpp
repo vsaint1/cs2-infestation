@@ -34,9 +34,8 @@ void EntityList::update() {
       entities.emplace_back(BaseEntity(entity, i, EntityType::FISH));
     } else if (schema_name.find("C_Weapon") != std::string::npos) {
       entities.emplace_back(BaseEntity(entity, i, EntityType::WEAPON));
-    } else {
-      entities.emplace_back(BaseEntity(entity, i, EntityType::INVALID));
-    }
+    } else
+      continue;
   }
 }
 
