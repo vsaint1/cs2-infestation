@@ -210,6 +210,9 @@ inline bool weapon_name = false;
 inline bool weapon_icon = false;
 inline bool weapon_distance = false;
 
+inline bool chicken_esp = false;
+
+
 }; // namespace world
 
 } // namespace settings

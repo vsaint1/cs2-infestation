@@ -15,11 +15,17 @@ void esp::render() {
     return;
 
   entity_list->update();
-
+  
   for (const auto &entity : entities) {
+
+    if (entity.type == EntityType::INVALID)
+      continue;
 
     if (entity.type == EntityType::INFERNO && settings::world::grenade_inferno_esp)
       _inferno(entity);
+
+    if (entity.type == EntityType::CHICKEN && settings::world::chicken_esp)
+      _chicken(entity);
 
     uintptr_t entity_identity = memory.readv<uintptr_t>(entity.pawn + offsets::CEntityInstance::m_pEntity);
 
@@ -43,9 +49,6 @@ void esp::render() {
     if (screen_pos.z < 0.001f)
       continue;
 
-    if (entity.type == EntityType::CHICKEN)
-      draw::text("mommy", ImVec2(screen_pos.x, screen_pos.y - 10), settings::colors::weapon_dropped);
-
     float dist = memory.readv<Vector3>(local_player + offsets::C_BasePlayerPawn::m_vOldOrigin).distance(abs_origin) / 100;
 
     auto clazz_name = memory.read_str(designer_name);
@@ -68,6 +71,10 @@ void esp::render() {
 
       if (settings::world::grenade_warning)
         draw::grenade_esp(ImGui::GetIO().Fonts->Fonts[1], normalized_str, dist, ImVec2(screen_pos.x, screen_pos.y), ImColor(255, 255, 255, 255), 20.0f);
+
+
+      //draw::path(screen_pos);
+    
     }
   }
 }
@@ -93,5 +100,23 @@ void esp::_inferno(const BaseEntity &ent) {
     float dist = memory.readv<Vector3>(local_player + offsets::C_BasePlayerPawn::m_vOldOrigin).distance(abs_origin) / 100;
 
     draw::grenade_esp(ImGui::GetIO().Fonts->Fonts[1], "molotov", dist, ImVec2(screen_pos.x, screen_pos.y), ImColor(255, 255, 255, 255), 20.0f);
+  }
+}
+
+void esp::_chicken(const BaseEntity &ent) {
+  const auto node = memory.readv<uintptr_t>(ent.pawn + offsets::C_BaseEntity::m_pGameSceneNode);
+
+  Vector3 abs_origin = memory.readv<Vector3>(node + offsets::CGameSceneNode::m_vecOrigin);
+
+  if (!abs_origin.is_zero()) {
+
+    Vector3 screen_pos = abs_origin.world_to_screen(local_viewmatrix);
+
+    if (screen_pos.z < 0.001f)
+      return;
+
+    float dist = memory.readv<Vector3>(local_player + offsets::C_BasePlayerPawn::m_vOldOrigin).distance(abs_origin) / 100;
+
+    draw::text("Chicken_Little", ImVec2(screen_pos.x, screen_pos.y - 10), ImColor(255, 0, 0, 255));
   }
 }

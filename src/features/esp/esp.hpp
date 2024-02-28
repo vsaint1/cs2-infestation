@@ -9,13 +9,13 @@
 #include "../globals.h"
 #include "../math.h"
 
-
 namespace esp {
 
 void render();
 
 void _inferno(const BaseEntity &ent);
 
+void _chicken(const BaseEntity &ent);
 
 }; // namespace esp
 
