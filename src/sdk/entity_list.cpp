@@ -7,7 +7,7 @@ void EntityList::update() {
   entities.clear();
 
   // 1 == C_World
-  for (auto i = 1; i < this->max_entities(); i++) {
+  for (auto i = 65; i < 1024; i++) {
     const auto entity = this->get<uintptr_t>(i);
 
     if (!entity)
@@ -16,26 +16,42 @@ void EntityList::update() {
     const auto schema_name = this->get_schema_name(entity);
 
 #if _DEBUG
-    SPDLOG_INFO(fmt::format("CLASS_NAME {}, INDEX {}", schema_name, i));
+    // SPDLOG_INFO(fmt::format("CLASS_NAME {}, INDEX {}", schema_name, i));
 #endif
 
-    if (schema_name == "CCSPlayerController") {
-      entities.emplace_back(BaseEntity(entity, i, EntityType::PLAYER));
-    } else if (schema_name == "C_HEGrenadeProjectile" || schema_name == "C_FlashbangProjectile" || schema_name == "C_SmokeGrenadeProjectile" || schema_name == "C_DecoyProjectile" ||
-               schema_name == "C_MolotovProjectile") {
+    switch (hash_const_enhanced(schema_name.c_str())) {
+    case hash_const("C_HEGrenadeProjectile"):
+    case hash_const("C_FlashbangProjectile"):
+    case hash_const("C_SmokeGrenadeProjectile"):
+    case hash_const("C_DecoyProjectile"):
+    case hash_const("C_MolotovProjectile"):
       entities.emplace_back(BaseEntity(entity, i, EntityType::GRENADE));
-    } else if (schema_name == "C_Inferno") {
+      break;
+
+    case hash_const("C_Inferno"):
       entities.emplace_back(BaseEntity(entity, i, EntityType::INFERNO));
-    } else if (schema_name == "C_PlantedC4") {
+      break;
+
+    case hash_const("C_PlantedC4"):
       entities.emplace_back(BaseEntity(entity, i, EntityType::C4));
-    } else if (schema_name == "C_Chicken") {
+      break;
+
+    case hash_const("C_Chicken"):
       entities.emplace_back(BaseEntity(entity, i, EntityType::CHICKEN));
-    } else if (schema_name == "C_Fish") {
+      break;
+
+    case hash_const("C_Fish"):
       entities.emplace_back(BaseEntity(entity, i, EntityType::FISH));
-    } else if (schema_name.find("C_Weapon") != std::string::npos) {
+      break;
+
+    case 0x1234ABCD: // TODO: comparing C_Weapons
       entities.emplace_back(BaseEntity(entity, i, EntityType::WEAPON));
-    } else
-      continue;
+      break;
+
+    default:
+      entities.emplace_back(BaseEntity(entity, i, EntityType::INVALID));
+      break;
+    }
   }
 }
 
