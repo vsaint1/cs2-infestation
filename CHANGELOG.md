@@ -35,3 +35,13 @@
 <img src="examples/version_1_5_0.png" alt="v1">
 
 
+# 2.0.0 **BEST VERSION**
+
+- [x] Improved all ESP logic
+- [x] Improved rendering logic
+- [x] Performance metrics
+- [x] Added Player ESP
+- [x] Huge Overlay FPS boost
+- [x] Grenade Trajectory **EXPERIMENTAL**
+
+<img src="examples/version_2_0_0.png" alt="v2">
