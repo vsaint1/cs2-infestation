@@ -183,6 +183,10 @@ namespace aimbot {
 
 namespace visuals {
 	inline bool player_esp = false;
+	inline bool player_name = false;
+	inline bool player_weapon = false;
+	inline bool player_distance = false;
+	inline bool player_snaplines = false;
 
 };
 
@@ -190,7 +194,7 @@ namespace misc {
 	inline bool experimental_features = false;
 	inline bool bomb_timer = false;
 	inline bool team_check = false;
-
+    inline bool performance = false;
 };
 
 namespace world {
@@ -202,7 +206,6 @@ inline bool grenade_distance = false;
 inline bool grenade_trajectory = false;
 inline bool grenade_name = false;
 inline bool grenade_snaplines = false;
-inline bool grenade_timer = false;
 inline bool grenade_inferno_esp = false;
 
 inline bool weapon_esp = false;
