@@ -46,6 +46,8 @@ void show_menu(GLFWwindow *window) {
     ImGui::Text("Player");
     ImGui::Checkbox("Enabled", &settings::visuals::player_esp);
     component::set_helper("Enable/Disable ESP");
+    ImGui::Checkbox("Player Weapon", &settings::visuals::player_weapon);
+    component::set_helper("Draw player current weapon");
     ImGui::Checkbox("Player name", &settings::visuals::player_name);
     component::set_helper("Draw player name");
     ImGui::Checkbox("SnapLines", &settings::visuals::player_snaplines);
