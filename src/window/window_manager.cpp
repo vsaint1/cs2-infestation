@@ -29,7 +29,7 @@ bool WindowManager::create(const char *window_name) {
   this->m_window = window;
 
   glfwMakeContextCurrent(window);
-  glfwSwapInterval(0);
+  glfwSwapInterval(GLFW_FALSE);
 
   IMGUI_CHECKVERSION();
 
@@ -40,8 +40,8 @@ bool WindowManager::create(const char *window_name) {
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
   ImGui::StyleColorsClassic();
   io.Fonts->AddFontFromMemoryTTF(&tahoma_font, sizeof(tahoma_font), 13.0f, NULL, io.Fonts->GetGlyphRangesDefault());
-	io.Fonts->AddFontFromMemoryTTF(&weapon_font_icon, sizeof(weapon_font_icon), 17.0f, NULL, io.Fonts->GetGlyphRangesDefault());
-  
+  io.Fonts->AddFontFromMemoryTTF(&weapon_font_icon, sizeof(weapon_font_icon), 17.0f, NULL, io.Fonts->GetGlyphRangesDefault());
+
   ImGui_ImplGlfw_InitForOpenGL(window, false);
 
   ImGui_ImplOpenGL3_Init(GLSL_VERSION);
@@ -70,6 +70,17 @@ void WindowManager::render() {
   glfwSwapBuffers(this->m_window);
 }
 
+void WindowManager::performance_metrics() {
+  ImGui::SetNextWindowSize(ImVec2(250.0f, 80.0f), ImGuiCond_Once);
+  ImGui::SetWindowPos(ImVec2(0,0));
+  ImGui::Begin(("Performance Metrics"));
+  auto &io = ImGui::GetIO();
+  ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+  int thread_count = std::thread::hardware_concurrency();
+  ImGui::Text("Thread count: %d", thread_count);
+  ImGui::End();
+}
+
 void WindowManager::begin_frame() {
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -87,7 +98,4 @@ void WindowManager::cleanup() {
 
 bool WindowManager::mouse_state(GLFWwindow *window, int key) { return glfwGetMouseButton(window, key) == GLFW_PRESS; }
 
-bool WindowManager::key_state(GLFWwindow *window, int key) {
-
-  return glfwGetKey(window, key);
-}
+bool WindowManager::key_state(GLFWwindow *window, int key) { return glfwGetKey(window, key); }

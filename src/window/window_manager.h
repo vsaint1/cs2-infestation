@@ -12,6 +12,7 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_internal.h"
 #include <GLFW/glfw3.h>
+#include "../features/globals.h"
 
 class WindowManager {
 
@@ -32,6 +33,8 @@ public:
 
   void cleanup();
 
+  void performance_metrics();
+  
   static bool mouse_state(GLFWwindow * window,int key);
 
   static bool key_state(GLFWwindow* window,int key);
