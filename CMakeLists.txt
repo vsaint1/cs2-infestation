@@ -25,12 +25,12 @@ endif ()
 
 find_package(ZLIB REQUIRED)
 find_package(spdlog REQUIRED)
+find_package(glfw3 REQUIRED)
 
 file(GLOB_RECURSE IMGUI  ${CMAKE_CURRENT_SOURCE_DIR}/external/include/imgui/*.cpp)
 
-add_executable(${PROJECT_NAME} src/main.cpp ${SOURCES} ${IMGUI} "src/utils/ui/custom_components.cpp" "src/utils/ui/custom_components.h")
+add_executable(${PROJECT_NAME} src/main.cpp ${SOURCES} ${IMGUI})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/include)
-target_link_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/lib)
 
-target_link_libraries(${PROJECT_NAME} spdlog::spdlog  ZLIB::ZLIB glfw3_mt OpenGl32 )
+target_link_libraries(${PROJECT_NAME} spdlog::spdlog ZLIB::ZLIB glfw OpenGl32 )
