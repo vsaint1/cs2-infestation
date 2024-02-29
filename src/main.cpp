@@ -28,8 +28,12 @@ int main(int, char **) {
     MessageBox(0, "Failed while trying to initialize modules", "Error", MB_ICONERROR);
   }
 
+  const auto entity_list = EntityList::get();
+
   while (!manager.should_close()) {
 
+    entity_list->update();
+    
     if (WindowManager::key_state(manager.m_window, GLFW_KEY_END) & 1)
       exit(0);
 
@@ -50,6 +54,9 @@ int main(int, char **) {
     misc::bomb_timer();
 
     esp::render();
+
+    if (settings::misc::performance)
+      manager.performance_metrics();
 
     ImGui::GetBackgroundDrawList()->AddCircle(ImVec2(width / 2, height / 2 - 25), 60, ImColor(255, 255, 255, 255), 100);
 
