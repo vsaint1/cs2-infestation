@@ -50,7 +50,7 @@ void esp::render() {
 
     if (entity.type == EntityType::WEAPON) {
 
-      static auto weapon_str = clazz_name.erase(clazz_name.find("weapon_"), 7).c_str();
+      auto weapon_str = clazz_name.erase(clazz_name.find("weapon_"), 7).c_str();
 
       if (settings::world::weapon_icon)
         draw::icon_esp(ImGui::GetIO().Fonts->Fonts[1], clazz_name.substr(7).c_str(), screen_pos, ImColor(255, 255, 255, 255));
@@ -64,7 +64,7 @@ void esp::render() {
 
     if (entity.type == EntityType::GRENADE) {
 
-      static auto grenade_str = clazz_name.erase(clazz_name.find("_projectile"), 11).c_str();
+      auto grenade_str = clazz_name.erase(clazz_name.find("_projectile"), 11).c_str();
 
       const auto tick_begin = strcmp("smokegrenade", grenade_str) == 0 ? memory.readv<bool>(entity.pawn + offsets::C_SmokeGrenadeProjectile::m_nSmokeEffectTickBegin)
                                                                        : memory.readv<bool>(entity.pawn + offsets::C_BaseCSGrenadeProjectile::m_bExplodeEffectBegan);
@@ -194,7 +194,7 @@ void esp::_player() {
 
     float distance = e_position.distance(local_pos) / 100;
 
-    static auto weapon_str = weap_name.erase(weap_name.find("weapon_"), 7).c_str();
+    auto weapon_str = weap_name.erase(weap_name.find("weapon_"), 7).c_str();
 
     if (settings::visuals::player_weapon)
       draw::icon_esp(ImGui::GetIO().Fonts->Fonts[1], weapon_str, screen_pos, settings::colors::player_weapon);
