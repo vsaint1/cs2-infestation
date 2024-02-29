@@ -24,7 +24,7 @@ void show_menu(GLFWwindow *window) {
 
   component::create_style();
   ImGui::SetNextWindowSize(ImVec2(500.0f, 400.0f), ImGuiCond_Once);
-  ImGui::Begin(("Infestation - 1.5.0"), &settings::show_menu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
+  ImGui::Begin(("Infestation"), &settings::show_menu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
 
   ImGui::BeginTabBar(("##tabs"), ImGuiTabBarFlags_None);
   ImGui::SetCursorPos(ImVec2(ImGui::GetWindowSize().x / 2 - 100, 50));

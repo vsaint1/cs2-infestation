@@ -50,7 +50,7 @@ void esp::render() {
 
     if (entity.type == EntityType::WEAPON) {
 
-      auto weapon_str = clazz_name.erase(clazz_name.find("weapon_"), 7).c_str();
+      const auto weapon_str = clazz_name.substr(7).c_str();
 
       if (settings::world::weapon_icon)
         draw::icon_esp(ImGui::GetIO().Fonts->Fonts[1], clazz_name.substr(7).c_str(), screen_pos, ImColor(255, 255, 255, 255));
@@ -64,7 +64,7 @@ void esp::render() {
 
     if (entity.type == EntityType::GRENADE) {
 
-      auto grenade_str = clazz_name.erase(clazz_name.find("_projectile"), 11).c_str();
+      const auto grenade_str = clazz_name.erase(clazz_name.find("_projectile"), 11).c_str();
 
       const auto tick_begin = strcmp("smokegrenade", grenade_str) == 0 ? memory.readv<bool>(entity.pawn + offsets::C_SmokeGrenadeProjectile::m_nSmokeEffectTickBegin)
                                                                        : memory.readv<bool>(entity.pawn + offsets::C_BaseCSGrenadeProjectile::m_bExplodeEffectBegan);
@@ -174,9 +174,12 @@ void esp::_player() {
     auto des_name = memory.readv<uintptr_t>(entity_identity + offsets::CEntityIdentity::m_designerName);
 
     std::string weap_name = memory.read_str(des_name);
+    if (weap_name.empty())
+      continue;
 
     std::string e_name = memory.read_str(player + offsets::CBasePlayerController::m_iszPlayerName);
-
+   if (e_name.empty())
+      continue;
     bool e_spotted = memory.readv<bool>(pcs_pawn + offsets::C_CSPlayerPawn::m_entitySpottedState + offsets::EntitySpottedState_t::m_bSpottedByMask);
 
     // CSkeletonInstance
@@ -194,13 +197,13 @@ void esp::_player() {
 
     float distance = e_position.distance(local_pos) / 100;
 
-    auto weapon_str = weap_name.erase(weap_name.find("weapon_"), 7).c_str();
+    const auto weapon_str = weap_name.erase(weap_name.find("weapon_"), 7).c_str();
 
     if (settings::visuals::player_weapon)
       draw::icon_esp(ImGui::GetIO().Fonts->Fonts[1], weapon_str, screen_pos, settings::colors::player_weapon);
 
     if (settings::visuals::player_name)
-      draw::text(e_name.c_str(), ImVec2(screen_pos.x, screen_pos.y -5), settings::colors::player_name);
+      draw::text(e_name.c_str(), ImVec2(screen_pos.x, screen_pos.y - 5), settings::colors::player_name);
 
     if (settings::visuals::player_distance)
       draw::distance_a(ImVec2(screen_pos.x, screen_pos.y), distance, settings::colors::player_distance);

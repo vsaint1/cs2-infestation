@@ -19,12 +19,12 @@ inline int width = ww;
 inline int height = wh;
 
 namespace offsets {
-constexpr std::ptrdiff_t dwEntityList = 0x18B3FA8;
+constexpr std::ptrdiff_t dwEntityList = 0x18BBAF8;
 constexpr std::ptrdiff_t dwGameEntitySystem_getHighestEntityIndex = 0x1510;
-constexpr std::ptrdiff_t dwLocalPlayerPawn = 0x1729348;
-constexpr std::ptrdiff_t dwPlantedC4 = 0x191B508;
-constexpr std::ptrdiff_t dwGlobalVars = 0x171CE70;
-constexpr std::ptrdiff_t dwViewMatrix = 0x19154C0;
+constexpr std::ptrdiff_t dwLocalPlayerPawn = 0x1730118;
+constexpr std::ptrdiff_t dwPlantedC4 = 0x1921858;
+constexpr std::ptrdiff_t dwGlobalVars = 0x1723B10;
+constexpr std::ptrdiff_t dwViewMatrix = 0x191CF30;
 
 namespace CBasePlayerController {                             // C_BaseEntity
 constexpr std::ptrdiff_t m_nFinalPredictedTick = 0x558;       // int32_t
