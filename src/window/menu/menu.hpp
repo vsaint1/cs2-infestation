@@ -23,7 +23,7 @@ void show_menu(GLFWwindow *window) {
   glfwSetWindowAttrib(window, GLFW_MOUSE_PASSTHROUGH, GLFW_FALSE);
 
   component::create_style();
-  ImGui::SetNextWindowSize(ImVec2(500.0f, 350.0f), ImGuiCond_Once);
+  ImGui::SetNextWindowSize(ImVec2(500.0f, 400.0f), ImGuiCond_Once);
   ImGui::Begin(("Infestation - 1.5.0"), &settings::show_menu, ImGuiWindowFlags_::ImGuiWindowFlags_NoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse);
 
   ImGui::BeginTabBar(("##tabs"), ImGuiTabBarFlags_None);
@@ -46,6 +46,12 @@ void show_menu(GLFWwindow *window) {
     ImGui::Text("Player");
     ImGui::Checkbox("Enabled", &settings::visuals::player_esp);
     component::set_helper("Enable/Disable ESP");
+    ImGui::Checkbox("Player name", &settings::visuals::player_name);
+    component::set_helper("Draw player name");
+    ImGui::Checkbox("SnapLines", &settings::visuals::player_snaplines);
+    component::set_helper("Draw line to player");
+    ImGui::Checkbox("Distance", &settings::visuals::player_distance);
+    component::set_helper("Draw player distance");
 
     ImGui::NextColumn();
 
@@ -82,17 +88,15 @@ void show_menu(GLFWwindow *window) {
         component::set_helper("Grenade projectile name");
         ImGui::Checkbox("Grenade Distance", &settings::world::grenade_distance);
         component::set_helper("Grenade projectile distance");
-        ImGui::Checkbox("Grenade Molotov", &settings::world::grenade_inferno_esp);
-        component::set_helper("Grenade molotov's on group, may cause slowness to update ESP", ImColor(211, 67, 18, 255), '!');
 
         if (settings::misc::experimental_features) {
-
-          ImGui::Checkbox("Grenade Timer", &settings::world::grenade_timer);
-          component::set_helper("This is experimental feature", ImColor(211, 67, 18, 255), '!');
 
           ImGui::Checkbox("Grenade Trajectory", &settings::world::grenade_trajectory);
           component::set_helper("This is experimental feature", ImColor(211, 67, 18, 255), '!');
           component::color_picker("##nade_trail", settings::colors::grenade_trails);
+
+          ImGui::Checkbox("Grenade Molotov", &settings::world::grenade_inferno_esp);
+          component::set_helper("Grenade molotov's on group", ImColor(211, 67, 18, 255), '!');
         }
       }
     }
@@ -103,6 +107,9 @@ void show_menu(GLFWwindow *window) {
   ImGui::SetNextItemWidth(100);
 
   if (ImGui::BeginTabItem("Misc")) {
+
+    ImGui::Checkbox("Performance Metrics", &settings::misc::performance);
+    component::set_helper("Enable/Disable performance metrics");
 
     ImGui::Checkbox("Bomb-Timer", &settings::misc::bomb_timer);
     component::set_helper("Enable/Disable C4 timer");
