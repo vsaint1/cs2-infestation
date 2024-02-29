@@ -19,20 +19,20 @@ void draw::text(const char *text, ImVec2 pos, ImColor color, float font_size) {
   ImGui::GetForegroundDrawList()->AddText(text_pos, color, text);
 }
 
-void draw::distance(ImVec2 pos, float distance, ImColor color) {
+void draw::distance(ImVec2 pos, float &distance, ImColor color) {
   std::string distance_str = std::to_string(static_cast<int32_t>(distance)) + "m";
   ImVec2 t_size = ImGui::CalcTextSize(distance_str.c_str());
   ImGui::GetBackgroundDrawList()->AddText(ImVec2(pos.x - t_size.x * 0.5f, pos.y - t_size.y * 0.5f + 7), color, distance_str.c_str());
 }
 
-void draw::distance_a(ImVec2 pos, float distance, ImColor color) {
+void draw::distance_a(ImVec2 pos, float &distance, ImColor color) {
   std::string distance_str = std::to_string(static_cast<int32_t>(distance)) + "m";
   ImVec2 t_size = ImGui::CalcTextSize(distance_str.c_str());
 
-  draw::text(distance_str.c_str(), ImVec2(pos.x - t_size.x * 0.5f, pos.y - t_size.y * 0.5f + 7), color);
+  draw::text(distance_str.c_str(), ImVec2(pos.x - t_size.x * 0.5f + 5, pos.y - t_size.y * 0.5f + 10), color);
 }
 
-void draw::grenade_esp(ImFont *font, const char *text, float distance, ImVec2 center, ImColor color, float font_size) {
+void draw::grenade_esp(ImFont *font, const char *text, float &distance, ImVec2 center, ImColor color, float font_size) {
 
   ImVec2 text_size = ImGui::CalcTextSize(text);
 
@@ -85,22 +85,23 @@ void draw::icon_esp(ImFont *font, const char *text, Vector3 pos, ImColor color, 
   ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(pos.x - text_size.x / 2, pos.y - text_size.y / 2 - 15), color, gun_icon(text));
 }
 
-void draw::path(Vector3 pos) {
-    static Vector3 last_trail_position; 
-    static std::vector<Vector3> trail_positions;
-    
-    if (pos != last_trail_position) {
-        trail_positions.push_back(pos);
-        last_trail_position = pos; 
-    }
+void draw::snaplines(Vector3 &screen_pos, ImColor color) { ImGui::GetBackgroundDrawList()->AddLine({screen_pos.x, screen_pos.y}, ImVec2(width / 2, height), color); }
 
-    for (size_t i = 1; i < trail_positions.size(); ++i) {
-        ImVec2 p1 = ImVec2(trail_positions[i - 1].x, trail_positions[i - 1].y);
-        ImVec2 p2 = ImVec2(trail_positions[i].x, trail_positions[i].y);
-        ImGui::GetForegroundDrawList()->AddLine(p1, p2, IM_COL32(255, 255, 255, 255), 2.0f);
-    }
+void draw::path(Vector3 &pos, int idx, bool tick_begin) {
+  if (tick_begin)
+    return;
 
-    if (trail_positions.size() > MAX_NUM_SEGMENTS)
-        trail_positions.erase(trail_positions.begin());
+  static std::map<int, std::vector<Vector3>> trail_positions;
 
+  trail_positions[idx].push_back(pos);
+
+  for (size_t i = 0; i < trail_positions[idx].size() - 1; ++i) {
+    ImVec2 p1 = ImVec2(trail_positions[idx][i].x, trail_positions[idx][i].y);
+    ImVec2 p2 = ImVec2(trail_positions[idx][i + 1].x, trail_positions[idx][i + 1].y);
+    ImGui::GetForegroundDrawList()->AddLine(p1, p2, IM_COL32(255, 255, 255, 255), 2.0f);
+  }
+
+  if (trail_positions[idx].size() > MAX_NUM_SEGMENTS) {
+    trail_positions[idx].erase(trail_positions[idx].begin());
+  }
 }
