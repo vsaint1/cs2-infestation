@@ -132,13 +132,21 @@ bool Memory::running_as_admin() {
 bool Memory::attach() {
   const auto pid = this->get_process_id(GAME_NAME);
 
+#if _DEBUG
   if (!this->running_as_admin())
     SPDLOG_WARN("Running without ROOT privileges");
+#else
+  if (!this->running_as_admin()) {
+    char buffer[64];
+    snprintf(buffer, sizeof(buffer), "Failed to attach on PROCESS_NAMEE[%s], please run as ADMIN", GAME_NAME);
+    MessageBoxA(0, buffer, "Error", MB_OK | MB_ICONERROR);
+    exit(EXIT_FAILURE);
+  }
+#endif
 
   if (!pid.has_value()) {
     SPDLOG_ERROR("Failed to attach on PROCESS_NAME: {}, isn't running.", GAME_NAME);
 
-    // TODO: change to SDL SDL_ShowSimpleMessageBox
     char buffer[64];
     snprintf(buffer, sizeof(buffer), "Failed to launch, the PROCESS_NAME[%s] isnt running.", GAME_NAME);
     MessageBoxA(0, buffer, "Error", MB_OK | MB_ICONERROR);
@@ -243,16 +251,16 @@ std::pair<std::optional<uintptr_t>, std::optional<uintptr_t>> Memory::get_module
 
 std::string Memory::read_str(uintptr_t address) noexcept {
   static const int length = 64;
-			std::vector<char> buffer(length);
+  std::vector<char> buffer(length);
 
-			this->read_raw(reinterpret_cast<void*>(address), buffer.data(), length);
+  this->read_raw(reinterpret_cast<void *>(address), buffer.data(), length);
 
-			const auto& it = find(buffer.begin(), buffer.end(), '\0');
+  const auto &it = find(buffer.begin(), buffer.end(), '\0');
 
-			if (it != buffer.end())
-				buffer.resize(distance(buffer.begin(), it));
+  if (it != buffer.end())
+    buffer.resize(distance(buffer.begin(), it));
 
-			return std::string(buffer.begin(), buffer.end());
+  return std::string(buffer.begin(), buffer.end());
 }
 
 bool Memory::readv(uintptr_t address, void *buffer, uintptr_t size) {

@@ -4,12 +4,12 @@ void misc::bomb_timer() {
   if (!settings::misc::bomb_timer)
     return;
 
-  global_vars = memory.readv<GlobalVarsBase>(memory.readv<uintptr_t>(client + offsets::dwGlobalVars));
+  auto global_vars = memory.readv<GlobalVarsBase>(memory.readv<uintptr_t>(g_global_vars));
 
-  auto temp_c4 = memory.readv<uintptr_t>(client + offsets::dwPlantedC4);
+  auto temp_c4 = memory.readv<uintptr_t>(c4_planted);
   auto plantedC4 = memory.readv<uintptr_t>(temp_c4);
 
-  auto bombplanted = memory.readv<bool>(client + offsets::dwPlantedC4 - 0x8);
+  auto bombplanted = memory.readv<bool>(c4_planted - 0x8);
 
   if (!bombplanted)
     draw::text("Waiting Bomb", ImVec2(40, 700), settings::colors::bomb_timer);

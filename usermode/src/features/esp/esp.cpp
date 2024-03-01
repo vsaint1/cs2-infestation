@@ -41,7 +41,7 @@ void esp::render() {
     if (screen_pos.z < 0.001f)
       continue;
 
-    float dist = memory.readv<Vector3>(local_player + offsets::C_BasePlayerPawn::m_vOldOrigin).distance(abs_origin) / 100;
+    float dist = abs_origin.distance(memory.readv<Vector3>(local_player + offsets::CGameSceneNode::m_vecOrigin)) / 100;
 
     auto clazz_name = memory.read_str(designer_name);
 
@@ -66,6 +66,9 @@ void esp::render() {
 
       const auto grenade_str = clazz_name.erase(clazz_name.find("_projectile"), 11).c_str();
 
+      if (!strcmp(grenade_str, "decoy"))
+        continue;
+
       const auto tick_begin = strcmp("smokegrenade", grenade_str) == 0 ? memory.readv<bool>(entity.pawn + offsets::C_SmokeGrenadeProjectile::m_nSmokeEffectTickBegin)
                                                                        : memory.readv<bool>(entity.pawn + offsets::C_BaseCSGrenadeProjectile::m_bExplodeEffectBegan);
 
@@ -89,17 +92,17 @@ void esp::_inferno(const BaseEntity &ent) {
 
   Vector3 abs_origin = memory.readv<Vector3>(node + offsets::CGameSceneNode::m_vecOrigin);
 
-  if (!abs_origin.is_zero()) {
+  if (abs_origin.is_zero())
+    return;
 
-    Vector3 screen_pos = abs_origin.world_to_screen(local_viewmatrix);
+  Vector3 screen_pos = abs_origin.world_to_screen(local_viewmatrix);
 
-    if (screen_pos.z < 0.001f)
-      return;
+  if (screen_pos.z < 0.001f)
+    return;
 
-    float dist = memory.readv<Vector3>(local_player + offsets::C_BasePlayerPawn::m_vOldOrigin).distance(abs_origin) / 100;
+  float dist = memory.readv<Vector3>(local_player + offsets::C_BasePlayerPawn::m_vOldOrigin).distance(abs_origin) / 100;
 
-    draw::grenade_esp(ImGui::GetIO().Fonts->Fonts[1], "molotov", dist, ImVec2(screen_pos.x, screen_pos.y), ImColor(255, 255, 255, 255), 20.0f);
-  }
+  draw::grenade_esp(ImGui::GetIO().Fonts->Fonts[1], "molotov", dist, ImVec2(screen_pos.x, screen_pos.y), ImColor(255, 255, 255, 255), 20.0f);
 }
 
 void esp::_chicken(const BaseEntity &ent) {
@@ -178,7 +181,7 @@ void esp::_player() {
       continue;
 
     std::string e_name = memory.read_str(player + offsets::CBasePlayerController::m_iszPlayerName);
-   if (e_name.empty())
+    if (e_name.empty())
       continue;
     bool e_spotted = memory.readv<bool>(pcs_pawn + offsets::C_CSPlayerPawn::m_entitySpottedState + offsets::EntitySpottedState_t::m_bSpottedByMask);
 
@@ -189,6 +192,9 @@ void esp::_player() {
 #if _DEBUG
     SPDLOG_INFO("NAME {} HEALTH {} WEAPON {} TEAM{}", e_name, e_health, weap_name, e_team);
 #endif
+
+    if (e_position.is_zero())
+      continue;
 
     Vector3 screen_pos = e_position.world_to_screen(local_viewmatrix);
 

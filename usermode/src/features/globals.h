@@ -15,6 +15,8 @@ inline uintptr_t client;
 
 inline ViewMatrix local_viewmatrix;
 
+inline uintptr_t c4_planted;
+
 inline int width = ww;
 inline int height = wh;
 
@@ -193,8 +195,8 @@ namespace visuals {
 namespace misc {
 	inline bool experimental_features = false;
 	inline bool bomb_timer = false;
-	inline bool team_check = false;
-    inline bool performance = false;
+	inline bool team_check = true;
+    inline bool performance = true;
 };
 
 namespace world {

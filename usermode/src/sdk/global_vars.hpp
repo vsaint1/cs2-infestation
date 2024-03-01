@@ -39,6 +39,6 @@ public:
 }; //Size: 0x02D0
 static_assert(sizeof(GlobalVarsBase) == 0x2D0);
 
-inline GlobalVarsBase global_vars{};
+inline uintptr_t g_global_vars{};
 
 #endif // SDK_GLOBAL_VARS_HPP_

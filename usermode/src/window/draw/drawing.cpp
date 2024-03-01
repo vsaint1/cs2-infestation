@@ -19,20 +19,20 @@ void draw::text(const char *text, ImVec2 pos, ImColor color, float font_size) {
   ImGui::GetForegroundDrawList()->AddText(text_pos, color, text);
 }
 
-void draw::distance(ImVec2 pos, float &distance, ImColor color) {
+void draw::distance(ImVec2 pos, float distance, ImColor color) {
   std::string distance_str = std::to_string(static_cast<int32_t>(distance)) + "m";
   ImVec2 t_size = ImGui::CalcTextSize(distance_str.c_str());
   ImGui::GetBackgroundDrawList()->AddText(ImVec2(pos.x - t_size.x * 0.5f, pos.y - t_size.y * 0.5f + 7), color, distance_str.c_str());
 }
 
-void draw::distance_a(ImVec2 pos, float &distance, ImColor color) {
+void draw::distance_a(ImVec2 pos, float distance, ImColor color) {
   std::string distance_str = std::to_string(static_cast<int32_t>(distance)) + "m";
   ImVec2 t_size = ImGui::CalcTextSize(distance_str.c_str());
 
   draw::text(distance_str.c_str(), ImVec2(pos.x - t_size.x * 0.5f + 5, pos.y - t_size.y * 0.5f + 10), color);
 }
 
-void draw::grenade_esp(ImFont *font, const char *text, float &distance, ImVec2 center, ImColor color, float font_size) {
+void draw::grenade_esp(ImFont *font, const char *text, float distance, ImVec2 center, ImColor color, float font_size) {
 
   ImVec2 text_size = ImGui::CalcTextSize(text);
 
@@ -67,7 +67,7 @@ void draw::grenade_esp(ImFont *font, const char *text, float &distance, ImVec2 c
 
     ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(center.x - text_size.x / 2 + 1 + 30, center.y - text_size.y / 2 + 1 - 10), ImColor(0, 0, 0, 255), gun_icon(text));
     ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(center.x - text_size.x / 2 + 30, center.y - text_size.y / 2 - 10), ImColor(255, 255, 255, 255), gun_icon(text));
-  } else if (!strcmp(text, "molotov")) {
+  }  else if (!strcmp(text, "molotov")) {
     ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(center.x - text_size.x / 2 + 1 + 15, center.y - text_size.y / 2 + 1 - 13), ImColor(0, 0, 0, 255), gun_icon(text));
     ImGui::GetForegroundDrawList()->AddText(font, font_size, ImVec2(center.x - text_size.x / 2 + 15, center.y - text_size.y / 2 - 13), color, gun_icon(text));
 

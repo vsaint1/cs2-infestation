@@ -8,18 +8,23 @@
 
 int main(int, char **) {
 
+#if NDEBUG && WIN32
+  ShowWindow(GetConsoleWindow(), SW_HIDE);
+#else
+  // TODO: add to others platforms
+#endif
+
   memory.attach();
 
-  // refactor this
-  SPDLOG_INFO("PID {} \n", memory.get_pid());
   g_entity_list = memory.find_pattern("client.dll", "48 8B 0D ? ? ? ? 48 89 7C 24 ? 8B FA C1 EB")->rip().as<EntityList *>();
-
+  g_global_vars = memory.find_pattern("client.dll", "48 89 0D ? ? ? ? 48 89 41")->rip().get_address();
+  auto sig_vm = memory.find_pattern("client.dll", "48 8D 0D ? ? ? ? 48 C1 E0 06")->rip();
   auto local_pawn = memory.find_pattern("client.dll", "48 8D 05 ? ? ? ? C3 CC CC CC CC CC CC CC CC 48 83 EC ? 8B 0D")->rip().add(0x138);
-  SPDLOG_INFO("LOCAL_PLAYER: {:#04x}", local_pawn.get_address());
+  auto sig_bomb = memory.find_pattern("client.dll", "48 8B 15 ? ? ? ? FF C0 48 8D 4C 24 40")->rip();
+
   auto [address, size] = memory.get_module_info("client.dll");
   client = address.value();
-  local_player = memory.readv<uintptr_t>(local_pawn.get_address());
-  SPDLOG_INFO("MODULE_BASE: {}", address.value());
+  c4_planted = sig_bomb.get_address();
 
   static WindowManager manager;
 
@@ -28,16 +33,21 @@ int main(int, char **) {
     MessageBox(0, "Failed while trying to initialize modules", "Error", MB_ICONERROR);
   }
 
-  const auto entity_list = EntityList::get();
-
   while (!manager.should_close()) {
 
+    const auto entity_list = EntityList::get();
+    if (!entity_list)
+      continue;
+
+    if (!local_player)
+      local_player = memory.readv<uintptr_t>(local_pawn.get_address());
+
     entity_list->update();
-    
+
     if (WindowManager::key_state(manager.m_window, GLFW_KEY_END) & 1)
       exit(0);
 
-    local_viewmatrix = memory.readv<ViewMatrix>(client + offsets::dwViewMatrix);
+    local_viewmatrix = memory.readv<ViewMatrix>(sig_vm.get_address());
 
     manager.pool_events();
 
