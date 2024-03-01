@@ -27,6 +27,10 @@ Check the upcoming features, improvements and upgrades made to `infestation`.
 > [!WARNING]  
 > Run as admin the the following commands
 
+**SKIP IF DONT WANT TO USE WITH KERNEL DRIVER**
+> [!WARNING]  
+> Change the driver path to your 
+
 FLAGS
 
 DESCRIPTION | VALUE
@@ -41,9 +45,11 @@ $ git clone https://github.com/vsaint1/cs2-infestation.git
 
 # windows 
 
-$ ./windows_build.bat FLAGS
+$ ./windows_build.bat --FLAGS
 
-$ ./driver_build.bat FLAGS
+# change the driver path to your
+
+$ ./driver_build.bat --FLAGS
 
 # linux
 
