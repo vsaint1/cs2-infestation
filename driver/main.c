@@ -1,4 +1,3 @@
-#define _AMD64_
 #include "main.h"
 
 NTSTATUS driver_unload(PDRIVER_OBJECT driver_object) {
