@@ -1,4 +1,5 @@
-# INFESTATION [![master](https://github.com/vsaint1/cs2-infestation/actions/workflows/msbuild.yml/badge.svg?branch=discontinued)]()
+# INFESTATION ![Codecov](https://img.shields.io/codecov/c/github/vsaint1/cs2-infestation) ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/vsaint1/cs2-infestation)
+
 
 Infestation is an open source external Counter-Strike 2 read only kernel-level gameplay enhancer.
 - `Infestation` Project name
