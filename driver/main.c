@@ -1,9 +1,11 @@
-#include "main.h"
+#include "utils/main.h"
 
 NTSTATUS driver_unload(PDRIVER_OBJECT driver_object) {
   UNREFERENCED_PARAMETER(driver_object);
 
   printf("test driver unload");
+  return STATUS_SUCCESS;
+
 }
 
 NTSTATUS driver_entry(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_path) {
