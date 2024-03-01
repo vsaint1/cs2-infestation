@@ -1,4 +1,4 @@
-# INFESTATION [![master](https://github.com/vsaint1/cs2-infestation/actions/workflows/msbuild.yml/badge.svg?branch=master)]()
+# INFESTATION [![master](https://github.com/vsaint1/cs2-infestation/actions/workflows/msbuild.yml/badge.svg?branch=discontinued)]()
 
 Infestation is an open source external Counter-Strike 2 read only kernel-level gameplay enhancer.
 - `Infestation` Project name
@@ -16,19 +16,38 @@ Check the upcoming features, improvements and upgrades made to `infestation`.
 
 ## Requirements
 
+- [WDK   - Driver](https://learn.microsoft.com/windows-hardware/drivers/download-the-wdk)
 - [MSVC  - Compiler](https://visualstudio.microsoft.com/vs/features/cplusplus/)
 - [Conan - Dependency management](https://conan.io/center)
 - [Cmake - Build System](https://cmake.org/)
 
 ## Building from source
 
+> [!WARNING]  
+> Run as admin the the following commands
+
+FLAGS
+
+DESCRIPTION | VALUE
+
+- Release mode --release
+- Debug mode --debug
+
 ```bash
 # clone
-
 $ git clone https://github.com/vsaint1/cs2-infestation.git
 
-# run the script
-$ ./build.bat
+
+# windows 
+
+$ ./windows_build.bat FLAGS
+
+$ ./driver_build.bat FLAGS
+
+# linux
+
+$ ./linux_build.sh
+
 ```
 
 ## How to use ?
