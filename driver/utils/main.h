@@ -3,8 +3,8 @@
  *   All rights reserved.
  */
 #pragma once
-#include <ntdef.h>
-#include <ntifs.h>
+#include "defs.h"
+#include "process/process.h"
 #include "macros.h"
 
 NTSTATUS driver_entry(PDRIVER_OBJECT driver_object,PUNICODE_STRING registry_path);
