@@ -73,12 +73,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
     <OutDir>$(ProjectDir)..\bin\$(ConfigurationName)</OutDir>
-    <IntDir>$(ProjectDir)..\bin\$(ConfigurationName)</IntDir>
+    <IntDir>$(ProjectDir)..\bin\$(ConfigurationName)\intermediates</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
     <OutDir>$(ProjectDir)..\bin\$(ConfigurationName)</OutDir>
-    <IntDir>$(ProjectDir)..\bin\$(ConfigurationName)</IntDir>
+    <IntDir>$(ProjectDir)..\bin\$(ConfigurationName)\intermediates</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
@@ -93,6 +93,9 @@
     <Link>
       <EntryPointSymbol>driver_entry</EntryPointSymbol>
     </Link>
+    <ClCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DriverSign>
@@ -122,11 +125,14 @@
     <FilesToPackage Include="$(TargetPath)" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="process\process.h" />
+    <ClInclude Include="utils\defs.h" />
     <ClInclude Include="utils\macros.h" />
     <ClInclude Include="utils\main.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c" />
+    <ClCompile Include="process\process.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

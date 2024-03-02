@@ -30,9 +30,18 @@
     <ClInclude Include="utils\macros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="process\process.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="process\process.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
