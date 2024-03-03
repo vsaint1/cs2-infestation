@@ -7,6 +7,7 @@
 
 #include "../../features/globals.h"
 #include "../../utils/gun_icons.hpp"
+#include "../../sdk/player/player_controller.h"
 
 constexpr int MAX_NUM_SEGMENTS = 20;
 
@@ -19,6 +20,7 @@ void grenade_esp(ImFont *font, const char *text, float distance, ImVec2 center, 
 void icon_esp(ImFont *font,const char *text, Vector3 pos, ImColor color, float font_size = 13.0f);
 void snaplines(Vector3 &screen_pos, ImColor color);
 void path(Vector3 &pos,int idx,bool tick_begin);
+void skeleton(uintptr_t bonearray,bool visible);
 
 };     // namespace draw
 #endif // WINDOW_DRAW_DRAWING_HPP_

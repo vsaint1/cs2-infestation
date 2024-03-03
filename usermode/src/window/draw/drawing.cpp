@@ -105,3 +105,48 @@ void draw::path(Vector3 &pos, int idx, bool tick_begin) {
     trail_positions[idx].erase(trail_positions[idx].begin());
   }
 }
+
+void draw::skeleton(uintptr_t bonearray,bool visible){
+
+#if _DEBUG
+    for (int i = 0; i < 32; i++) {
+       auto bone = PlayerController::get_bone_pos_2d(bonearray,i);
+
+        std::string number = std::to_string(i);
+        ImVec2 TextSize = ImGui::CalcTextSize(number.c_str());
+        ImGui::GetForegroundDrawList()->AddText(ImVec2(bone.x - TextSize.x / 2, bone.y - TextSize.y / 2), ImColor(255, 255, 255, 255), number.c_str());
+
+    }
+#else
+
+   Vector3 head = PlayerController::get_bone_pos_2d(bonearray,EBone::Head);
+	Vector3 neck = PlayerController::get_bone_pos_2d(bonearray,EBone::Neck);
+	Vector3 right_shoulder = PlayerController::get_bone_pos_2d(bonearray,EBone::RightShoulder);
+	Vector3 left_shoulder = PlayerController::get_bone_pos_2d(bonearray,EBone::LeftShoulder);
+	Vector3 right_arm = PlayerController::get_bone_pos_2d(bonearray,EBone::RightArm);
+	Vector3 left_arm = PlayerController::get_bone_pos_2d(bonearray,EBone::LeftArm);
+	Vector3 right_hand = PlayerController::get_bone_pos_2d(bonearray,EBone::RightHand);
+	Vector3 left_hand = PlayerController::get_bone_pos_2d(bonearray,EBone::LeftHand);
+	Vector3 root = PlayerController::get_bone_pos_2d(bonearray,EBone::Root);
+	Vector3 right_knee = PlayerController::get_bone_pos_2d(bonearray,EBone::RightKnee);
+	Vector3 left_knee = PlayerController::get_bone_pos_2d(bonearray,EBone::LeftKnee);
+	Vector3 right_foot = PlayerController::get_bone_pos_2d(bonearray,EBone::RightFoot);
+	Vector3 left_foot = PlayerController::get_bone_pos_2d(bonearray,EBone::LeftFoot);
+
+    const constexpr int workaround = 25;
+
+	ImGui::GetBackgroundDrawList()->AddLine({ head.x, head.y - workaround }, { neck.x, neck.y - workaround }, visible ? settings::colors::skeleton_visible_color : settings::colors::skeleton_hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y - workaround }, { right_shoulder.x, right_shoulder.y - workaround }, visible ? settings::colors::skeleton_visible_color : settings::colors::skeleton_hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y - workaround }, { left_shoulder.x, left_shoulder.y - workaround }, visible ? settings::colors::skeleton_visible_color : settings::colors::skeleton_hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ right_shoulder.x, right_shoulder.y - workaround }, { right_arm.x, right_arm.y - workaround }, visible ? settings::colors::skeleton_visible_color : settings::colors::skeleton_hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ left_shoulder.x, left_shoulder.y - workaround }, { left_arm.x, left_arm.y - workaround }, visible ? settings::colors::skeleton_visible_color : settings::colors::skeleton_hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ right_arm.x, right_arm.y - workaround }, { right_hand.x, right_hand.y - workaround }, visible ? settings::colors::skeleton_visible_color : settings::colors::skeleton_hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ left_arm.x, left_arm.y - workaround }, { left_hand.x, left_hand.y - workaround }, visible ? settings::colors::skeleton_visible_color : settings::colors::skeleton_hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ neck.x, neck.y - workaround }, { root.x, root.y - workaround }, visible ? settings::colors::skeleton_visible_color : settings::colors::skeleton_hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ root.x, root.y - workaround }, { right_knee.x, right_knee.y - workaround }, visible ? settings::colors::skeleton_visible_color : settings::colors::skeleton_hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ root.x, root.y - workaround }, { left_knee.x, left_knee.y - workaround }, visible ? settings::colors::skeleton_visible_color : settings::colors::skeleton_hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ right_knee.x, right_knee.y - workaround }, { right_foot.x, right_foot.y - workaround }, visible ? settings::colors::skeleton_visible_color : settings::colors::skeleton_hidden_color);
+	ImGui::GetBackgroundDrawList()->AddLine({ left_knee.x, left_knee.y - workaround }, { left_foot.x, left_foot.y - workaround }, visible ? settings::colors::skeleton_visible_color : settings::colors::skeleton_hidden_color);
+#endif
+
+};
