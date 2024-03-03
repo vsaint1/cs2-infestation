@@ -51,6 +51,8 @@ void show_menu(GLFWwindow *window) {
         component::set_helper("Draw player current weapon");
         ImGui::Checkbox("Name", &settings::visuals::player_name);
         component::set_helper("Draw player name");
+        ImGui::Checkbox("Health", &settings::visuals::player_health);
+        component::set_helper("Draw player health");
         ImGui::Checkbox("SnapLines", &settings::visuals::player_snaplines);
         component::set_helper("Draw line to player");
         ImGui::Checkbox("Distance", &settings::visuals::player_distance);
