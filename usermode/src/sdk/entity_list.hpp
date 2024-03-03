@@ -8,6 +8,7 @@
 #include "../features/globals.h"
 #include "../memory/memory.hpp"
 #include "base_entity.hpp"
+#include "player/player_controller.h"
 
 class EntityList {
 
@@ -30,7 +31,7 @@ public:
     return memory.readv<T>(controller);
   }
 
-  const int max_entities() { return memory.readv<int>(this + offsets::dwGameEntitySystem_getHighestEntityIndex); }
+  int max_entities() { return memory.readv<int>(this + offsets::dwGameEntitySystem_getHighestEntityIndex); }
 
   const std::string get_schema_name(const uintptr_t &entity);
 };
