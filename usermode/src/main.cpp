@@ -16,13 +16,13 @@ int main(int, char **) {
 
   memory.attach();
 
-  g_entity_list = memory.find_pattern("client.dll", "48 8B 0D ? ? ? ? 48 89 7C 24 ? 8B FA C1 EB")->rip().as<EntityList *>();
-  g_global_vars = memory.find_pattern("client.dll", "48 89 0D ? ? ? ? 48 89 41")->rip().get_address();
-  auto sig_vm = memory.find_pattern("client.dll", "48 8D 0D ? ? ? ? 48 C1 E0 06")->rip();
-  auto local_pawn = memory.find_pattern("client.dll", "48 8D 05 ? ? ? ? C3 CC CC CC CC CC CC CC CC 48 83 EC ? 8B 0D")->rip().add(0x138);
-  auto sig_bomb = memory.find_pattern("client.dll", "48 8B 15 ? ? ? ? FF C0 48 8D 4C 24 40")->rip();
+  g_entity_list = memory.find_pattern(CLIENT_MODULE_NAME, "48 8B 0D ? ? ? ? 48 89 7C 24 ? 8B FA C1 EB")->rip().as<EntityList *>();
+  g_global_vars = memory.find_pattern(CLIENT_MODULE_NAME, "48 89 0D ? ? ? ? 48 89 41")->rip().get_address();
+  auto sig_vm = memory.find_pattern(CLIENT_MODULE_NAME, "48 8D 0D ? ? ? ? 48 C1 E0 06")->rip();
+  auto local_pawn = memory.find_pattern(CLIENT_MODULE_NAME, "48 8D 05 ? ? ? ? C3 CC CC CC CC CC CC CC CC 48 83 EC ? 8B 0D")->rip().add(0x138);
+  auto sig_bomb = memory.find_pattern(CLIENT_MODULE_NAME, "48 8B 15 ? ? ? ? FF C0 48 8D 4C 24 40")->rip();
 
-  auto [address, size] = memory.get_module_info("client.dll");
+  auto [address, size] = memory.get_module_info(CLIENT_MODULE_NAME);
   client = address.value();
   c4_planted = sig_bomb.get_address();
 
