@@ -23,7 +23,7 @@ Vector3 PlayerController::get_bone_pos_2d(uintptr_t &bonearray, int &bone_id) {
     return memory.readv<Vector3>(bonearray + bone_id * 32).world_to_screen(local_viewmatrix);
 }
 
-Vector3 PlayerController::get_bone_pos_2d(uintptr_t &bonearray, EBone bone) {
+Vector3 PlayerController::get_bone_pos_2d(uintptr_t bonearray, EBone bone) {
     return memory.readv<Vector3>(bonearray + static_cast<int>(bone) * 32).world_to_screen(local_viewmatrix);
 
 }

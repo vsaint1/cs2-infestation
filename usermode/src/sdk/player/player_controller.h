@@ -32,7 +32,7 @@ class PlayerController : public BaseEntity {
 public:
 
 
-    static Vector3 get_bone_pos_2d(uintptr_t &bonearray,EBone bone);
+    static Vector3 get_bone_pos_2d(uintptr_t bonearray,EBone bone);
 
     static Vector3 get_bone_pos_2d(uintptr_t &bonearray,int &bone_id);
 
