@@ -6,7 +6,7 @@
 #define FEATURES_ESP_WEAPON_H_
 #include "../../window/draw/drawing.hpp"
 #include "../../sdk/entity_list.hpp"
-#include "../../sdk/player_controller.hpp"
+#include "../../sdk/player/player_controller.h"
 #include "../globals.h"
 #include "../math.h"
 
@@ -18,9 +18,10 @@ void _inferno(const BaseEntity &ent);
 
 void _chicken(const BaseEntity &ent);
 
-void _player();
+void _player(const BaseEntity &ent);
 
 
 }; // namespace esp
+
 
 #endif // FEATURES_ESP_WEAPON_H_

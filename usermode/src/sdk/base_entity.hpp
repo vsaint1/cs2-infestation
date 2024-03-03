@@ -5,6 +5,7 @@
 #ifndef SDK_BASE_ENTITY_HPP_
 #define SDK_BASE_ENTITY_HPP_
 #include "../memory/memory.hpp"
+#include "../features/globals.h"
 
 
 enum EntityType : uint8_t {
