@@ -225,11 +225,16 @@ void esp::_player(const BaseEntity &ent) {
 
     const auto weapon_str = weap_name.erase(weap_name.find("weapon_"), 7).c_str();
 
+    Vector3 head_pos = PlayerController::get_bone_pos_2d(p_bonearray, EBone::Head);
+
+    float h = abs(screen_pos.y - head_pos.y);
+    float w = h / 2.0f;
+
     if (settings::visuals::player_weapon)
         draw::icon_esp(ImGui::GetIO().Fonts->Fonts[1], weapon_str, screen_pos, settings::colors::player_weapon);
 
     if (settings::visuals::player_name)
-        draw::text(e_name.c_str(), ImVec2(screen_pos.x, screen_pos.y - 5), settings::colors::player_name);
+        draw::text(e_name.c_str(), ImVec2(screen_pos.x,head_pos.y -25), settings::colors::player_name,15.0f);
 
     if (settings::visuals::player_distance)
         draw::distance_a(ImVec2(screen_pos.x, screen_pos.y), distance, settings::colors::player_distance);
@@ -239,5 +244,8 @@ void esp::_player(const BaseEntity &ent) {
 
     if (settings::visuals::player_skeleton)
         draw::skeleton(p_bonearray, visible);
+
+    if (settings::visuals::player_health)
+        draw::healthbar(screen_pos.x + 25, head_pos.y - 25, w, h, 2, e_health);
 }
 
