@@ -149,4 +149,29 @@ void draw::skeleton(uintptr_t bonearray,bool visible){
 	ImGui::GetBackgroundDrawList()->AddLine({ left_knee.x, left_knee.y - workaround }, { left_foot.x, left_foot.y - workaround }, visible ? settings::colors::skeleton_visible_color : settings::colors::skeleton_hidden_color);
 #endif
 
+}
+
+void draw::filled_rect(int x, int y, int w, int h, ImVec4 color) {
+
+    ImGui::GetForegroundDrawList()->AddRectFilled(ImVec2(x, y), ImVec2(x + w, y + h), ImGui::ColorConvertFloat4ToU32(color), 0, 0);
+}
+
+void draw::healthbar(int x, int y, int w, int h, int thick, int health) {
+
+    float dt = health / 100.0f;
+
+    ImVec4 color = ImVec4(ImLerp(255.0f, 0.f, dt), ImLerp(0.f, (health > 50 ? 165.0f : 0.0f), dt), 0.0f, 200);
+
+
+    std::string health_str = std::to_string(static_cast<int32_t>(health));
+
+    int health_h = (h * health) / 100;
+    int bar_y = y + h - health_h;
+
+    draw::filled_rect(x + (w / 2) - 25, y, thick, h, ImColor(0,0,0,255));
+    draw::filled_rect(x + (w / 2) - 25, bar_y, thick, health_h, color);
+
+    if (health < 100)
+        draw::text(health_str.c_str(), ImVec2(x + (w / 2) - 22, bar_y + 5), ImVec4(255, 255, 255, 255));
+
 };
