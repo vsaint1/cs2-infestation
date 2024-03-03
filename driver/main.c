@@ -12,7 +12,7 @@ NTSTATUS driver_entry(PDRIVER_OBJECT driver_object, PUNICODE_STRING registry_pat
 
   driver_object->DriverUnload = driver_unload;
 
-  if (DRIVER_RUNNING("FACEIT.sys") || DRIVER_RUNNING("gamersclub.sys") || DRIVER_RUNNING("bedaisy.sys") || DRIVER_RUNNING("vgk.sys") || ("EasyAntiCheat_EOS.sys")) {
+  if (DRIVER_RUNNING("FACEIT.sys") || DRIVER_RUNNING("gamersclub.sys") || DRIVER_RUNNING("bedaisy.sys") || DRIVER_RUNNING("vgk.sys") || DRIVER_RUNNING("EasyAntiCheat_EOS.sys")) {
     printf("Aborting AC driver found running ");
     return STATUS_ABANDONED;
   }
