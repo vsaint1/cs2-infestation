@@ -19,16 +19,13 @@ void EntityList::update() {
             continue;
 
 #if _DEBUG
-       // SPDLOG_INFO(fmt::format("CLASS_NAME {}, INDEX {}", schema_name, i));
+       SPDLOG_INFO(fmt::format("CLASS_NAME {}, INDEX {}", schema_name, i));
 #endif
 
         switch (hash_const_enhanced(schema_name.c_str())) {
-            case hash_const("CCSPlayerController"): {
-
+            case hash_const("CCSPlayerController"):
                 entities.emplace_back(BaseEntity(entity, i, EntityType::PLAYER));
                 break;
-
-            }
             case hash_const("C_HEGrenadeProjectile"):
             case hash_const("C_FlashbangProjectile"):
             case hash_const("C_SmokeGrenadeProjectile"):
@@ -61,7 +58,6 @@ void EntityList::update() {
                 entities.emplace_back(BaseEntity(entity, i, EntityType::INVALID));
                 break;
         }
-        continue;
 
     }
 }

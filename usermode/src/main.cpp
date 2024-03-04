@@ -1,7 +1,9 @@
 // Created by vsantos1 on 2/16/2024.
 //
+#include "features/aimbot/aimbot.h"
 #include "features/esp/esp.hpp"
 #include "features/misc/bomb.hpp"
+
 #include "sdk/entity_list.hpp"
 #include "window/menu/menu.hpp"
 
@@ -14,7 +16,6 @@ int main(int, char **) {
 #endif
 
   memory.attach();
-
   g_entity_list = memory.find_pattern(CLIENT_MODULE_NAME, "48 8B 0D ? ? ? ? 48 89 7C 24 ? 8B FA C1 EB")->rip().as<EntityList *>();
   g_global_vars = memory.find_pattern(CLIENT_MODULE_NAME, "48 89 0D ? ? ? ? 48 89 41")->rip().get_address();
   auto sig_vm = memory.find_pattern(CLIENT_MODULE_NAME, "48 8D 0D ? ? ? ? 48 C1 E0 06")->rip();
@@ -35,13 +36,13 @@ int main(int, char **) {
   while (!manager.should_close()) {
 
     const auto entity_list = EntityList::get();
+
     if (!entity_list)
       continue;
 
-    if (!local_player)
-      local_player = memory.readv<uintptr_t>(local_pawn.get_address());
-
     entity_list->update();
+
+    local_player = memory.readv<uintptr_t>(local_pawn.get_address());
 
     if (WindowManager::key_state(manager.m_window, GLFW_KEY_END) & 1)
       exit(0);
@@ -66,8 +67,6 @@ int main(int, char **) {
 
     if (settings::misc::performance)
       manager.performance_metrics();
-
-    ImGui::GetBackgroundDrawList()->AddCircle(ImVec2(width / 2, height / 2 - 25), 60, ImColor(255, 255, 255, 255), 100);
 
     manager.render();
   }
