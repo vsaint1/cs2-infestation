@@ -22,12 +22,12 @@ void esp::render() {
         if (entity.type == EntityType::CHICKEN && settings::world::chicken_esp)
             _chicken(entity);
 
-        const uintptr_t entity_identity = memory.readv<uintptr_t>(entity.pawn + offsets::CEntityInstance::m_pEntity);
+        const auto entity_identity = memory.readv<uintptr_t>(entity.pawn + offsets::CEntityInstance::m_pEntity);
 
         if (!entity_identity)
             continue;
 
-        const uintptr_t designer_name = memory.readv<uintptr_t>(
+        const auto designer_name = memory.readv<uintptr_t>(
                 entity_identity + offsets::CEntityIdentity::m_designerName);
 
         if (!designer_name)
@@ -141,13 +141,11 @@ void esp::_player(const BaseEntity &ent) {
     if (!local_player)
         return;
 
-    int local_index = 1;
-
     const auto entity_list = EntityList::get();
 
     auto player = entity_list->get<uintptr_t>(ent.nIdx);
 
-    if (!player)
+    if (player == 0)
         return;
 
     const auto h_pawn = memory.readv<std::uint32_t>(player + offsets::CCSPlayerController::m_hPlayerPawn);
@@ -159,10 +157,8 @@ void esp::_player(const BaseEntity &ent) {
 
     auto pcs_pawn = memory.readv<uintptr_t>(list_entry2 + 120 * (h_pawn & 0x1FF));
 
-    if (PlayerController::is_localplayer(pcs_pawn, local_player)) {
-        local_index = ent.nIdx;
+    if (pcs_pawn ==  local_player)
         return;
-    }
 
     auto local_pos = memory.readv<Vector3>(local_player + offsets::C_BasePlayerPawn::m_vOldOrigin);
 
@@ -177,7 +173,7 @@ void esp::_player(const BaseEntity &ent) {
 
     int e_team = memory.readv<int>(pcs_pawn + offsets::C_BaseEntity::m_iTeamNum);
 
-    if (settings::misc::team_check && PlayerController::same_team(local_team, e_team))
+    if (settings::misc::team_check && local_team == e_team)
         return;
 
     auto m_pclippingweapon = memory.readv<uintptr_t>(
@@ -203,14 +199,11 @@ void esp::_player(const BaseEntity &ent) {
     const auto p_bonearray = memory.readv<uintptr_t>(
             p_gamescene + offsets::CSkeletonInstance::m_modelState + offsets::CGameSceneNode::m_vecOrigin);
 
-
-    bool visible = e_spotted << local_index - 1;
-
     auto gun_immunity = memory.readv<bool>(pcs_pawn + offsets::C_CSPlayerPawnBase::m_bGunGameImmunity);
 
 #if _DEBUG
     SPDLOG_INFO("NAME {} HEALTH {} WEAPON {} TEAM {} GUN_IMMUNITY {} VISIBLE {} ", e_name, e_health, weap_name, e_team,
-                gun_immunity, visible);
+                gun_immunity, e_spotted);
 #endif
 
     if (e_position.is_zero())
@@ -223,7 +216,7 @@ void esp::_player(const BaseEntity &ent) {
 
     float distance = e_position.distance(local_pos) / 100;
 
-    const auto weapon_str = weap_name.erase(weap_name.find("weapon_"), 7).c_str();
+    const auto weapon_str = weap_name.erase(weap_name.find("weapon_"), 7);
 
     Vector3 head_pos = PlayerController::get_bone_pos_2d(p_bonearray, EBone::Head);
 
@@ -231,10 +224,10 @@ void esp::_player(const BaseEntity &ent) {
     float w = h / 2.0f;
 
     if (settings::visuals::player_weapon)
-        draw::icon_esp(ImGui::GetIO().Fonts->Fonts[1], weapon_str, screen_pos, settings::colors::player_weapon);
+        draw::icon_esp(ImGui::GetIO().Fonts->Fonts[1], weapon_str.c_str(), screen_pos, settings::colors::player_weapon);
 
     if (settings::visuals::player_name)
-        draw::text(e_name.c_str(), ImVec2(screen_pos.x,head_pos.y -25), settings::colors::player_name,15.0f);
+        draw::text(e_name.c_str(), ImVec2(screen_pos.x,head_pos.y -25), settings::colors::player_name);
 
     if (settings::visuals::player_distance)
         draw::distance_a(ImVec2(screen_pos.x, screen_pos.y), distance, settings::colors::player_distance);
@@ -243,9 +236,8 @@ void esp::_player(const BaseEntity &ent) {
         draw::snaplines(screen_pos, settings::colors::player_snaplines);
 
     if (settings::visuals::player_skeleton)
-        draw::skeleton(p_bonearray, visible);
+        draw::skeleton(p_bonearray, e_spotted << 0);
 
     if (settings::visuals::player_health)
         draw::healthbar(screen_pos.x + 25, head_pos.y - 25, w, h, 2, e_health);
 }
-

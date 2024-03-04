@@ -35,7 +35,12 @@ void show_menu(GLFWwindow *window) {
     if (ImGui::BeginTabItem(("Aimbot"))) {
         ImGui::Text("Aimbot");
         ImGui::Checkbox("Enabled", &settings::aimbot::aimbot);
-
+		ImGui::Checkbox("Visible Check", &settings::aimbot::visible_check);
+		component::set_helper("Enable/Disable Visible Check");
+		ImGui::SliderFloat("FOV", &settings::aimbot::fov, 0.f, 100.f, "%.0f");
+		component::set_helper("Aimbot FOV");
+		ImGui::Combo("Target", &settings::aimbot::selectedhitbox, settings::aimbot::hitbox, IM_ARRAYSIZE(settings::aimbot::hitbox));
+		ImGui::SliderInt("Smooth", &settings::aimbot::smooth, 0, 10, "%d");
         ImGui::EndTabItem();
     }
 

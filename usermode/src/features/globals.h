@@ -181,6 +181,12 @@ namespace settings {
 
     namespace aimbot {
         inline bool aimbot = false;
+        inline bool visible_check =false;
+        inline float fov = 10.0f;
+        inline int smooth = 0;
+        inline int selectedhitbox = 0;
+		inline const char* hitbox[] = { ("Head"), ("Neck"),("Chest"),("Pelvis"),("Automatic")};
+
     };
 
     namespace visuals {
