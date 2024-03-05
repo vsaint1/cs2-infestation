@@ -45,3 +45,11 @@
 - [x] Grenade Trajectory **EXPERIMENTAL**
 
 <img src="examples/version_2_0_0.png" alt="v2">
+
+
+# 2.5.0 **STABLE VERSION**
+
+- [x] Fixed player ESP crash
+- [x] Reverted entity_list reading
+
+<img src="examples/version_2_5_0.png" alt="v2">

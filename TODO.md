@@ -11,8 +11,8 @@
 **obs: the following LIST isn't ordered**
 - [ ] Aimbot
 - [ ] Triggerbot
-- [ ] ESP
-- [ ] Misc
+- [x] ESP
+- [x] Misc
 - [ ] Config System
 - [ ] Improve handling Errors and Crashes
 - [ ] Kernel mode
