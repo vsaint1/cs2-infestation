@@ -4,8 +4,6 @@
  */
 #include "player_controller.h"
 
-#include <utility>
-
 
 bool PlayerController::same_team(int local_team, int enemy_team) {
     return local_team == enemy_team;
