@@ -18,7 +18,7 @@ void _inferno(const BaseEntity &ent);
 
 void _chicken(const BaseEntity &ent);
 
-void _player(const BaseEntity &ent);
+void _player(const PlayerController &player_controller);
 
 
 }; // namespace esp
