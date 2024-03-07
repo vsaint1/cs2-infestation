@@ -9,18 +9,31 @@
 #include "../globals.h"
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <random>
+#include <string>
 
-#define FOLDER "C:/Documents/infestation-cfg/"
+#if _WIN32
+#define USERNAME getenv("USERPROFILE")
+#else
+#define USERNAME getenv("HOME")
+#endif
 
 class ConfigSystem {
 
 public:
 
-bool create(const char* file_name);
+bool create();
+
+std::vector<std::string> get_files();
+
+void load(const std::string file_name);
 
 private:
 
 nlohmann::json to_json();
+
+
+std::string generate_file_name(int len);
 
 };
 
