@@ -18,10 +18,6 @@ void EntityList::update() {
     if (schema_name.empty())
       continue;
 
-#if _DEBUG
-      SPDLOG_INFO(fmt::format("CLASS_NAME {}, INDEX {}", schema_name, i));
-#endif
-
     switch (hash_const_enhanced(schema_name.c_str())) {
     case hash_const("CCSPlayerController"):
       entities.emplace_back(BaseEntity(entity, i, EntityType::PLAYER));
