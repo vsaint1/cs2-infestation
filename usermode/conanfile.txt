@@ -2,6 +2,7 @@
 zlib/1.2.11
 spdlog/1.13.0
 glfw/3.4
+nlohmann_json/3.11.3
 
 [generators]
 CMakeDeps

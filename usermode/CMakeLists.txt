@@ -22,6 +22,7 @@ endif ()
 find_package(ZLIB REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(glfw3 REQUIRED)
+find_package(nlohmann_json)
 
 file(GLOB_RECURSE IMGUI  ${CMAKE_CURRENT_SOURCE_DIR}/external/include/imgui/*.cpp)
 
@@ -29,4 +30,4 @@ add_executable(${PROJECT_NAME} src/main.cpp ${SOURCES} ${IMGUI})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/include)
 
-target_link_libraries(${PROJECT_NAME} spdlog::spdlog ZLIB::ZLIB glfw OpenGl32 )
+target_link_libraries(${PROJECT_NAME} spdlog::spdlog ZLIB::ZLIB glfw OpenGl32 nlohmann_json::nlohmann_json)
