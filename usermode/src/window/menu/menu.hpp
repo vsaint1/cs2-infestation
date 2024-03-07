@@ -155,15 +155,19 @@ void show_menu(GLFWwindow *window) {
         ImGui::Spacing();
         ImGui::Separator();
 
-        if (ImGui::Selectable(config.get_files()[i].c_str())) {
+        if (ImGui::Selectable(config.get_files()[i].c_str(), selected_config == i)) {
+          ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.59f, 0.0f, 0.0f, 1.0f));
+          ImGui::PushStyleColor(ImGuiCol_TextSelectedBg, ImVec4(1.0f, 0.23f, 0.29f, 1.00f));
+          ImGui::PopStyleColor(2);
           selected_config = i;
         }
+      
       }
 
       if (ImGui::Button("Load", ImVec2(100, 0))) {
 
         std::string file_name = config.get_files()[selected_config];
-        
+
         SPDLOG_INFO("Loading config: {}", file_name);
         config.load(file_name);
       }
