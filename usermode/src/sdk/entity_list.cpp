@@ -19,7 +19,7 @@ void EntityList::update() {
       continue;
 
 #if _DEBUG
-      // SPDLOG_INFO(fmt::format("CLASS_NAME {}, INDEX {}", schema_name, i));
+      SPDLOG_INFO(fmt::format("CLASS_NAME {}, INDEX {}", schema_name, i));
 #endif
 
     switch (hash_const_enhanced(schema_name.c_str())) {
