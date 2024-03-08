@@ -29,7 +29,6 @@ std::vector<std::string> ConfigSystem::get_files() {
 
   std::filesystem::path PATH = std::filesystem::path(USERNAME) / "Documents" / "infestation-cfg/";
 
-
   if (!std::filesystem::exists(PATH))
     return std::vector<std::string>();
 
@@ -131,7 +130,6 @@ void ConfigSystem::load(const std::string file_name) {
   settings::visuals::player_snaplines = j["visuals"]["player_snaplines"];
   settings::visuals::player_skeleton = j["visuals"]["player_skeleton"];
 
-
   settings::world::esp = j["visuals"]["world"];
   settings::world::chicken_esp = j["visuals"]["chicken_esp"];
 
@@ -152,6 +150,25 @@ void ConfigSystem::load(const std::string file_name) {
   settings::misc::bomb_timer = j["misc"]["bomb_timer"];
   settings::misc::team_check = j["misc"]["team_check"];
 
-
   file.close();
+}
+
+void ConfigSystem::override(const std::string file_name) {
+  std::filesystem::path PATH = std::filesystem::path(USERNAME) / "Documents" / "infestation-cfg" / file_name;
+
+  std::string file_path = PATH.string();
+
+  std::ofstream file(file_path);
+
+  file.clear();
+  file << this->to_json();
+  file.close();
+}
+
+void ConfigSystem::remove(const std::string file_name) {
+  std::filesystem::path PATH = std::filesystem::path(USERNAME) / "Documents" / "infestation-cfg" / file_name;
+
+  if (std::filesystem::exists(PATH))
+    std::filesystem::remove(PATH);
+    
 }
