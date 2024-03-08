@@ -28,10 +28,13 @@ std::vector<std::string> get_files();
 
 void load(const std::string file_name);
 
+void override(const std::string file_name);
+
+void remove(const std::string file_name);
+
 private:
 
 nlohmann::json to_json();
-
 
 std::string generate_file_name(int len);
 
