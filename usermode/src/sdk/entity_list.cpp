@@ -22,7 +22,7 @@ void EntityList::update() {
     case hash_const("CCSPlayerController"):
       entities.emplace_back(BaseEntity(entity, i, EntityType::PLAYER));
       break;
-      
+
     case hash_const("C_HEGrenadeProjectile"):
     case hash_const("C_FlashbangProjectile"):
     case hash_const("C_SmokeGrenadeProjectile"):
@@ -55,6 +55,7 @@ void EntityList::update() {
       entities.emplace_back(BaseEntity(entity, i, EntityType::INVALID));
       break;
     }
+    continue;
   }
 }
 
