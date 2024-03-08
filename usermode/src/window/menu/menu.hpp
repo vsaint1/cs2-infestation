@@ -15,9 +15,8 @@ int selected_config = 0;
 void show_menu(GLFWwindow *window) {
   ImGuiIO &io = ImGui::GetIO();
 
-  if (settings::show_menu) 
+  if (settings::show_menu)
     glfwFocusWindow(window);
-  
 
   if (WindowManager::mouse_state(window, GLFW_MOUSE_BUTTON_LEFT)) {
     io.MouseDown[0] = true;
@@ -39,6 +38,7 @@ void show_menu(GLFWwindow *window) {
   ImGui::SetNextItemWidth(100);
 
   if (ImGui::BeginTabItem(("Aimbot"))) {
+    ImGui::BeginDisabled();
     ImGui::Text("Aimbot");
     ImGui::Checkbox("Enabled", &settings::aimbot::aimbot);
     ImGui::Checkbox("Visible Check", &settings::aimbot::visible_check);
@@ -47,6 +47,7 @@ void show_menu(GLFWwindow *window) {
     component::set_helper("Aimbot FOV");
     ImGui::Combo("Target", &settings::aimbot::selectedhitbox, settings::aimbot::hitbox, IM_ARRAYSIZE(settings::aimbot::hitbox));
     ImGui::SliderInt("Smooth", &settings::aimbot::smooth, 0, 10, "%d");
+    ImGui::EndDisabled();
     ImGui::EndTabItem();
   }
 
