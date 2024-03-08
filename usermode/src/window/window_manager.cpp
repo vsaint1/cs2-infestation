@@ -73,7 +73,8 @@ void WindowManager::render() {
 void WindowManager::performance_metrics() {
   ImGui::SetNextWindowSize(ImVec2(250.0f, 80.0f), ImGuiCond_Once);
   ImGui::SetWindowPos(ImVec2(0,0));
-  ImGui::Begin(("Performance Metrics"));
+
+  ImGui::Begin(("Metrics - %s",BUILD_TYPE));
   auto &io = ImGui::GetIO();
   ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
   int thread_count = std::thread::hardware_concurrency();

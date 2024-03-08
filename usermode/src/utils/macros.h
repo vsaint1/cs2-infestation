@@ -19,6 +19,12 @@
 
 #endif
 
+#if _DEBUG
+#define BUILD_TYPE "[DEBUG] - Metrics, build " ## __TIMESTAMP__
+#else
+#define BUILD_TYPE "[RELEASE] - Metrics, build " ## __TIMESTAMP__
+#endif
+
 bool compare(std::string_view str1, std::string_view str2);
 
 template <typename _T> unsigned int constexpr hash_const(_T const *input) { return *input ? static_cast<unsigned int>(*input) + 33 * hash_const(input + 1) : 5381; }
