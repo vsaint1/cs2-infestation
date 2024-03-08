@@ -15,6 +15,10 @@ int selected_config = 0;
 void show_menu(GLFWwindow *window) {
   ImGuiIO &io = ImGui::GetIO();
 
+  if (settings::show_menu) 
+    glfwFocusWindow(window);
+  
+
   if (WindowManager::mouse_state(window, GLFW_MOUSE_BUTTON_LEFT)) {
     io.MouseDown[0] = true;
     io.MouseClicked[0] = true;
@@ -161,7 +165,6 @@ void show_menu(GLFWwindow *window) {
           ImGui::PopStyleColor(2);
           selected_config = i;
         }
-      
       }
 
       if (ImGui::Button("Load", ImVec2(100, 0))) {
@@ -174,12 +177,39 @@ void show_menu(GLFWwindow *window) {
       component::set_helper("Load config");
 
       if (ImGui::Button("Delete", ImVec2(100, 0))) {
-        // TODO: delete config
+
+        ImGui::OpenPopup("##delete_config");
       }
       component::set_helper("Delete config");
+
+      ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+      ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+      if (ImGui::BeginPopupModal("##delete_config", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::SetItemDefaultFocus();
+        ImGui::Text("Are you sure you want to delete this config? %s\n\n", config.get_files()[selected_config].c_str());
+        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "This action cannot be undone!");
+        ImGui::Separator();
+
+        if (ImGui::Button("Yes", ImVec2(50, 0))) {
+          config.remove(config.get_files()[selected_config]);
+          ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("No", ImVec2(50, 0)))
+          ImGui::CloseCurrentPopup();
+
+        ImGui::EndPopup();
+      }
     }
 
-    if (ImGui::Button("Save", ImVec2(100, 0))) {
+    if (ImGui::Button("Override config", ImVec2(100, 0))) {
+      std::string file_name = config.get_files()[selected_config];
+      config.override(file_name);
+    }
+    component::set_helper("Override current selected configuration");
+
+    if (ImGui::Button("Create New", ImVec2(100, 0))) {
       if (config.create())
         SPDLOG_INFO("Created new config file: {}", config.get_files()[selected_config]);
       else
