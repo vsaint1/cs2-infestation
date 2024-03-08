@@ -13,6 +13,6 @@
 - [ ] Triggerbot
 - [x] ESP
 - [x] Misc
-- [ ] Config System
-- [ ] Improve handling Errors and Crashes
+- [x] Config System
+- [x] Improve handling Errors and Crashes
 - [ ] Kernel mode

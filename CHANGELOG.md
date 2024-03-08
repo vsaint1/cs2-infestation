@@ -53,3 +53,14 @@
 - [x] Reverted entity_list reading
 
 <img src="examples/version_2_5_0.png" alt="v2">
+
+
+# 3.0.0 **MAJOR UPDATE**
+
+
+- [x] Fixed reading `string` crashes
+- [x] Improved performance on build_type `debug` and `release`
+- [x] Added ConfigSystem 
+- [x] Improved error handling
+
+<img src="examples/version_3_0_0.png" alt="v2">
