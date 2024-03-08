@@ -71,7 +71,7 @@ void WindowManager::render() {
 }
 
 void WindowManager::performance_metrics() {
-  ImGui::SetNextWindowSize(ImVec2(250.0f, 80.0f), ImGuiCond_Once);
+  ImGui::SetNextWindowSize(ImVec2(300.0f, 80.0f), ImGuiCond_Once);
   ImGui::SetWindowPos(ImVec2(0,0));
 
   ImGui::Begin(("Metrics - %s",BUILD_TYPE));
