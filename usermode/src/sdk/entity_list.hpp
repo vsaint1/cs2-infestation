@@ -33,7 +33,7 @@ public:
 
   const int max_entities() { return memory.readv<int>(this + offsets::dwGameEntitySystem_getHighestEntityIndex); }
 
-  const std::string get_schema_name(const uintptr_t &entity);
+  std::string get_schema_name(const uintptr_t &entity);
 };
 
 inline EntityList *g_entity_list{};

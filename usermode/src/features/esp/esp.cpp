@@ -226,11 +226,14 @@ void esp::_player(const BaseEntity &ent) {
   float h = abs(screen_pos.y - head_pos.y);
   float w = h / 2.0f;
 
+  if (settings::visuals::player_box || distance > 10)
+    draw::filled_box(screen_pos.x - (w / 2), head_pos.y - 25, w, h, 1, settings::colors::player_box);
+
   if (settings::visuals::player_weapon)
-    draw::icon_esp(ImGui::GetIO().Fonts->Fonts[1], weapon_str.c_str(), screen_pos, settings::colors::player_weapon);
+    draw::icon_esp(ImGui::GetIO().Fonts->Fonts[1], weapon_str.c_str(), {screen_pos.x, screen_pos.y}, settings::colors::player_weapon, distance > 10 ? 8.0f : 13.0f);
 
   if (settings::visuals::player_name)
-    draw::text(e_name.c_str(), ImVec2(screen_pos.x, head_pos.y - 25), settings::colors::player_name);
+    draw::text(e_name.c_str(), ImVec2(screen_pos.x, head_pos.y - 25), settings::colors::player_name, 14.5f);
 
   if (settings::visuals::player_distance)
     draw::distance_a(ImVec2(screen_pos.x, screen_pos.y), distance, settings::colors::player_distance);
@@ -238,9 +241,9 @@ void esp::_player(const BaseEntity &ent) {
   if (settings::visuals::player_snaplines)
     draw::snaplines(screen_pos, settings::colors::player_snaplines);
 
-  if (settings::visuals::player_skeleton)
+  if (settings::visuals::player_skeleton && distance < 15)
     draw::skeleton(p_bonearray, visible);
 
   if (settings::visuals::player_health)
-    draw::healthbar(screen_pos.x + 25, head_pos.y - 25, w, h, 2, e_health);
+    draw::healthbar(screen_pos.x + 30, head_pos.y - 25, w, h, 2, e_health);
 }

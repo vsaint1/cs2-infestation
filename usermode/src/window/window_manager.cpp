@@ -29,7 +29,7 @@ bool WindowManager::create(const char *window_name) {
   this->m_window = window;
 
   glfwMakeContextCurrent(window);
-  glfwSwapInterval(GLFW_FALSE);
+  glfwSwapInterval(GLFW_TRUE);
 
   IMGUI_CHECKVERSION();
 
