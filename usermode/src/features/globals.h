@@ -197,6 +197,7 @@ namespace settings {
         inline bool player_snaplines = false;
         inline bool player_skeleton = false;
         inline bool player_health = false;
+        inline bool player_box = false;
 
     };
 
