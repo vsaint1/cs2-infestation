@@ -61,6 +61,8 @@ void show_menu(GLFWwindow *window) {
     component::set_helper("Enable/Disable ESP");
     ImGui::Checkbox("Weapon", &settings::visuals::player_weapon);
     component::set_helper("Draw player current weapon");
+    ImGui::Checkbox("Box", &settings::visuals::player_box);
+    component::set_helper("Player boxes");
     ImGui::Checkbox("Name", &settings::visuals::player_name);
     component::set_helper("Draw player name");
     ImGui::Checkbox("Health", &settings::visuals::player_health);

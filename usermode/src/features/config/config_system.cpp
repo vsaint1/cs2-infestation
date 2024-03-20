@@ -60,6 +60,7 @@ nlohmann::json ConfigSystem::to_json() {
       {"player_snaplines", settings::visuals::player_snaplines},
       {"player_skeleton", settings::visuals::player_skeleton},
       {"player_health", settings::visuals::player_health},
+      {"player_box", settings::visuals::player_box},
 
       {"world", settings::world::esp},
 
@@ -129,6 +130,7 @@ void ConfigSystem::load(const std::string file_name) {
   settings::visuals::player_distance = j["visuals"]["player_distance"];
   settings::visuals::player_snaplines = j["visuals"]["player_snaplines"];
   settings::visuals::player_skeleton = j["visuals"]["player_skeleton"];
+  settings::visuals::player_box = j["visuals"]["player_box"];
 
   settings::world::esp = j["visuals"]["world"];
   settings::world::chicken_esp = j["visuals"]["chicken_esp"];
