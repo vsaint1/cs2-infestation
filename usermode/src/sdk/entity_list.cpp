@@ -59,7 +59,7 @@ void EntityList::update() {
   }
 }
 
-const std::string EntityList::get_schema_name(const uintptr_t &entity) {
+std::string EntityList::get_schema_name(const uintptr_t &entity) {
 
   uintptr_t entity_identity = memory.readv<uintptr_t>(entity + offsets::CEntityInstance::m_pEntity);
 

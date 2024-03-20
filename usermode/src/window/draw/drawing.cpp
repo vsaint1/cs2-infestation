@@ -156,6 +156,18 @@ void draw::filled_rect(int x, int y, int w, int h, ImVec4 color) {
     ImGui::GetForegroundDrawList()->AddRectFilled(ImVec2(x, y), ImVec2(x + w, y + h), ImGui::ColorConvertFloat4ToU32(color), 0, 0);
 }
 
+void draw::filled_box(int x, int y, int w, int h, int border, ImVec4 color) {
+	const int shadow_offset = 1;
+	ImVec4 shadow_color = ImVec4(0.2f, 0.2f, 0.2f, 0.5f);
+  
+	draw::filled_rect(x + shadow_offset, y + shadow_offset, w, h, shadow_color);
+	draw::filled_rect(x, y, w, border, color); //top 
+	draw::filled_rect(x, y , border, h , color); //left 
+	draw::filled_rect(x + w - border, y, border, h , color); //right 
+	draw::filled_rect(x, y + h - border, w, border, color); //bottom 
+
+}
+
 void draw::healthbar(int x, int y, int w, int h, int thick, int health) {
 
     float dt = health / 100.0f;

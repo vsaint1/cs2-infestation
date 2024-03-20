@@ -32,6 +32,8 @@ namespace draw {
 
     void filled_rect(int x, int y, int w, int h, ImVec4 color);
 
+    void filled_box(int x, int y, int w, int h, int border,ImVec4 color);
+
     void healthbar(int x, int y, int w, int h, int thick, int health);
 
 };     // namespace draw
